@@ -1,0 +1,64 @@
+.nav {
+    background-color: #00254E;
+    height: 50px;
+    display: flex;
+    width: 100vw;
+    align-items: center;
+    justify-content: left;
+}
+.navButton {
+    background-color: #00254E;
+    height: 50px;
+    border: none;
+    font-family: "ADLaM Display", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    text-align: center;
+    color: white;
+    font-size: 1.5rem;
+    display: block;
+    align-items: center;
+    margin-left: 50px;
+}
+
+.navButton:hover {
+    background-color: blue;
+}
+.logo {
+    background-color: #00254E;
+    padding-top: 0px;
+    font-family: 'ADLaM Display';
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.logo-container > p {
+    margin-block: auto;
+}
+
+.logo1 {
+    background-color: #00254E;
+    padding-top: 0px;
+    font-family: 'ADLaM Display';
+    color: #8EB2D9;
+    font-size: 1.5rem;
+    text-align: center;
+    padding-right: 40px; 
+}
+.logo-container {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    padding-left: 0%;
+    margin-left: 0%;
+}
+
+.nav-container {
+    display: flex;
+    background-color: #00254E;
+    height: 50px;
+    width: 100%;
+    align-items: center;
+    padding-left: 18px;
+}

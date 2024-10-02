@@ -1,0 +1,65 @@
+@import 'material-symbols';
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+
+.grid > p {
+    margin-block: auto;
+}
+
+.grid {
+    margin-top: 10px;
+    margin-left: 20px;
+    display: grid;
+    grid-row-gap: 29px;
+
+}
+
+.grid-item-1 {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    height: 38px;
+    width: 150px;
+    display: flex;
+    justify-content: left; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    text-align: center;
+}
+.grid-item-2 {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    height: 30px;
+    width: 220px;
+    justify-content: right;
+}
+.grid-item-3 {
+
+    grid-column-start: 1;
+    grid-column-end: 3;
+    margin-left: 30px;
+    
+
+}
+.grid-item-4 {
+    width: 210px;
+    display: flex;
+    justify-content: left; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    text-align: center;
+}
+.grid-item-6 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    margin-left: 30px;
+
+
+}
+
+
+
+#select-menu {
+    background-color: #C7DCE5;
+    background-image: url("./arrow_down.svg");
+    background-size: 32px;
+    border-color: #C7DCE5;
+
+}
