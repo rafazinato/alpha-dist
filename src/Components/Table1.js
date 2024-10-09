@@ -1,8 +1,14 @@
 
 
-function Table1({}) {
+function Table1({compound}) {
+    
+    
     return (
-        <h1></h1>
+        <>
+        <table>
+            
+        </table>
+        </>
     );
 }
 

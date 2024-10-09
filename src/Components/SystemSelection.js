@@ -28,7 +28,6 @@ function SystemSelection({setCompound, data}) {
             </div>
             <div className="grid-item-2">
             <Form.Select aria-label="Default select example" id='select-menu' onChange={(e) => handleId(e.target.value)}>
-                <option>Open this select menu</option>
                 {listName}
             </Form.Select>
             </div>

@@ -18,9 +18,9 @@ function App() {
    const [compound, setCompound] = useState({
      name: '',
      smiles: '',
-     pka1: '',
-     pka2: '',
-     pka3: ''
+     pka1: null,
+     pka2: null,
+     pka3: null
    });
 
   useEffect(() => {
@@ -56,17 +56,19 @@ function App() {
           <Molecule smiles={compound.smiles}/>
         </div>
         <div className="table-1">
-          <Table1 />
+          <Table1 compound={compound} />
         </div>
         </div>
     
       {/* DIV que envolve o DDE e tabela 2 */}
     <div className='container-second'>
-        <div className='dde'>
-            <DDE  />
-        </div>
         <div className='table-2'>
-        <Table2  /> 
+          <Table2  />
+        </div>
+        <div className='dde'>
+
+        <DDE compound={compound} />
+
         </div>
     </div>
     </div>

@@ -37,21 +37,22 @@
 
 .container-second {
   display: flex;
-  height: 522px;
+  height: 500px;
 
 }
 
-.dde {
+.table-2 {
   border: 2px solid #C7DCE5;
-  width: 550px;
+  width: 800px;
   margin-left: 50px;
   font-size: 1.25rem;
 
 }
-.table-2 {
+.dde {
   margin-left: 142px;
-  width: 1100px;
+  width: 1050px;
   border: 2px solid #C7DCE5;
   border-radius: 20px;
   font-size: 1.25rem;
+  margin-right: 110px;
 }
