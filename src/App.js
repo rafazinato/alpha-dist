@@ -18,9 +18,9 @@ function App() {
    const [compound, setCompound] = useState({
      name: '',
      smiles: '',
-     pka1: null,
-     pka2: null,
-     pka3: null
+     pka1: '',
+     pka2: '',
+     pka3: ''
    });
 
   useEffect(() => {

@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chart from 'chart.js/auto';
+import "../assets/dde.css";
 
+function arange(start, stop, step = 1) {
+  let result = [];
+  for (let i = start; i < stop; i += step) {
+      result.push(i);
+  }
+  return result;
+}
 
 function DDE({compound}) {
 
@@ -8,15 +16,12 @@ function DDE({compound}) {
     const chartInstanceRef = useRef(null); // Ref para armazenar a instância do gráfico    
     const pka = [Number(compound.pka1), Number(compound.pka2), Number(compound.pka3)].filter(v=>v!=0);
 
-    let ph = arange(0, 14, .05);
+    // console.log(pka)
 
-    function arange(start, stop, step = 1) {
-        let result = [];
-        for (let i = start; i < stop; i += step) {
-            result.push(i);
-        }
-        return result;
-      }
+    // let ph = arange(0, 14, .05);
+    let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
+
+    // console.log(ph)
 
       function calcAlpha(ph, pka) {
         let alpha = [];
@@ -47,8 +52,6 @@ function DDE({compound}) {
 
   // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
   useEffect(() => {
-    // ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
-
     if (chartInstanceRef.current) {
       chartInstanceRef.current.destroy(); // Destroi o gráfico anterior antes de criar o novo
     }
@@ -59,7 +62,7 @@ function DDE({compound}) {
     chartInstanceRef.current = new Chart(ctx, {
       type: 'line', // Tipo de gráfico
       data: {
-        labels: ph,
+        labels: ph ? ph : [0],
         datasets: [
           {
             label: 'Alfa 0',
@@ -118,7 +121,7 @@ function DDE({compound}) {
             max: Math.max(ph),
             ticks: {
                 callback: (value, index, values) => {
-                    return ph[index].toFixed(1);
+                    return ph[index] ? ph[index].toFixed(1) : 0;
                 },
             }
           }

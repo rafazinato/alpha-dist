@@ -1,10 +1,19 @@
 
 
-function Table2() {
+function Table2(compound) {
     return (
         <>
             <p>Selecione um pH: </p>
-            <h1>Tabela 2</h1>
+            <input></input>
+            <table>
+                <thead>
+                    <th>Alfa</th>
+                    <th>Valores</th>
+                    <th>Log Alfa</th>
+                    <th>Valores</th>
+                    <th>Parâmetros</th>
+                </thead>
+            </table>
         </>
 
     );
