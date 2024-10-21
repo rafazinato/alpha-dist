@@ -14,14 +14,24 @@ import data1 from "./data/Pasta1.csv";
 function App() {
 
   const [data, setData] = useState([]); // Estado para armazenar os dados do arquivo
-   const [selectedDataset, setSelectedDataset] = useState(null);
+   const [selectedDataset, setSelectedDataset] = useState('');
    const [compound, setCompound] = useState({
      name: '',
      smiles: '',
      pka1: '',
      pka2: '',
-     pka3: ''
+     pka3: '',
+     charge_protonated: ''
    });
+
+   // Calculando a carga de cada alfa para calculo de carga máxima e carga efetiva
+   let listpka = [compound.pka1, compound.pka2, compound.pka3];
+   let numberpka = listpka.filter((v) => v).length;
+   let alfascharge = [compound.charge_protonated];
+   for (let i = 0; i < numberpka; i++) {
+     alfascharge.push(alfascharge[alfascharge.length - 1] - 1);
+   }
+
 
   useEffect(() => {
     const fetchParseData = async () => {
@@ -38,7 +48,7 @@ function App() {
 
     fetchParseData();
   }, []); // Chama o efeito apenas uma vez quando o componente monta
-
+  console.log(compound.charge_protonated)
   return (
     <div className="body">
       {/* NAV BAR */}
@@ -49,9 +59,7 @@ function App() {
       {/* DIV que envolve a seleção de sistema, componente e tabela 1 */}
       
       <div className='container-first'>
-        <div className="background-selection">
           <SystemSelection data={data} setCompound={setCompound} />          
-        </div>
         <div className="background-molecule">
           <Molecule smiles={compound.smiles}/>
         </div>
@@ -63,7 +71,7 @@ function App() {
       {/* DIV que envolve o DDE e tabela 2 */}
     <div className='container-second'>
         <div className='table-2'>
-          <Table2  />
+          <Table2 compound={compound} alfascharge={alfascharge} />
         </div>
         <div className='dde'>
 
@@ -71,6 +79,7 @@ function App() {
 
         </div>
     </div>
+    <a href='https://google.com'>asaaa</a>
     </div>
   );
 }

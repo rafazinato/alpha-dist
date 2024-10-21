@@ -1,5 +1,5 @@
-.body {
-  font-family: 'ADLaM Display'
+body {
+  font-family: 'Inter'
 }
 
 .container-first {
@@ -9,23 +9,14 @@
 
 }
 
-.background-selection {
-  background-color: #C7DCE5;
-  border-radius: 20px;
-  height: 283px;
-  width: 550px;
-  /* margin-left: 48px; */
-}
-
 .background-molecule {
   border: 2px solid #00254E;
-  border-radius: 20px;
+  border-radius: 10px;
   width: 388px;
   text-align: center;
   justify-content: center;
   margin-left: 97px;
   font-size: 1.25rem;
-
 }
 
 .table-1 {
@@ -38,21 +29,19 @@
 .container-second {
   display: flex;
   height: 500px;
-
+  align-items: center;
 }
 
 .table-2 {
-  border: 2px solid #C7DCE5;
+
   width: 950px;
   margin-left: 10px;
-  font-size: 1.25rem;
+
 
 }
 .dde {
   margin-left: 142px;
   width: 1050px;
-  border: 2px solid #C7DCE5;
-  border-radius: 20px;
   font-size: 1.25rem;
   margin-right: 110px;
 }

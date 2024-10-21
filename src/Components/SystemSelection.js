@@ -17,38 +17,48 @@ function SystemSelection({setCompound, data}) {
             smiles: data[idx].smile,
             pka1: data[idx].pka1,
             pka2: data[idx].pka2,
-            pka3: data[idx].pka3, 
+            pka3: data[idx].pka3,
+            charge_protonated: data[idx].charge_protonated 
         })
 
     };
     return (
-        <div className="grid">
-            <div className="grid-item-1">
-            Seleção de sistema:
+        <div className="selector">
+            <div className="database-selection">
+                <div className="grid-item-4">
+                    Seleção de base de dados:
+                </div>
+                <div className="grid-item-5">
+                <Form.Select id='select-menu' defaultValue=''>
+                    <option disabled={true} value=''>Open this select menu</option>
+                    <option value={"1"}>One</option>
+                    <option value={"2"}>Two</option>
+                    <option value={"3"}>Three</option>
+                
+                </Form.Select>
+                </div>
             </div>
-            <div className="grid-item-2">
-            <Form.Select aria-label="Default select example" id='select-menu' onChange={(e) => handleId(e.target.value)}>
-                {listName}
-            </Form.Select>
-            </div>
-            <div className="grid-item-3">
-                Descrição
-            </div>
-            <div className="grid-item-4">
-                Seleção de base de dados:
-            </div>
-            <div className="grid-item-5">
-            <Form.Select aria-label="Default select example" id='select-menu' >
-                <option value={"0"}>Open this select menu</option>
-                <option value={"1"}>One</option>
-                <option value={"2"}>Two</option>
-                <option value={"3"}>Three</option>
-            
-            </Form.Select>
-            </div>
+
             <div className="grid-item-6">
-                Descrição
+                Cada base de dados possui dados de diferentes compostos
             </div>
+
+            <div className="system-selection">
+                <div className="grid-item-1">
+                Seleção de sistema:
+                </div>
+                <div className="grid-item-2">
+                <Form.Select id='select-menu' defaultValue='' onChange={(e) => handleId(e.target.value)}>
+                    <option disabled={true} value=''>Open this select menu</option>
+                    {listName}
+                </Form.Select>
+                </div>
+            </div>
+
+            <div className="grid-item-3">
+                Selecione o sistema de ácido-base de Bronsted desejado 
+            </div>
+            
         </div>
         
     );

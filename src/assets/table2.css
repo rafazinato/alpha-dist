@@ -1,0 +1,33 @@
+.ph-selection {
+    display: flex;
+    height: 30px;
+    margin: 8px 0px;
+}
+
+#ph-input{
+    border: none;
+    border-bottom: 1px solid black;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 55px;
+}
+
+#ph-input:focus{
+    outline: none;
+    text-align: center;
+}
+
+.table2{
+    background-color:#C7DCE5;
+    width: 100%;
+    border-radius: 10px;
+    border-spacing: 0px;
+    text-align: center;
+    border-spacing: 0;
+    table-layout: fixed; /* Distribuir as larguras igualmente */
+    border-collapse: collapse; /* Garantir que as bordas colapsem, eliminando espaços extras */
+    font-weight: normal;
+    overflow: hidden;
+}

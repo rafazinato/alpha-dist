@@ -1,13 +1,13 @@
 .table1{
     background-color:#C7DCE5;
     width: 100%;
-    border-radius: 5px;
+    border-radius: 10px;
     border-spacing: 0px;
     text-align: center;
     border-spacing: 0;
     table-layout: fixed; /* Distribuir as larguras igualmente */
     border-collapse: collapse; /* Garantir que as bordas colapsem, eliminando espaços extras */
-    
+    overflow: hidden;
 }
 
 th, td {
@@ -27,9 +27,10 @@ th, td {
     border-radius: 5px;
 }
 
-thead tr {
-    background-color: #8EB2D9; /* Tom de azul mais escuro */
-    border-radius: 5px;
+thead {
+    background-color: #014087; /* Tom de azul mais escuro */
+    border-radius: 10px;
+    color: white;
 
 
  }

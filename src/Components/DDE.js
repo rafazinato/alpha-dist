@@ -16,7 +16,6 @@ function DDE({compound}) {
     const chartInstanceRef = useRef(null); // Ref para armazenar a instância do gráfico    
     const pka = [Number(compound.pka1), Number(compound.pka2), Number(compound.pka3)].filter(v=>v!=0);
 
-    // console.log(pka)
 
     // let ph = arange(0, 14, .05);
     let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
@@ -65,28 +64,28 @@ function DDE({compound}) {
         labels: ph ? ph : [0],
         datasets: [
           {
-            label: 'Alfa 0',
+            label: 'α₀',
             data: a0,
             backgroundColor: 'rgba(3, 119, 252, 0.2)',
             borderColor: 'rgba(3, 119, 252, 1)',
             borderWidth: 2,
             fill: false,
           },{
-            label: 'Alfa 1',
+            label: 'α₁',
             data: a1,
             backgroundColor: 'rgba(252, 177, 3, 0.2)',
             borderColor: 'rgba(252, 177, 3, 1)',
             borderWidth: 2,
             fill: false,
           },{
-            label: 'Alfa 2',
+            label: 'α₂',
             data: a2,
             backgroundColor: 'rgba(11, 158, 45, 0.2)',
             borderColor: 'rgba(11, 158, 45, 1)',
             borderWidth: 2,
             fill: false,
           },{
-            label: 'Alfa 3',
+            label: 'α₃',
             data: a3,
             backgroundColor: 'rgba(219, 18, 18, 0.2)',
             borderColor: 'rgba(219, 18, 18, 1)',
@@ -106,11 +105,16 @@ function DDE({compound}) {
           legend: {
             display: true,
             position: 'top',
+            labels: {
+              font: {
+                size: 15
+              }
+
+            }
           },
-          title: {
-            display: true,
-            text: 'Gráfico de Seleção de Compostos',
-          },
+          // title: {
+          //   display: true,
+          // },
         },
         scales: {
           y: {

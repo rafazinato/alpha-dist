@@ -1,11 +1,11 @@
-﻿id,name,smile,pka1,pka2,pka3
-0,trifluoromethanesulfonic acid,C(F)(F)(F)S(=O)(=O)O,-13,,
-1,squaric acid,c1(c(c(=O)c1=O)O)O,1.5,3.5,
-2,citric acid,OC(=O)CC(O)(C(=O)O)CC(=O)O,3.13,4.76,6.40
-3,aniline,c1ccc(cc1)N,5,,
-4,acetic acid,CC(=O)O,4.76,,
-5,benzoic acid,c1ccccc1C(=O)O,4.20,,
-6,carbonic acid,C(=O)(O)O,6.35,10.33,
-7,formic acid,O=CO,3.75,,
-8,malonic acid,O=C(O)CC(O)=O,2.83,5.69,
-9,oxalic acid,OC(=O)C(=O)O,1.27,4.27,
+﻿id,name,smile,pka1,pka2,pka3,charge_protonated
+0,trifluoromethanesulfonic acid,C(F)(F)(F)S(=O)(=O)O,-13,,,0
+1,squaric acid,c1(c(c(=O)c1=O)O)O,1.5,3.5,,0
+2,citric acid,OC(=O)CC(O)(C(=O)O)CC(=O)O,3.13,4.76,6.40,0
+3,aniline,c1ccc(cc1)N,5,,,1
+4,acetic acid,CC(=O)O,4.76,,,0
+5,benzoic acid,c1ccccc1C(=O)O,4.20,,,0
+6,carbonic acid,C(=O)(O)O,6.35,10.33,,0
+7,formic acid,O=CO,3.75,,,0
+8,malonic acid,O=C(O)CC(O)=O,2.83,5.69,,0
+9,oxalic acid,OC(=O)C(=O)O,1.27,4.27,,0
