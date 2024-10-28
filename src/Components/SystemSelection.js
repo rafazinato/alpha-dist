@@ -5,7 +5,7 @@ import data1 from "../data/Pasta1.csv";
 import * as Papa from "papaparse";
 import React, { useState, useEffect, useRef } from "react";
 
-function SystemSelection({setCompound, data}) {
+function SystemSelection({setCompound, data,datasets,selectedDataset,setSelectedDataset}) {
 
     const listName = data.map((compounds, index) => <option id={compounds.index}>{compounds.name}</option>)
 
@@ -22,6 +22,7 @@ function SystemSelection({setCompound, data}) {
         })
 
     };
+
     return (
         <div className="selector">
             <div className="database-selection">
@@ -29,12 +30,14 @@ function SystemSelection({setCompound, data}) {
                     Seleção de base de dados:
                 </div>
                 <div className="grid-item-5">
-                <Form.Select id='select-menu' defaultValue=''>
+                <Form.Select id='select-menu' defaultValue='' onChange={(e) => setSelectedDataset(datasets[e.target.value])}>
                     <option disabled={true} value=''>Open this select menu</option>
-                    <option value={"1"}>One</option>
-                    <option value={"2"}>Two</option>
-                    <option value={"3"}>Three</option>
-                
+                    {Object.keys(datasets).map((datasetName) => (
+                    <option value={datasetName}>
+                        {datasetName}
+                    </option>
+                    ))}
+                            
                 </Form.Select>
                 </div>
             </div>

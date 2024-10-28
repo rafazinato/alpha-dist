@@ -10,7 +10,7 @@ function arange(start, stop, step = 1) {
   return result;
 }
 
-function DDE({compound}) {
+function QEGRAPH({compound,alfascharge}) {
 
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null); // Ref para armazenar a instância do gráfico    
@@ -47,6 +47,21 @@ function DDE({compound}) {
     let a2 = alpha.map(a => a[2])
     let a3 = alpha.map(a => a[3])
 
+    // criando o cálculo da carga efetiva
+    let alpha_list = [a0,a1,a2,a3]
+    let each_charge = ph.map((ph,phindex) => alfascharge.map((charge,index) => Number(charge)*Number(alpha_list[index][phindex])))
+
+
+    let effective_charge = [];
+
+    each_charge.forEach( num => {
+        effective_charge.push(num.reduce((acc, curr) => acc + curr, 0))   
+    })
+    // let loga0 = alpha.map(a => Math.log10(a[0]))
+    console.log(effective_charge)
+
+
+
     // Criando o gráfico
 
   // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
@@ -64,31 +79,10 @@ function DDE({compound}) {
         labels: ph ? ph : [0],
         datasets: [
           {
-            label: 'α₀',
-            data: a0,
+            data: effective_charge,
+            label: "Carga Efetiva",
             backgroundColor: 'rgba(3, 119, 252, 0.2)',
             borderColor: 'rgba(3, 119, 252, 1)',
-            borderWidth: 2,
-            fill: false,
-          },{
-            label: 'α₁',
-            data: a1,
-            backgroundColor: 'rgba(252, 177, 3, 0.2)',
-            borderColor: 'rgba(252, 177, 3, 1)',
-            borderWidth: 2,
-            fill: false,
-          },{
-            label: 'α₂',
-            data: a2,
-            backgroundColor: 'rgba(11, 158, 45, 0.2)',
-            borderColor: 'rgba(11, 158, 45, 1)',
-            borderWidth: 2,
-            fill: false,
-          },{
-            label: 'α₃',
-            data: a3,
-            backgroundColor: 'rgba(219, 18, 18, 0.2)',
-            borderColor: 'rgba(219, 18, 18, 1)',
             borderWidth: 2,
             fill: false,
           }
@@ -122,7 +116,7 @@ function DDE({compound}) {
           y: {
             title: {
               display: true,
-              text: 'Fração de α',
+              text: 'Carga Efetiva',
               color: 'black',
               font: {
                 family: 'Inter',
@@ -156,6 +150,7 @@ function DDE({compound}) {
 
   }, [alpha, ph]); // O efeito será disparado toda vez que o 'text' mudar
     
+    
     return(
         <div >
         <p className="graph-title">
@@ -169,4 +164,4 @@ function DDE({compound}) {
     );
 }
 
-export default DDE
+export default QEGRAPH

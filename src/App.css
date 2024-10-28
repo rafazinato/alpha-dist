@@ -3,45 +3,56 @@ body {
 }
 
 .container-first {
-  display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 30px;
+  display: grid;
+  width: 100%;
+  grid-template-columns: 2fr 1fr 3fr;
 
+
+
+  /* overflow: hidden; */
+}
+
+.grid-system-selection {
+	margin: 10px 10px 0px 10px;
 }
 
 .background-molecule {
+	margin: 10px 100px 0px 100px;
+
   border: 2px solid #00254E;
   border-radius: 10px;
-  width: 388px;
   text-align: center;
   justify-content: center;
-  margin-left: 97px;
   font-size: 1.25rem;
 }
 
 .table-1 {
-  margin-left: 97px;
-  width: 557px;
-  /* border: 2px solid #C7DCE5;
-  border-radius: 20px; */
+	margin: 10px 10px 0px 10px;
 }
 
-.container-second {
-  display: flex;
-  height: 500px;
-  align-items: center;
+.dde {
+  align-self: center;
+  margin: 10px 10px 10px 10px;
+  width: 100%;
+
+
+  /* grid-column-start: 2; */
+
+
+}
+
+.ddelog {
+  align-self: center;
+ margin: 10px 10px 10px 10px;
+ justify-content: center;
+
 }
 
 .table-2 {
+  text-align: left;
+  align-self: center;
+  margin: 10px 10px 10px 10px;
+  grid-column-start: 1;
+  grid-column-end: 2 ;
 
-  width: 950px;
-  margin-left: 10px;
-
-
-}
-.dde {
-  margin-left: 142px;
-  width: 1050px;
-  font-size: 1.25rem;
-  margin-right: 110px;
 }

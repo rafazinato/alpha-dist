@@ -10,7 +10,7 @@ function arange(start, stop, step = 1) {
   return result;
 }
 
-function DDE({compound}) {
+function LOGDDE({compound}) {
 
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null); // Ref para armazenar a instância do gráfico    
@@ -42,10 +42,10 @@ function DDE({compound}) {
     }
     
     let alpha = ph.map(ph => calcAlpha(ph, pka));
-    let a0 = alpha.map(a => a[0])
-    let a1 = alpha.map(a => a[1])
-    let a2 = alpha.map(a => a[2])
-    let a3 = alpha.map(a => a[3])
+    let loga0 = alpha.map(a => Math.log10(a[0]))
+    let loga1 = alpha.map(a => Math.log10(a[1]))
+    let loga2 = alpha.map(a => Math.log10(a[2]))
+    let loga3 = alpha.map(a => Math.log10(a[3]))
 
     // Criando o gráfico
 
@@ -65,28 +65,28 @@ function DDE({compound}) {
         datasets: [
           {
             label: 'α₀',
-            data: a0,
+            data: loga0,
             backgroundColor: 'rgba(3, 119, 252, 0.2)',
             borderColor: 'rgba(3, 119, 252, 1)',
             borderWidth: 2,
             fill: false,
           },{
             label: 'α₁',
-            data: a1,
+            data: loga1,
             backgroundColor: 'rgba(252, 177, 3, 0.2)',
             borderColor: 'rgba(252, 177, 3, 1)',
             borderWidth: 2,
             fill: false,
           },{
             label: 'α₂',
-            data: a2,
+            data: loga2,
             backgroundColor: 'rgba(11, 158, 45, 0.2)',
             borderColor: 'rgba(11, 158, 45, 1)',
             borderWidth: 2,
             fill: false,
           },{
             label: 'α₃',
-            data: a3,
+            data: loga3,
             backgroundColor: 'rgba(219, 18, 18, 0.2)',
             borderColor: 'rgba(219, 18, 18, 1)',
             borderWidth: 2,
@@ -122,7 +122,7 @@ function DDE({compound}) {
           y: {
             title: {
               display: true,
-              text: 'Fração de α',
+              text: 'Fração de log α',
               color: 'black',
               font: {
                 family: 'Inter',
@@ -159,7 +159,7 @@ function DDE({compound}) {
     return(
         <div >
         <p className="graph-title">
-            Diagrama de distribuição de espécies
+            Logaritmo do diagrama de distribuição de espécies
         </p>
         <div class='graph-container'>
             <canvas ref={chartRef} /> 
@@ -169,4 +169,4 @@ function DDE({compound}) {
     );
 }
 
-export default DDE
+export default LOGDDE
