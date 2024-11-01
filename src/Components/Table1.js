@@ -28,6 +28,11 @@ function Table1({ compound }) {
               <th>pKA<sub>1</sub></th>
               <th>pKA<sub>2</sub></th>
               <th>pKA<sub>3</sub></th>
+              <th>pKA<sub>4</sub></th>
+              <th>pKA<sub>5</sub></th>
+              <th>pKA<sub>6</sub></th>
+              <th>pKA<sub>7</sub></th>
+              <th>pKA<sub>8</sub></th>
             </tr>
           </thead>
           <tr>

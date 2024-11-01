@@ -1,8 +1,7 @@
 import "../assets/systemselection.css"
 import 'material-symbols'
 import Form from 'react-bootstrap/Form';
-import data1 from "../data/Pasta1.csv";
-import * as Papa from "papaparse";
+
 import React, { useState, useEffect, useRef } from "react";
 
 function SystemSelection({setCompound, data,datasets,selectedDataset,setSelectedDataset}) {

@@ -1,9 +1,9 @@
 import React, { useState,} from "react";
 import "../assets/table2.css";
 import { elements } from "chart.js";
-function Table2({compound,alfascharge}) {
+function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
    const [chosenph,setChosenPh] = useState()
-   const [chosenconc, setChosenConc] = useState(0) 
+
 
     const pka = [Number(compound.pka1), Number(compound.pka2), Number(compound.pka3)].filter(v=>v!=0);
 
@@ -49,13 +49,14 @@ function Table2({compound,alfascharge}) {
     //     pka.slice(1).forEach((element,index) => {
     //         buffer += element ? chosenconc * alfascharge[index] * (dev_alpha0 * 10 ** (ph - pka.slice(0, index+1).reduce((acc, curr) => acc + curr, 0)) + alpha[0] * Math.log(10) * 10 ** (ph - pka.slice(0, index+1).reduce((acc, curr) => acc + curr, 0))) : 0
     //     })
-    //     console.log(buffer)
+
     //     return buffer;
     // }
     // calculo do Wat para temperatura ambiente
     let pKw = 14 
     let wat = 10**(-chosenph) - 10**(chosenph - pKw)
     let alpha = calcAlpha(chosenph,pka)
+    let qwat = (10**(-chosenph))**2 + (10**(chosenph - pKw))**2
 
 
     let each_charge = alfascharge.map((charge,index) =>  Number(charge)*Number(alpha[index]))
@@ -81,8 +82,7 @@ function Table2({compound,alfascharge}) {
         each_charge_before.forEach( num => {
             effective_charge_before += num;
         })
-        buffer = ((effective_charge - effective_charge_before)* chosenconc + (wat - wat_before))/(chosenph - ph_before)
-        console.log(chosenconc)
+        buffer = ((effective_charge - effective_charge_before)*chosenconc +(wat - wat_before))/(chosenph - ph_before)
         return buffer;
     }
 
@@ -141,7 +141,7 @@ function Table2({compound,alfascharge}) {
                     <td>{Math.log10(Number(alpha[3])) ? Math.log10(Number(alpha[3])).toFixed(4) : '--'}</td>
                     
                     <td>β</td>
-                    <td>{ buffer ? buffer.toExponential(4) : "--"}</td>
+                    <td>{ buffer ? buffer.toFixed(4) : "--"}</td>
                 </tr>
                 <tr>
                     <td>α<sub>4</sub></td>
@@ -157,16 +157,32 @@ function Table2({compound,alfascharge}) {
                     <td></td>
                     
                     <td>q<sub>wat</sub></td>
-                    <td></td>
+                    <td>{qwat.toExponential(4)}</td>
                 </tr>
                 <tr>
-                <td>α<sub>5</sub></td>
+                <td>α<sub>6</sub></td>
                     <td></td>
                     <td></td>
                     
                     <td>q<sub>quad</sub></td>
                     <td>{qquad.toFixed(4)}</td>
                 </tr>
+                <tr>
+                <td>α<sub>7</sub></td>
+                    <td></td>
+                    <td></td>
+                    
+
+                </tr>
+                <tr>
+                <td>α<sub>8</sub></td>
+                    <td></td>
+                    <td></td>
+                    
+
+                </tr>
+                
+                
             </table>
         );
         }
@@ -175,7 +191,7 @@ function Table2({compound,alfascharge}) {
         <div>
             <div className="ph-selection">
                 <p>Informe um pH: <input  onChange={(e) => setChosenPh(e.target.value.replace(',', '.'))} id='ph-input' ></input></p>
-                <p>Informe uma concentração (Mol/L): <input  onChange={(e) => setChosenConc(parseFloat(e.target.value) || 0)} id='c-input' ></input></p>
+                <p>Informe uma concentração (Mol/L): <input  onChange={(e) => setChosenConc(parseFloat(e.target.value.replace(',', '.')) || 0)} id='c-input' ></input></p>
                 
             </div>
             {maketable2()}

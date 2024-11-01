@@ -10,10 +10,11 @@ import SystemSelection from './Components/SystemSelection';
 import Molecule from './Components/Molecule';
 import { useState, useEffect } from 'react';
 import * as Papa from "papaparse";
-import file1 from "./data/Pasta1.csv";
-import file2 from "./data/compostos_quimicos.csv";
+import file1 from "./data/Database1.csv";
+import file2 from "./data/Database2.csv";
 import { parse } from 'smiles-drawer';
 import QEGRAPH from './Components/QEGRAPH';
+import VANSYKLE from './Components/VANSYKLE.js';
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
      pka3: '',
      charge_protonated: ''
    });
+   const [chosenconc, setChosenConc] = useState(0) 
 
    // Calculando a carga de cada alfa para calculo de carga máxima e carga efetiva
    let listpka = [compound.pka1, compound.pka2, compound.pka3];
@@ -80,7 +82,7 @@ function App() {
           <div>   
           </div>
           <div className='table-2'>
-          <Table2 compound={compound} alfascharge={alfascharge} />
+          <Table2 compound={compound} alfascharge={alfascharge}  chosenconc={chosenconc} setChosenConc={setChosenConc} />
           </div>
           <div className='dde'>
               <DDE compound={compound} />
@@ -92,7 +94,7 @@ function App() {
             <QEGRAPH compound={compound} alfascharge={alfascharge} />
           </div>
           <div>
-            <DDE compound={compound} />
+            <VANSYKLE compound={compound} alfascharge={alfascharge} chosenconc={chosenconc} />
           </div>
           <div>
             <DDE compound={compound} />

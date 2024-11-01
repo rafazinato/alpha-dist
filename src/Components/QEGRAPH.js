@@ -20,7 +20,7 @@ function QEGRAPH({compound,alfascharge}) {
     // let ph = arange(0, 14, .05);
     let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
 
-    // console.log(ph)
+
 
       function calcAlpha(ph, pka) {
         let alpha = [];
@@ -58,7 +58,7 @@ function QEGRAPH({compound,alfascharge}) {
         effective_charge.push(num.reduce((acc, curr) => acc + curr, 0))   
     })
     // let loga0 = alpha.map(a => Math.log10(a[0]))
-    console.log(effective_charge)
+
 
 
 
@@ -98,12 +98,15 @@ function QEGRAPH({compound,alfascharge}) {
         plugins: {
           
           legend: {
-            display: true,
+            display: false,
             position: 'top',
             labels: {
+              textAlign: 'right',
               font: {
                 size: 15
-              }
+              },
+              color: 'black',
+              padding: 10,
 
             }
           },
@@ -154,7 +157,7 @@ function QEGRAPH({compound,alfascharge}) {
     return(
         <div >
         <p className="graph-title">
-            Diagrama de distribuição de espécies
+            Carga Efetiva
         </p>
         <div class='graph-container'>
             <canvas ref={chartRef} /> 
