@@ -10,7 +10,7 @@ function arange(start, stop, step = 1) {
   return result;
 }
 
-function VANSYKLE({compound,alfascharge,chosenconc}) {
+function BUFFERFUNCTION({compound,alfascharge,chosenconc}) {
 
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null); // Ref para armazenar a instância do gráfico    
@@ -19,6 +19,8 @@ function VANSYKLE({compound,alfascharge,chosenconc}) {
 
     // let ph = arange(0, 14, .05);
     let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
+
+
 
       function calcAlpha(ph, pka) {
         let alpha = [];
@@ -40,8 +42,6 @@ function VANSYKLE({compound,alfascharge,chosenconc}) {
     }
     
     let alpha = ph.map(ph => calcAlpha(ph, pka));
-    let pKw = 14 
-
     let a0 = alpha.map(a => a[0])
     let a1 = alpha.map(a => a[1])
     let a2 = alpha.map(a => a[2])
@@ -49,56 +49,19 @@ function VANSYKLE({compound,alfascharge,chosenconc}) {
 
     // criando o cálculo da carga efetiva
     let alpha_list = [a0,a1,a2,a3]
-    let ph_before = [] 
-    let wat = 0
-    let wat_before = 0
-    let each_charge = 0
+    let each_charge = ph.map((ph,phindex) => alfascharge.map((charge,index) => Number(charge)*Number(alpha_list[index][phindex])))
+
+
     let effective_charge = [];
 
+    each_charge.forEach( num => {
+        effective_charge.push(num.reduce((acc, curr) => acc + curr, 0))   
+    })
 
-    if (Array.isArray(ph) && ph.length > 0) {
-        ph_before = ph.map(ph => ph - 0.05)
-        wat = ph.map((ph) => (10**(-ph) - 10**(ph - pKw)))
-        wat_before = ph_before.map(ph_before => (10**(-ph_before) - 10**(ph_before - pKw)))
-
-        // calculando a carga efetiva atual
-        each_charge = ph.map((ph,phindex) => (alfascharge.map((charge,index) => Number(charge)*Number(alpha_list[index][phindex]))))
-        each_charge.forEach( num => {
-            effective_charge.push(num.reduce((acc, curr) => acc + curr, 0))   
-        })
+    let ionic_strength = effective_charge.map( effective_charge => (1/2 * chosenconc * effective_charge**2))  
 
 
-    }
-
-    let alpha_before = calcAlpha(ph_before,pka)
-    let buffer = []
-        // // Van Slyke’s buffer
-
-
-        let a0b = alpha_before.map(a => a[0])
-        let a1b= alpha_before.map(a => a[1])
-        let a2b = alpha_before.map(a => a[2])
-        let a3b = alpha_before.map(a => a[3])
-        let alpha_list_before = [a0b,a1b,a2b,a3b]
-        let each_charge_before = ph_before.map((_, phindex) => 
-            alfascharge.map((charge, index) => Number(charge) * Number(alpha_list_before[index][phindex]))
-        );
-    
-            // calculate effective_charge_before  using forEach() method
-            let effective_charge_before = each_charge_before.map(num => 
-                num.reduce((acc, curr) => acc + curr, 0)
-            );
-            
-            for (let i = 0; i < ph.length; i++) {
-                buffer.push(Math.abs(
-                    ((effective_charge[i] - effective_charge[i-1]) * chosenconc ) / (ph[i] - ph[i-1]))
-                );
-            }
-console.log(buffer)
-
-
-
-// Criando o gráfico
+    // Criando o gráfico
 
   // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
   useEffect(() => {
@@ -115,8 +78,8 @@ console.log(buffer)
         labels: ph ? ph : [0],
         datasets: [
           {
-            data: buffer,
-            label: "Van Slyke’s buffer value",
+            data: ionic_strength,
+            label: "Carga Efetiva",
             backgroundColor: 'rgba(3, 119, 252, 0.2)',
             borderColor: 'rgba(3, 119, 252, 1)',
             borderWidth: 2,
@@ -155,7 +118,7 @@ console.log(buffer)
           y: {
             title: {
               display: true,
-              text: 'Van Slyke’s buffer value',
+              text: 'Força Iônica',
               color: 'black',
               font: {
                 family: 'Inter',
@@ -187,13 +150,13 @@ console.log(buffer)
       },
     });
 
-  }, [alpha, ph]); 
+  }, [alpha, ph]); // O efeito será disparado toda vez que o 'text' mudar
     
     
     return(
         <div >
         <p className="graph-title">
-          Van Slyke’s buffer value
+            Força Iônica 
         </p>
         <div class='graph-container'>
             <canvas ref={chartRef} /> 
@@ -203,4 +166,4 @@ console.log(buffer)
     );
 }
 
-export default VANSYKLE
+export default BUFFERFUNCTION

@@ -49,3 +49,30 @@
     font-weight: normal;
     overflow: hidden;
 }
+
+ /* Criando os texto ao passar o mouse emcima */
+ .tooltip-container {
+    position: relative;
+    display: inline-block;  
+}
+
+.tooltip-container .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #00254E;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 105%;
+  }
+  
+  .tooltip-container:hover .tooltiptext {
+    visibility: visible;
+
+  }

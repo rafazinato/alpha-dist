@@ -15,7 +15,8 @@ import file2 from "./data/Database2.csv";
 import { parse } from 'smiles-drawer';
 import QEGRAPH from './Components/QEGRAPH';
 import VANSYKLE from './Components/VANSYKLE.js';
-
+import BUFFERFUNCTION from './Components/BufferingFunction.js';
+import Footer from './Components/Footer.js';
 function App() {
 
   const [data, setData] = useState([]); // Estado para armazenar os dados do arquivo
@@ -79,8 +80,6 @@ function App() {
           <div className="table-1">
             <Table1 compound={compound} />
           </div>
-          <div>   
-          </div>
           <div className='table-2'>
           <Table2 compound={compound} alfascharge={alfascharge}  chosenconc={chosenconc} setChosenConc={setChosenConc} />
           </div>
@@ -97,9 +96,10 @@ function App() {
             <VANSYKLE compound={compound} alfascharge={alfascharge} chosenconc={chosenconc} />
           </div>
           <div>
-            <DDE compound={compound} />
+          <BUFFERFUNCTION compound={compound} alfascharge={alfascharge} chosenconc={chosenconc} />
           </div>
       </div>
+      <Footer />
       </div>
 
 

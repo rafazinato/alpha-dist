@@ -1,0 +1,18 @@
+.foot-container {
+    padding-left: 18px;
+    padding-right: 18px;
+    height: 70px;
+    display: flex;
+    background-color: #014087;
+    color: white;
+    align-items: center;
+    justify-content: space-between;
+
+    
+}
+.text-footer {
+    margin-bottom: 0;
+}
+a {
+    color: white;
+}

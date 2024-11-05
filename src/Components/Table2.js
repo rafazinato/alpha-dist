@@ -73,7 +73,6 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
     // Van Slyke’s buffer
     function calcBuffer(chosenph,pka,chosenconc) {
         let ph_before = chosenph - 0.1
-        let wat_before = 10**(-ph_before) - 10**(ph_before - pKw)
         let alpha_before = calcAlpha(ph_before,pka)
         let each_charge_before = alfascharge.map((charge,index) =>  Number(charge)*Number(alpha_before[index]))
         let effective_charge_before = 0;
@@ -82,7 +81,9 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
         each_charge_before.forEach( num => {
             effective_charge_before += num;
         })
-        buffer = ((effective_charge - effective_charge_before)*chosenconc +(wat - wat_before))/(chosenph - ph_before)
+        //         buffer = ((effective_charge - effective_charge_before)*chosenconc + ( wat - wat_before) )/(chosenph - ph_before)
+        buffer = Math.abs(((effective_charge - effective_charge_before)*chosenconc )/(chosenph - ph_before))
+
         return buffer;
     }
 
@@ -92,8 +93,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
     // Kolthoff’s buffer capacity
     let koltoff_alpha = calcAlpha(chosenph-1,pka)
 
-
-    let each_charge_koltoff = alfascharge.map((charge,index) =>  Number(charge)*Number(koltoff_alpha[index]))
+    let each_charge_koltoff = koltoff_alpha.map((charge,index) =>  Number(charge)*Number(koltoff_alpha[index]))
     let effective_charge_koltoff = 0;
 
     // calculate effective charge using forEach() method
@@ -101,7 +101,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
         effective_charge_koltoff += num;
     })
 
-    let koltoff = (wat + effective_charge*chosenconc) -(10**(-(chosenph-1) - 10**(chosenph -1 - pKw) + effective_charge_koltoff))
+    let koltoff = ((wat + effective_charge*chosenconc) -(10**(-(chosenph-1) - 10**(chosenph -1 - pKw) + effective_charge_koltoff)))
     function maketable2() {
 
         return(
@@ -117,30 +117,30 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
                     <td>α<sub>0</sub></td>
                     <td>{Number(alpha[0]) ? alpha[0].toFixed(4) : '--'}</td>
                     <td>{Math.log10(Number(alpha[0])) ? Math.log10(Number(alpha[0])).toFixed(4) : '--'}</td>
-                    <td>Wat</td>
-                    <td>{wat.toExponential(4)}</td>
+                    <td className="tooltip-container">Wat<span className='tooltiptext'>Constante da água</span></td>
+                    <td>{wat ? wat.toExponential(4) : '--'}</td>
                 </tr>
 
                 <tr>
                     <td>α<sub>1</sub></td>
                     <td>{Number(alpha[1]) ? alpha[1].toFixed(4) : '--'}</td>
                     <td>{Math.log10(Number(alpha[1])) ? Math.log10(Number(alpha[1])).toFixed(4) : '--'}</td>
-                    <td>q<sub>ef</sub></td>
-                    <td>{effective_charge.toFixed(4)}</td>
+                    <td className="tooltip-container">q<sub>ef</sub><span className='tooltiptext'>Carga Efetiva</span></td>
+                    <td>{ effective_charge ? effective_charge.toFixed(4): '--'}</td>
                 </tr>
                 <tr>
                     <td>α<sub>2</sub></td>
                     <td>{Number(alpha[2]) ? alpha[2].toFixed(4) : '--'}</td>
                     <td>{Math.log10(Number(alpha[2])) ? Math.log10(Number(alpha[2])).toFixed(4) : '--'}</td>
-                    <td>τ</td>
-                    <td>{(wat + chosenconc*effective_charge).toFixed(4)}</td>
+                    <td className="tooltip-container">τ<span className='tooltiptext'>Buffering Function</span></td>
+                    <td>{(wat + chosenconc*effective_charge) ? (wat + chosenconc*effective_charge).toFixed(4) : '--'}</td>
                 </tr>
                 <tr>
                     <td>α<sub>3</sub></td>
                     <td>{Number(alpha[3]) ? alpha[3].toFixed(4) : '--'}</td>
                     <td>{Math.log10(Number(alpha[3])) ? Math.log10(Number(alpha[3])).toFixed(4) : '--'}</td>
                     
-                    <td>β</td>
+                    <td className="tooltip-container">β<span className='tooltiptext'>Van Slyke’s buffer value</span></td>
                     <td>{ buffer ? buffer.toFixed(4) : "--"}</td>
                 </tr>
                 <tr>
@@ -148,24 +148,24 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
                     <td></td>
                     <td></td>
                    
-                    <td>BC</td>
-                    <td>{koltoff.toExponential(4)}</td>
+                    <td className="tooltip-container">BC<span className='tooltiptext'>Kolthoff’s buffer value</span></td>
+                    <td>{ koltoff ? koltoff.toExponential(4) : "--"}</td>
                 </tr>
                 <tr>
                     <td>α<sub>5</sub></td>
                     <td></td>
                     <td></td>
                     
-                    <td>q<sub>wat</sub></td>
-                    <td>{qwat.toExponential(4)}</td>
+                    <td className="tooltip-container">q<sub>wat</sub><span className='tooltiptext'>Carga da água</span></td>
+                    <td>{qwat ? qwat.toExponential(4) : '--'}</td>
                 </tr>
                 <tr>
                 <td>α<sub>6</sub></td>
                     <td></td>
                     <td></td>
                     
-                    <td>q<sub>quad</sub></td>
-                    <td>{qquad.toFixed(4)}</td>
+                    <td className="tooltip-container">q<sub>quad</sub><span className='tooltiptext'>Fator de carga quadrático</span></td>
+                    <td>{ qquad ? qquad.toFixed(4) : '--'}</td>
                 </tr>
                 <tr>
                 <td>α<sub>7</sub></td>
@@ -191,7 +191,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
         <div>
             <div className="ph-selection">
                 <p>Informe um pH: <input  onChange={(e) => setChosenPh(e.target.value.replace(',', '.'))} id='ph-input' ></input></p>
-                <p>Informe uma concentração (Mol/L): <input  onChange={(e) => setChosenConc(parseFloat(e.target.value.replace(',', '.')) || 0)} id='c-input' ></input></p>
+                <p>Informe uma concentração (mol/L): <input  onChange={(e) => setChosenConc(parseFloat(e.target.value.replace(',', '.')) || 0)} id='c-input' ></input></p>
                 
             </div>
             {maketable2()}

@@ -9,7 +9,8 @@ p {
     height: 350px;
     width: 550px;
     display: flex;
-    align-items: center; 
+    align-items: center;
+    margin-top: 20px;
 
 }
 .graph-title {
