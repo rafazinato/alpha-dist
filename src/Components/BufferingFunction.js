@@ -16,11 +16,10 @@ function BUFFERFUNCTION({compound,alfascharge,chosenconc}) {
     const chartInstanceRef = useRef(null); // Ref para armazenar a instância do gráfico    
     const pka = [Number(compound.pka1), Number(compound.pka2), Number(compound.pka3)].filter(v=>v!=0);
 
-
-    // let ph = arange(0, 14, .05);
-    let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
-
-
+    let pKw = 14
+    let ph = arange(0, 14, .05);
+    // let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
+    let qwat = ph.map( ph => (10**(-ph))**2 + (10**(ph - pKw))**2)
 
       function calcAlpha(ph, pka) {
         let alpha = [];
@@ -79,12 +78,20 @@ function BUFFERFUNCTION({compound,alfascharge,chosenconc}) {
         datasets: [
           {
             data: ionic_strength,
-            label: "Carga Efetiva",
+            label: "Sitema",
             backgroundColor: 'rgba(3, 119, 252, 0.2)',
             borderColor: 'rgba(3, 119, 252, 1)',
             borderWidth: 2,
             fill: false,
+          }, {
+            data: qwat,
+            label: "Contribuição da água",
+            backgroundColor: 'rgba(11, 158, 45, 0.2)',
+            borderColor: 'rgba(11, 158, 45, 1)',
+            borderWidth: 2,
+            fill: false,
           }
+
         ]
       },
       options: {
@@ -97,7 +104,7 @@ function BUFFERFUNCTION({compound,alfascharge,chosenconc}) {
         plugins: {
           
           legend: {
-            display: false,
+            display: true,
             position: 'top',
             labels: {
               textAlign: 'right',

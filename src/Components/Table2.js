@@ -73,6 +73,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
     // Van Slyke’s buffer
     function calcBuffer(chosenph,pka,chosenconc) {
         let ph_before = chosenph - 0.1
+        let wat_before = 10**(-ph_before) - 10**(ph_before - pKw)
         let alpha_before = calcAlpha(ph_before,pka)
         let each_charge_before = alfascharge.map((charge,index) =>  Number(charge)*Number(alpha_before[index]))
         let effective_charge_before = 0;
@@ -81,8 +82,9 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
         each_charge_before.forEach( num => {
             effective_charge_before += num;
         })
-        //         buffer = ((effective_charge - effective_charge_before)*chosenconc + ( wat - wat_before) )/(chosenph - ph_before)
-        buffer = Math.abs(((effective_charge - effective_charge_before)*chosenconc )/(chosenph - ph_before))
+        buffer = ((effective_charge - effective_charge_before)*chosenconc + ( wat - wat_before) )/(chosenph - ph_before)
+         // Calculo do buffer sem considerar QWAT
+         // buffer = Math.abs(((effective_charge - effective_charge_before)*chosenconc )/(chosenph - ph_before)) 
 
         return buffer;
     }
@@ -101,7 +103,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
         effective_charge_koltoff += num;
     })
 
-    let koltoff = ((wat + effective_charge*chosenconc) -(10**(-(chosenph-1) - 10**(chosenph -1 - pKw) + effective_charge_koltoff)))
+    let koltoff = ((wat + effective_charge*chosenconc) -(10**(-(chosenph-1) - 10**(chosenph -1 - pKw) + effective_charge_koltoff*chosenconc)))
     function maketable2() {
 
         return(
@@ -117,7 +119,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
                     <td>α<sub>0</sub></td>
                     <td>{Number(alpha[0]) ? alpha[0].toFixed(4) : '--'}</td>
                     <td>{Math.log10(Number(alpha[0])) ? Math.log10(Number(alpha[0])).toFixed(4) : '--'}</td>
-                    <td className="tooltip-container">Wat<span className='tooltiptext'>Constante da água</span></td>
+                    <td className="tooltip-container">Wat<span className='tooltiptext'>Water contribution</span></td>
                     <td>{wat ? wat.toExponential(4) : '--'}</td>
                 </tr>
 
@@ -125,7 +127,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
                     <td>α<sub>1</sub></td>
                     <td>{Number(alpha[1]) ? alpha[1].toFixed(4) : '--'}</td>
                     <td>{Math.log10(Number(alpha[1])) ? Math.log10(Number(alpha[1])).toFixed(4) : '--'}</td>
-                    <td className="tooltip-container">q<sub>ef</sub><span className='tooltiptext'>Carga Efetiva</span></td>
+                    <td className="tooltip-container">q<sub>ef</sub><span className='tooltiptext'> Effective charge</span></td>
                     <td>{ effective_charge ? effective_charge.toFixed(4): '--'}</td>
                 </tr>
                 <tr>
@@ -156,7 +158,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
                     <td></td>
                     <td></td>
                     
-                    <td className="tooltip-container">q<sub>wat</sub><span className='tooltiptext'>Carga da água</span></td>
+                    <td className="tooltip-container">q<sub>wat</sub><span className='tooltiptext'>Ionic strenght water contribution</span></td>
                     <td>{qwat ? qwat.toExponential(4) : '--'}</td>
                 </tr>
                 <tr>
@@ -164,7 +166,7 @@ function Table2({compound,alfascharge,chosenconc,setChosenConc}) {
                     <td></td>
                     <td></td>
                     
-                    <td className="tooltip-container">q<sub>quad</sub><span className='tooltiptext'>Fator de carga quadrático</span></td>
+                    <td className="tooltip-container">q<sub>quad</sub><span className='tooltiptext'>Ion contribution</span></td>
                     <td>{ qquad ? qquad.toFixed(4) : '--'}</td>
                 </tr>
                 <tr>

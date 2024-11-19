@@ -17,8 +17,8 @@ function LOGDDE({compound}) {
     const pka = [Number(compound.pka1), Number(compound.pka2), Number(compound.pka3)].filter(v=>v!=0);
 
 
-    // let ph = arange(0, 14, .05);
-    let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
+    let ph = arange(0, 14, .05);
+    // let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
 
     // console.log(ph)
 

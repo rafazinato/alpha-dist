@@ -2,6 +2,7 @@ import "../assets/systemselection.css"
 import 'material-symbols'
 import Form from 'react-bootstrap/Form';
 
+
 import React, { useState, useEffect, useRef } from "react";
 
 function SystemSelection({setCompound, data,datasets,selectedDataset,setSelectedDataset}) {
@@ -41,9 +42,6 @@ function SystemSelection({setCompound, data,datasets,selectedDataset,setSelected
                 </div>
             </div>
 
-            <div className="grid-item-6">
-                Cada base de dados possui dados de diferentes compostos
-            </div>
 
             <div className="system-selection">
                 <div className="grid-item-1">
@@ -57,9 +55,6 @@ function SystemSelection({setCompound, data,datasets,selectedDataset,setSelected
                 </div>
             </div>
 
-            <div className="grid-item-3">
-                Selecione o sistema de ácido-base de Bronsted desejado 
-            </div>
             
         </div>
         

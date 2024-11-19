@@ -21,7 +21,8 @@
 }
 
 .navButton:hover {
-    background-color: blue;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
 }
 .logo {
     background-color: #014087;

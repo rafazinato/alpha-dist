@@ -17,8 +17,8 @@ function VANSYKLE({compound,alfascharge,chosenconc}) {
     const pka = [Number(compound.pka1), Number(compound.pka2), Number(compound.pka3)].filter(v=>v!=0);
 
 
-    // let ph = arange(0, 14, .05);
-    let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
+    let ph = arange(0, 14, .05);
+    // let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
 
       function calcAlpha(ph, pka) {
         let alpha = [];
@@ -88,14 +88,15 @@ function VANSYKLE({compound,alfascharge,chosenconc}) {
             let effective_charge_before = each_charge_before.map(num => 
                 num.reduce((acc, curr) => acc + curr, 0)
             );
-            
-            for (let i = 0; i < ph.length; i++) {
+
+let water_contribution = []
+            for (let i = 1; i < ph.length; i++) {
+                water_contribution.push(Math.abs( ( wat[i] - wat_before[i]) )/(ph[i] - ph[i-1]))
                 buffer.push(Math.abs(
                     ((effective_charge[i] - effective_charge[i-1]) * chosenconc ) / (ph[i] - ph[i-1]))
                 );
             }
-console.log(buffer)
-
+let max_default_y_axis = Number(Math.max(...buffer)*1.1)
 
 
 // Criando o gráfico
@@ -121,7 +122,15 @@ console.log(buffer)
             borderColor: 'rgba(3, 119, 252, 1)',
             borderWidth: 2,
             fill: false,
-          }
+          },
+          {
+            data: water_contribution,
+            label: "Contribuição da água",
+            backgroundColor: 'rgba(219, 18, 18, 0.2)',
+            borderColor: 'rgba(219, 18, 18, 1)',
+            borderWidth: 2,
+            fill: false,
+          },
         ]
       },
       options: {
@@ -134,7 +143,7 @@ console.log(buffer)
         plugins: {
           
           legend: {
-            display: false,
+            display: true,
             position: 'top',
             labels: {
               textAlign: 'right',
@@ -163,6 +172,7 @@ console.log(buffer)
               }
             },
             beginAtZero: true,
+            max: max_default_y_axis
           },
           x: {
             title: {
