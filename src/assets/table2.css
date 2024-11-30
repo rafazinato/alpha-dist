@@ -76,3 +76,31 @@
     visibility: visible;
 
   }
+
+  .tables-container-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 100px 100px 100px 100px 100px;
+    grid-template-rows: auto;
+    gap: 21px;
+    grid-template-areas: 
+        "item-1 item-1 item-1 item-3 item-3"
+        "item-1 item-1 item-1 item-2 item-2"
+
+
+
+  }
+
+  .table-alfas {
+    grid-area: item-1;
+  }
+
+  .tables-charges {
+    grid-area: item-2;
+  }
+  .tables-buffer {
+    grid-area: item-3;
+    width: 100%;
+
+  }
+

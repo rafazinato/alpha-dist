@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Chart from 'chart.js/auto';
-import "../assets/dde.css";
+import "../assets/graphs.css";
 
 function arange(start, stop, step = 1) {
   let result = [];
@@ -14,7 +14,7 @@ function BUFFERFUNCTION({compound,alfascharge,chosenconc}) {
 
     const chartRef = useRef(null);
     const chartInstanceRef = useRef(null); // Ref para armazenar a instância do gráfico    
-    const pka = [Number(compound.pka1), Number(compound.pka2), Number(compound.pka3)].filter(v=>v!=0);
+    const pka = [Number(compound.pka1), Number(compound.pka2), Number(compound.pka3)].filter(v=>v!==0);
 
     let pKw = 14
     let ph = arange(0, 14, .05);
@@ -62,10 +62,10 @@ function BUFFERFUNCTION({compound,alfascharge,chosenconc}) {
 
     // Criando o gráfico
 
-  // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
+
   useEffect(() => {
     if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy(); // Destroi o gráfico anterior antes de criar o novo
+      chartInstanceRef.current.destroy(); 
     }
 
     const ctx = chartRef.current.getContext('2d');
@@ -78,7 +78,7 @@ function BUFFERFUNCTION({compound,alfascharge,chosenconc}) {
         datasets: [
           {
             data: ionic_strength,
-            label: "Sitema",
+            label: "Sistema",
             backgroundColor: 'rgba(3, 119, 252, 0.2)',
             borderColor: 'rgba(3, 119, 252, 1)',
             borderWidth: 2,
@@ -157,7 +157,7 @@ function BUFFERFUNCTION({compound,alfascharge,chosenconc}) {
       },
     });
 
-  }, [alpha, ph]); // O efeito será disparado toda vez que o 'text' mudar
+  }, [alpha, ph,ionic_strength,qwat]); // O efeito será disparado toda vez que o 'text' mudar
     
     
     return(

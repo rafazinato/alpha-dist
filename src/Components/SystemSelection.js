@@ -3,15 +3,14 @@ import 'material-symbols'
 import Form from 'react-bootstrap/Form';
 
 
-import React, { useState, useEffect, useRef } from "react";
 
 function SystemSelection({setCompound, data,datasets,selectedDataset,setSelectedDataset}) {
-
+// Compostos que irão aparecer no menu de selecão select
     const listName = data.map((compounds, index) => <option id={compounds.index}>{compounds.name}</option>)
 
 
     const handleId = (i) => {
-        let idx = data.findIndex((item) => item.name == i);
+        let idx = data.findIndex((item) => item.name === i);
         setCompound({
             name: data[idx].name,
             smiles: data[idx].smile,

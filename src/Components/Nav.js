@@ -1,4 +1,5 @@
 import '../assets/nav.css';
+import { Link } from "react-router-dom";
 
 function Button(props) {
     return(
@@ -14,10 +15,11 @@ function Nav(props) {
             <p className='logo'>AlphaDist</p><p className='logo1'>Web</p>   
             </div>
             <div className='nav'>
-            <Button content="Início" />
+            <Link to="/"><Button content="Início" /></Link>
             <Button content="Tutorial" />
             <Button content="Teoria" />
-            <Button content="Sobre" />
+            <Link to="/sobre"><Button content="Sobre" /></Link>
+
             </div>
 
         </div>

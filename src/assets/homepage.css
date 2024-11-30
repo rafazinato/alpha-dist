@@ -1,0 +1,64 @@
+body {
+    font-family: 'Inter'
+  }
+  
+  .container-first {
+    display: grid;
+    align-self: center;
+    width: 100%;
+    grid-template-columns: 2fr 1fr 2fr;
+    gap: 15px;
+  
+  
+  
+  
+    /* overflow: hidden; */
+  }
+  
+  .grid-system-selection {
+      margin: 10px 10px 0px 10px;
+  }
+  
+  .background-molecule {
+      margin: 10px 120px 0px 120px;
+  
+    border: 2px solid #00254E;
+    border-radius: 10px;
+    text-align: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  
+  .table-1 {
+    justify-self: center;
+    align-items: center;
+      margin: 10px 10px 0px 10px;
+  }
+  
+  .dde {
+    align-self: center;
+    margin: 10px 10px 10px 10px;
+    width: 100%;
+  
+  
+    /* grid-column-start: 2; */
+  
+  
+  }
+  
+  .ddelog {
+    align-self: center;
+   margin: 10px 10px 10px 10px;
+   justify-content: center;
+  
+  }
+  
+  .table-2 {
+    text-align: left;
+    align-self: center;
+    margin: 10px 10px 10px 10px;
+    grid-column-start: 1;
+    grid-column-end: 2 ;
+  
+  }
+  
