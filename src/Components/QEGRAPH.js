@@ -38,6 +38,11 @@ function QEGRAPH({ compound, alfascharge }) {
     Number(compound.pka1),
     Number(compound.pka2),
     Number(compound.pka3),
+    Number(compound.pka4),
+    Number(compound.pka5),
+    Number(compound.pka6),
+    Number(compound.pka7),
+    Number(compound.pka8)
   ].filter((v) => v !== 0);
   const [xmin, setXmin] = useState(undefined);
   const [xmax, setXmax] = useState(undefined);
@@ -132,7 +137,7 @@ function QEGRAPH({ compound, alfascharge }) {
           labels: ph ? ph : [0],
           datasets: [
             {
-              label: "α₀",
+              label: 'Carga Efetiva',
               data: effective_charge,
               backgroundColor: "rgba(3, 119, 252, 0.2)",
               borderColor: "rgba(3, 119, 252, 1)",
@@ -150,7 +155,7 @@ function QEGRAPH({ compound, alfascharge }) {
           responsive: true,
           plugins: {
             legend: {
-              display: true,
+              display: false,
               position: "top",
               labels: {
                 font: {
@@ -163,7 +168,7 @@ function QEGRAPH({ compound, alfascharge }) {
             y: {
               title: {
                 display: true,
-                text: "", // 'Fração de α'
+                text: "Effective Charge (qe)", // 'Fração de α'
                 color: "black",
                 font: {
                   family: "Inter",
@@ -187,9 +192,8 @@ function QEGRAPH({ compound, alfascharge }) {
               min: Math.min(ph),
               max: Math.max(ph),
               ticks: {
-                callback: (value, index, values) => {
-                  return ph[index] ? ph[index].toFixed(1) : 0;
-                },
+                callback: function (value,index) { if (Number.isInteger(ph[index])) { return ph[index]; } },
+                
               },
             },
           },
@@ -251,7 +255,7 @@ function QEGRAPH({ compound, alfascharge }) {
               y: {
                 title: {
                   display: true,
-                  text: "Carga Efetiva",
+                  text: "Effective Charge (qe)",
                   color: "black",
                   font: {
                     family: "Inter",

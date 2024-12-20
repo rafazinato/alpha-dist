@@ -10,6 +10,8 @@
     border-collapse: collapse; /* Garantir que as bordas colapsem, eliminando espaços extras */
     overflow: hidden;
     font-weight: normal;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 .table1-rest {
     background-color:#C7DCE5;
@@ -17,7 +19,7 @@
     border-spacing: 0px;
     text-align: center;
     border-spacing: 0;
-    table-layout: fixed; /* Distribuir as larguras igualmente */
+    /* table-layout: fixed; Distribuir as larguras igualmente */
     border-collapse: collapse; /* Garantir que as bordas colapsem, eliminando espaços extras */
     overflow: hidden;
     border-bottom-left-radius: 10px;
@@ -32,11 +34,12 @@ th, td {
 }
 
 
+
 .first-row {
     width: 100%;
 }
 .second-row {
-    background-color: #8EB2D9;
+    background-color: #C7DCE5;
     width: 100%;
     border-spacing: 0px;
 
@@ -54,5 +57,48 @@ thead {
 
  }
 
+.cell {
+    background-color: #C7DCE5;
+    color: black
+}
 
+.cell2 {
+    background-color: #014087;
+    color: white;
+}
 
+.charge-table {
+    background-color:#C7DCE5;
+    width: 20%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-spacing: 0px;
+    text-align: center;
+    border-spacing: 0;
+    table-layout: fixed; /* Distribuir as larguras igualmente */
+    border-collapse: collapse; /* Garantir que as bordas colapsem, eliminando espaços extras */
+    overflow: hidden;
+    font-weight: normal;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.table-input {
+    width: 90px;
+}
+
+.button-style {
+    background-color:#014087;
+    color: white;
+    border-radius: 5px;
+    border: 2px solid;
+    border-color: #00254E ;
+
+    
+}
+
+.button-style:hover {
+    background-color:#8EB2D9;
+    color: black;
+
+}

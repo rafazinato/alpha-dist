@@ -12,12 +12,17 @@ function arange(start, stop, step = 1) {
   return result;
 }
 
-function DDE({ compound }) {
+function DDE({ compound,pkauser, showInput, userchartInstanceRef}) {
+
+  // 
+
+  
   // Variavéis usadas para construção do editor de gráfico
 
   const [showeditor, setShowEditor] = useState(false);
   const chartRef = useRef(null);
   const editorRef = useRef(null);
+  const userchartRef = useRef(null);
   const [ph_editor, setPhEditor] = useState(() =>
     arange(0, 14, 0.05).map((value) => parseFloat(value.toFixed(1)))
   );
@@ -34,10 +39,16 @@ function DDE({ compound }) {
   // Variavéis usadas para construção do gráfico principal
   const chartInstanceRef = useRef(null);
   const editorInstanceRef = useRef(null);
+  // const userchartInstanceRef = useRef(null);
   const pka = [
     Number(compound.pka1),
     Number(compound.pka2),
     Number(compound.pka3),
+    Number(compound.pka4),
+    Number(compound.pka5),
+    Number(compound.pka6),
+    Number(compound.pka7),
+    Number(compound.pka8)
   ].filter((v) => v !== 0);
   const [ph, setPh] = useState(
     arange(0, 14.05, 0.05).map((value) => parseFloat(value.toFixed(4)))
@@ -56,6 +67,7 @@ function DDE({ compound }) {
 
   // Função que retorna uma lista, em que cada elemento corresponde ao alfa0,alfa1....alfaN
   function calcAlpha(ph, pka) {
+    pka = pka.filter((v) => v !== 0)
     let alpha = [];
 
     let denominator = 1;
@@ -94,7 +106,20 @@ function DDE({ compound }) {
   let a1_reference = alpha_reference.map((a) => a[1]);
   let a2_reference = alpha_reference.map((a) => a[2]);
   let a3_reference = alpha_reference.map((a) => a[3]);
+  // Variaveis para inserir dados do usuario
 
+
+  let alpha_user = ph.map((ph) => calcAlpha(ph, pkauser));
+  let a0_user = alpha_user.map((a) => a[0]);
+  let a1_user = alpha_user.map((a) => a[1]);
+  let a2_user = alpha_user.map((a) => a[2]);
+  let a3_user = alpha_user.map((a) => a[3]);
+
+  // if (pkauser !== undefined) {
+  //   setDdeData([a0_user,a1_user,a2_user,a3_user])
+  // } else {
+  //   setDdeData([a0,a1,a2,a3])
+  // }
   // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
 
   useEffect(() => {
@@ -105,46 +130,32 @@ function DDE({ compound }) {
     if (chartRef.current) {
       // Verifica se os elementos canvas estão disponíveis
       const ctx = chartRef.current.getContext("2d");
+      let alldata = [a0,a1,a2,a3]
+      let legend_color_list = ["rgba(3, 119, 252, 0.2)","rgba(252, 177, 3, 0.2)","rgba(11, 158, 45, 0.2)","rgba(219, 18, 18, 0.2)"]
+      let legend_bordercolor_list = ["rgba(3, 119, 252, 1)","rgba(252, 177, 3, 1)","rgba(11, 158, 45, 1)","rgba(219, 18, 18, 1)"]
+      let label_list = ['α₀','α₁','α₂','α₃']
+      let datachartset = []
+      alldata.forEach((array,index) => {
+        if (array[0]) {
+          datachartset.push(
+            {
+              label: label_list[index],
+              data: array,
+              backgroundColor: legend_color_list[index],
+              borderColor: legend_bordercolor_list[index],
+              borderWidth: 2,
+              fill: false,
+            }
+          )
+        }
+      })
 
       // Cria o novo gráfico de linha
       chartInstanceRef.current = new Chart(ctx, {
         type: "line",
         data: {
           labels: ph ? ph : [0],
-          datasets: [
-            {
-              label: "α₀",
-              data: a0,
-              backgroundColor: "rgba(3, 119, 252, 0.2)",
-              borderColor: "rgba(3, 119, 252, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₁",
-              data: a1,
-              backgroundColor: "rgba(252, 177, 3, 0.2)",
-              borderColor: "rgba(252, 177, 3, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₂",
-              data: a2,
-              backgroundColor: "rgba(11, 158, 45, 0.2)",
-              borderColor: "rgba(11, 158, 45, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₃",
-              data: a3,
-              backgroundColor: "rgba(219, 18, 18, 0.2)",
-              borderColor: "rgba(219, 18, 18, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-          ],
+          datasets: datachartset
         },
         options: {
           elements: {
@@ -165,10 +176,11 @@ function DDE({ compound }) {
             },
           },
           scales: {
+
             y: {
               title: {
                 display: true,
-                text: "", // 'Fração de α'
+                text: "Fraction of equilibrium (α)", // 'Fração de α'
                 color: "black",
                 font: {
                   family: "Inter",
@@ -179,6 +191,7 @@ function DDE({ compound }) {
               min: ymin ? ymin : 0,
               max: ymax ? ymax : 1,
             },
+            
             x: {
               title: {
                 display: true,
@@ -191,17 +204,133 @@ function DDE({ compound }) {
               },
               min: Math.min(ph),
               max: Math.max(ph),
-              ticks: {
-                callback: (value, index, values) => {
-                  return ph[index] ? ph[index].toFixed(1) : 0;
-                },
+              ticks: 
+              {
+                callback: function (value,index) { if (Number.isInteger(ph[index])) { return ph[index]; } },
+                // callback: (value, index, values) => {
+                //   return ph[index] ? ph[index].toFixed(1) : 0;
+                // },
               },
             },
           },
         },
       });
     }
-  }, [alpha, ph, a0, a1, a2, a3, ymax, ymin]);
+  }, [alpha, ph, a0, a1, a2, a3, ymax, ymin,alpha_user]);
+// gráfico construído para colocar dados dos usuarios
+
+
+useEffect(() => {
+  if (userchartInstanceRef.current) {
+    userchartInstanceRef.current.destroy(); // Destroi o gráfico anterior antes de criar o novo
+  }
+
+  if (userchartRef.current) {
+    // Verifica se os elementos canvas estão disponíveis
+    const ctx = userchartRef.current.getContext("2d");
+
+    // Cria o novo gráfico de linha
+    userchartInstanceRef.current = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: ph ? ph : [0],
+        datasets: [
+          {
+            label: "α₀",
+            data:  a0_user,
+            backgroundColor: "rgba(3, 119, 252, 0.2)",
+            borderColor: "rgba(3, 119, 252, 1)",
+            borderWidth: 2,
+            fill: false,
+          },
+          {
+            label: "α₁",
+            data: a1_user ,
+            backgroundColor: "rgba(252, 177, 3, 0.2)",
+            borderColor: "rgba(252, 177, 3, 1)",
+            borderWidth: 2,
+            fill: false,
+          },
+          {
+            label: "α₂",
+            data: a2_user ,
+            backgroundColor: "rgba(11, 158, 45, 0.2)",
+            borderColor: "rgba(11, 158, 45, 1)",
+            borderWidth: 2,
+            fill: false,
+          },
+          {
+            label: "α₃",
+            data: a3_user ,
+            backgroundColor: "rgba(219, 18, 18, 0.2)",
+            borderColor: "rgba(219, 18, 18, 1)",
+            borderWidth: 2,
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        elements: {
+          point: {
+            radius: 0,
+          },
+        },
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: "top",
+            labels: {
+              font: {
+                size: 15,
+              },
+            },
+          },
+        },
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: "Fraction of equilibrium (α)", 
+              color: "black",
+              font: {
+                family: "Inter",
+                size: "12px",
+              },
+            },
+            beginAtZero: true,
+            min: ymin ? ymin : 0,
+            max: ymax ? ymax : 1,
+          },
+          x: {
+            // afterTickToLabelConversion: function(data) {
+            //   var xLabels = data.ticks;
+            //   xLabels.forEach(function (labels, i) {
+            //       if (i % 1000 != 0){
+            //           xLabels[i] = '';
+            //       }
+            //   });
+            // },
+            title: {
+              display: true,
+              text: "pH",
+              color: "black",
+              font: {
+                family: "Inter",
+                size: "12px",
+              },
+            },
+            min: Math.min(ph),
+            max: Math.max(ph),
+            ticks: {
+              callback: function (value,index) { if (Number.isInteger(ph[index])) { return ph[index]; } },
+            },
+          },
+        },
+      },
+    });
+  }
+}, [alpha, ph, a0, a1, a2, a3, ymax, ymin,alpha_user]);
 
   // Construindo o Modal e editor de gráfico
 
@@ -221,7 +350,7 @@ function DDE({ compound }) {
       setA3Editor(a3.slice(alpha_min, alpha_max));
     } else if (xmin !== 0 && xmax === 0) {
       setPhEditor(arange(xmin, 14, 0.05));
-      console.log("a");
+
       alpha_min = ph_reference.indexOf(xmin);
       setA0Editor(a0.slice(alpha_min));
       setA1Editor(a1.slice(alpha_min));
@@ -318,7 +447,7 @@ function DDE({ compound }) {
             y: {
               title: {
                 display: true,
-                text: "Fração de α", // 'Fração de α'
+                text: "Fraction of equilibrium (α)", // 'Fração de α'
                 color: "black",
                 font: {
                   family: "Inter",
@@ -329,7 +458,7 @@ function DDE({ compound }) {
               max: ymax_editor ? ymax_editor : 1,
               beginAtZero: true,
             },
-            x: {
+            x:{
               title: {
                 display: true,
                 text: "pH",
@@ -340,8 +469,7 @@ function DDE({ compound }) {
                 },
               },
               ticks: {
-                callback: (value, index) =>
-                  ph_editor[index] ? ph_editor[index].toFixed(1) : "",
+                callback: function (value,index) { if (Number.isInteger(ph[index])) { return ph[index]; } },
               },
             },
           },
@@ -433,7 +561,7 @@ function DDE({ compound }) {
       </div>
 
       <div className="graph-container">
-        <canvas ref={chartRef} />
+        { showInput ? <canvas ref={userchartRef} /> :  <canvas ref={chartRef} /> }
       </div>
 
       <Modal

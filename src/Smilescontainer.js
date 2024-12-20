@@ -19,7 +19,7 @@ const SmileDrawerContainer = ({ smilesStr }) => {
 
   return (
     <div>
-      <img ref={imgRef} width={150} alt="SMILES structure" />
+      <img ref={imgRef} width={175} alt="SMILES structure" />
     </div>
   );
 };

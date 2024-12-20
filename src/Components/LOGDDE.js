@@ -4,7 +4,6 @@ import "../assets/graphs.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-
 function arange(start, stop, step = 1) {
   let result = [];
   for (let i = start; i < stop; i += step) {
@@ -14,8 +13,7 @@ function arange(start, stop, step = 1) {
 }
 
 function DDE({ compound }) {
-
-    // Variavéis usadas para construção do editor de gráfico
+  // Variavéis usadas para construção do editor de gráfico
 
   const [showeditor, setShowEditor] = useState(false);
   const editorRef = useRef(null);
@@ -36,14 +34,19 @@ function DDE({ compound }) {
   const [loga2_editor, setLogA2Editor] = useState(undefined);
   const [loga3_editor, setLogA3Editor] = useState(undefined);
 
-   // Variavéis usadas para construção do gráfico principal
+  // Variavéis usadas para construção do gráfico principal
 
-  const chartInstanceRef = useRef(null); 
+  const chartInstanceRef = useRef(null);
   const chartRef = useRef(null);
   const pka = [
     Number(compound.pka1),
     Number(compound.pka2),
     Number(compound.pka3),
+    Number(compound.pka4),
+    Number(compound.pka5),
+    Number(compound.pka6),
+    Number(compound.pka7),
+    Number(compound.pka8),
   ].filter((v) => v !== 0);
   const [ph, setPh] = useState(
     arange(0, 14.05, 0.05).map((value) => parseFloat(value.toFixed(4)))
@@ -52,7 +55,6 @@ function DDE({ compound }) {
   const [xmax, setXmax] = useState(undefined);
   const [ymin, setYmin] = useState(undefined);
   const [ymax, setYmax] = useState(undefined);
-
 
   // Função que retorna uma lista, em que cada elemento corresponde ao alfa0,alfa1....alfaN
 
@@ -106,46 +108,40 @@ function DDE({ compound }) {
     if (chartRef.current) {
       // Verifica se os elementos canvas estão disponíveis
       const ctx = chartRef.current.getContext("2d");
+      let alldata = [loga0, loga1, loga2, loga3];
+      let legend_color_list = [
+        "rgba(3, 119, 252, 0.2)",
+        "rgba(252, 177, 3, 0.2)",
+        "rgba(11, 158, 45, 0.2)",
+        "rgba(219, 18, 18, 0.2)",
+      ];
+      let legend_bordercolor_list = [
+        "rgba(3, 119, 252, 1)",
+        "rgba(252, 177, 3, 1)",
+        "rgba(11, 158, 45, 1)",
+        "rgba(219, 18, 18, 1)",
+      ];
+      let label_list = ["α₀", "α₁", "α₂", "α₃"];
+      let datachartset = [];
+      alldata.forEach((array, index) => {
+        if (array[0]) {
+          datachartset.push({
+            label: label_list[index],
+            data: array,
+            backgroundColor: legend_color_list[index],
+            borderColor: legend_bordercolor_list[index],
+            borderWidth: 2,
+            fill: false,
+          });
+        }
+      });
 
       // Cria o novo gráfico de linha
       chartInstanceRef.current = new Chart(ctx, {
         type: "line",
         data: {
           labels: ph ? ph : [0],
-          datasets: [
-            {
-              label: "α₀",
-              data: loga0,
-              backgroundColor: "rgba(3, 119, 252, 0.2)",
-              borderColor: "rgba(3, 119, 252, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₁",
-              data: loga1,
-              backgroundColor: "rgba(252, 177, 3, 0.2)",
-              borderColor: "rgba(252, 177, 3, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₂",
-              data: loga2,
-              backgroundColor: "rgba(11, 158, 45, 0.2)",
-              borderColor: "rgba(11, 158, 45, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₃",
-              data: loga3,
-              backgroundColor: "rgba(219, 18, 18, 0.2)",
-              borderColor: "rgba(219, 18, 18, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-          ],
+          datasets: datachartset,
         },
         options: {
           elements: {
@@ -169,7 +165,7 @@ function DDE({ compound }) {
             y: {
               title: {
                 display: true,
-                text: "", // 'Fração de α'
+                text: "Logarithm of fraction of equilibrium", // 'Fração de α'
                 color: "black",
                 font: {
                   family: "Inter",
@@ -193,8 +189,10 @@ function DDE({ compound }) {
               min: Math.min(ph),
               max: Math.max(ph),
               ticks: {
-                callback: (value, index, values) => {
-                  return ph[index] ? ph[index].toFixed(1) : 0;
+                callback: function (value, index) {
+                  if (Number.isInteger(ph[index])) {
+                    return ph[index];
+                  }
                 },
               },
             },
@@ -202,13 +200,12 @@ function DDE({ compound }) {
         },
       });
     }
-  }, [alpha, ph, loga0, loga1, loga2, loga3,ymax,ymin]);
+  }, [alpha, ph, loga0, loga1, loga2, loga3, ymax, ymin]);
 
   // Construindo o Modal e editor de gráfico
 
   let alpha_min = 0;
   let alpha_max = 0;
-
 
   function changephEditor() {
     if (xmin !== 0 && xmax !== 0) {
@@ -247,8 +244,6 @@ function DDE({ compound }) {
     setYmaxEditor(storage_ymax);
     setYminEditor(storage_ymin);
   }
-
-
 
   useEffect(() => {
     if (!showeditor) return;
@@ -322,7 +317,7 @@ function DDE({ compound }) {
             y: {
               title: {
                 display: true,
-                text: "Fração de α", // 'Fração de α'
+                text: "Logarithm of fraction of equilibrium", // 'Fração de α'
                 color: "black",
                 font: {
                   family: "Inter",
@@ -344,8 +339,7 @@ function DDE({ compound }) {
                 },
               },
               ticks: {
-                callback: (value, index) =>
-                  ph_editor[index] ? ph_editor[index].toFixed(1) : "",
+                callback: function (value,index) { if (Number.isInteger(ph[index])) { return ph[index]; } },
               },
             },
           },
@@ -369,8 +363,7 @@ function DDE({ compound }) {
     loga2_reference,
     loga3_reference,
     ymax_editor,
-    ymin_editor
-
+    ymin_editor,
   ]);
 
   function handleSave() {

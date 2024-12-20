@@ -47,7 +47,7 @@
     table-layout: fixed; /* Distribuir as larguras igualmente */
     border-collapse: collapse; /* Garantir que as bordas colapsem, eliminando espaços extras */
     font-weight: normal;
-    overflow: hidden;
+    overflow: visible;
 }
 
  /* Criando os texto ao passar o mouse emcima */
@@ -64,20 +64,25 @@
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
+    overflow: visible;
+    
     
     /* Position the tooltip */
     position: absolute;
-    z-index: 1;
+    z-index: 9999;
     top: -5px;
     left: 105%;
   }
   
   .tooltip-container:hover .tooltiptext {
     visibility: visible;
+    overflow: visible;
+    z-index: 9999;
 
   }
 
   .tables-container-grid {
+    overflow: visible; /* Permite que o tooltip fique visível fora dos limites */
     width: 100%;
     display: grid;
     grid-template-columns: 100px 100px 100px 100px 100px;

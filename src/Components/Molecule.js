@@ -8,7 +8,7 @@ const Molecule = ({smiles}) => {
   
   return (
     <>
-      <div className="SMILES">Estrutura mais protonada</div>
+      <div className="SMILES"></div>
       {smiles ? <SmileDrawerContainer smilesStr={smiles} /> : null}
     </>
   );

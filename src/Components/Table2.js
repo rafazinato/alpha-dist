@@ -7,6 +7,11 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc }) {
     Number(compound.pka1),
     Number(compound.pka2),
     Number(compound.pka3),
+    Number(compound.pka4),
+    Number(compound.pka5),
+    Number(compound.pka6),
+    Number(compound.pka7),
+    Number(compound.pka8)
   ].filter((v) => v !== 0);
 
   // Função que retorna uma lista, em que cada elemento corresponde ao alfa0,alfa1....alfaN
@@ -275,14 +280,14 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc }) {
     <>
     <div style={{display: 'flex',gap:'30px'}}>
     <p>
-                Informe um pH:{" "}
+                pH:{" "}
                 <input
                     onChange={(e) => setChosenPh(e.target.value.replace(",", "."))}
                     id="ph-input"
                 ></input>
                 </p>
                 <p>
-          Informe a concentração (mol/L):{" "}
+          Concentração (mol/L):{" "}
           <input
             onChange={(e) =>
               setChosenConc(parseFloat(e.target.value.replace(",", ".")) || 0)

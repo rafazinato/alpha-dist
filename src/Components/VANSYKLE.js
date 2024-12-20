@@ -13,7 +13,7 @@ function arange(start, stop, step = 1) {
   return result;
 }
 
-function VANSYKLE({ compound, alfascharge, chosenconc }) {
+function VANSYKLE({ compound, alfascharge, chosenconc, needupdate, setNeedUpdate}) {
 
   // State que contém dados usados no gráfico
 
@@ -24,6 +24,11 @@ function VANSYKLE({ compound, alfascharge, chosenconc }) {
     Number(compound.pka1),
     Number(compound.pka2),
     Number(compound.pka3),
+    Number(compound.pka4),
+    Number(compound.pka5),
+    Number(compound.pka6),
+    Number(compound.pka7),
+    Number(compound.pka8)
   ].filter((v) => v !== 0);
 
   let ph = arange(0, 14, 0.05);
@@ -146,14 +151,10 @@ function VANSYKLE({ compound, alfascharge, chosenconc }) {
     return tempReference;
   }, [chosenconc, ph, effective_charge]);
 
-  const [graph_data, setGraphData] = useState()
+  
   const [showKoltOff, setShowKoltoff] = useState(true)
   const [graph_title, setGraphTitle] = useState(["Van Slyke’s buffer value","Kolthoff"])
-  // useEffect(() => {
-  // setGraphData(buffer)
-  // },[buffer]
-  // )
-
+  const [graph_data, setGraphData] = useState()
 
   // for (let i = 1; i < ph.length; i++) {
   //   water_contribution.push(
@@ -194,18 +195,46 @@ function VANSYKLE({ compound, alfascharge, chosenconc }) {
   // let koltoff = ((wat + effective_charge*chosenconc) -(10**(-(chosenph-1) - 10**(chosenph -1 - pKw) + effective_charge_koltoff*chosenconc)))
   // let koltoff = ph.map((ph,idx) => Math.abs(wat[idx] + effective_charge[idx]*chosenconc -((10**(-(ph -0.5))) - 10**(ph -0.5 - pKw) + effective_charge_koltoff[idx]*chosenconc)))
   let koltoff = ph.map((ph,idx) => Math.abs( effective_charge[idx]*chosenconc - effective_charge_koltoff[idx]*chosenconc))
+ // Calculando τ (Buffering Fuction)
 
+
+ let buffering_funtion = ((effective_charge.map( (e,idx) => (chosenconc*e + wat[idx]))))
+//  buffering_funtion = buffering_funtion.map(e => Math.abs(e))
   // Criando o gráfico
-  console.log(koltoff)
 
+
+  console.log(buffering_funtion)
+
+  useEffect(() => {
+    if (needupdate) {
+      if (showKoltOff) {
+        setGraphData(koltoff)
+      } else {
+        setGraphData(buffer)
+      }
+      setNeedUpdate(false)
+    }
+  })
+
+
+
+  
   // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
   useEffect(() => {
+
     if (chartInstanceRef.current) {
       chartInstanceRef.current.destroy(); // Destroi o gráfico anterior antes de criar o novo
     }
 
     const ctx = chartRef.current.getContext("2d");
-
+    let initial_sum_water_buffer = []
+    let sum_water_buffer =  []
+    if (buffer && water_contribution) {
+      initial_sum_water_buffer = water_contribution.map((element, idx) =>  element + buffer[idx])
+    }
+    if (graph_data && water_contribution) {
+      sum_water_buffer =  water_contribution.map((element, idx) =>  element + graph_data[idx])
+    } 
     // Cria o novo gráfico de linha
     chartInstanceRef.current = new Chart(ctx, {
       type: "line", // Tipo de gráfico
@@ -228,6 +257,22 @@ function VANSYKLE({ compound, alfascharge, chosenconc }) {
             borderWidth: 2,
             fill: false,
           },
+          {
+            data: sum_water_buffer[0] ? sum_water_buffer : initial_sum_water_buffer,
+            label: "Soma",
+            backgroundColor: "rgba(11, 158, 45, 0.2)",
+            borderColor: "rgba(11, 158, 45, 1)",
+            borderWidth: 3,
+            fill: false, 
+          },
+          {
+            data: buffering_funtion,
+            label: "Buffering Function",
+            backgroundColor: "rgba(11, 158, 45, 0.2)",
+            borderColor: "rgba(11, 158, 45, 1)",
+            borderWidth: 2,
+            fill: false, 
+          }
         ],
       },
       options: {
@@ -276,7 +321,7 @@ function VANSYKLE({ compound, alfascharge, chosenconc }) {
           y: {
             title: {
               display: true,
-              text: "Van Slyke’s buffer value",
+              text: graph_title[0],
               color: "black",
               font: {
                 family: "Inter",
@@ -299,41 +344,60 @@ function VANSYKLE({ compound, alfascharge, chosenconc }) {
             min: Math.min(ph),
             max: Math.max(ph),
             ticks: {
+              stepSize: 1,
               callback: (value, index, values) => {
-                return ph[index] ? ph[index].toFixed(1) : 0;
+                return ph[index] ? (ph[index]).toFixed(1) : 0;
               },
             },
           },
         },
       },
     });
-  }, [alpha, ph, buffer, max_default_y_axis, water_contribution,graph_data,graph_title]);
+  }, [alpha, ph, buffer, max_default_y_axis, water_contribution,graph_data,graph_title,compound]);
 // criando função que muda entre van slke e koltoff
 
 function changeGraphType() {
   if (showKoltOff) {
     setGraphData(koltoff)
     setShowKoltoff(!showKoltOff)
-    setGraphTitle(["Kolthoff’ buffer value","Van Slyke"])
+    setGraphTitle(["Kolthoff’ buffer value","Mudar para Van Slyke"])
   }
   if (!showKoltOff) {
     setGraphData(buffer)
     setShowKoltoff(!showKoltOff)
-    setGraphTitle(["Van Slyke’s buffer value","Kolthoff"])
+    setGraphTitle(["Van Slyke’s buffer value","Mudar para Kolthoff"])
   }
-
-  
 }
+
+// useEffect(() => {
+//   // Recalcula os dados do gráfico com base no composto selecionado
+//   if (showKoltOff) {
+//     setGraphData(koltoff); // Mostra o gráfico de Kolthoff
+//     setGraphTitle(["Kolthoff’ buffer value", "Mudar para Van Slyke"]);
+//   } else {
+//     setGraphData(buffer); // Mostra o gráfico de Van Slyke
+//     setGraphTitle(["Van Slyke’s buffer value", "Mudar para Kolthoff"]);
+//   }
+// }, [compound, koltoff, buffer, showKoltOff]); // Adicione 'compound' como dependência
+
+
   return (
     <div>
       <div style={{display: 'flex', justifyContent: 'center'}}>
         <p className="graph-title">{graph_title[0]}</p>
-        <button onClick={() => changeGraphType()}>{graph_title[1]}</button>
       </div>
+
 
       <div class="graph-container">
         <canvas ref={chartRef} />
       </div>
+
+      <div style={{display: 'flex', justifyContent: 'center'}} >
+        <button  className='change-graph-button' onClick={() => changeGraphType()}>{graph_title[1]}</button>
+
+      </div>
+
+
     </div>
   );
 }

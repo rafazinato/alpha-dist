@@ -1,3 +1,4 @@
+import { VscNoNewline } from 'react-icons/vsc';
 import '../assets/nav.css';
 import { Link } from "react-router-dom";
 
@@ -15,10 +16,10 @@ function Nav(props) {
             <p className='logo'>AlphaDist</p><p className='logo1'>Web</p>   
             </div>
             <div className='nav'>
-            <Link to="/"><Button content="Início" /></Link>
-            <Button content="Tutorial" />
-            <Button content="Teoria" />
-            <Link to="/sobre"><Button content="Sobre" /></Link>
+            <Link style={{textDecoration: 'none' }} to="/"><Button content="Início" /></Link>
+            <Button style={{textDecoration: 'none' }} content="Tutorial" />
+            <Button style={{textDecoration: 'none' }} content="Teoria" />
+            <Link style={{textDecoration: 'none' }} to="/sobre"><Button content="Sobre" /></Link>
 
             </div>
 

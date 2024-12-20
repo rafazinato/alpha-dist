@@ -20,8 +20,8 @@ body {
   }
   
   .background-molecule {
-      margin: 10px 120px 0px 120px;
-  
+    width: 70%;
+    align-content: center;
     border: 2px solid #00254E;
     border-radius: 10px;
     text-align: center;
