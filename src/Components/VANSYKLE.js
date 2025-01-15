@@ -153,8 +153,8 @@ function VANSYKLE({ compound, alfascharge, chosenconc, needupdate, setNeedUpdate
 
   
   const [showKoltOff, setShowKoltoff] = useState(true)
-  const [graph_title, setGraphTitle] = useState(["Van Slyke’s buffer value","Kolthoff"])
-  const [graph_data, setGraphData] = useState()
+  const [graph_title, setGraphTitle] = useState(["Evaluation of Capacity of Buffer"])
+
 
   // for (let i = 1; i < ph.length; i++) {
   //   water_contribution.push(
@@ -202,7 +202,7 @@ function VANSYKLE({ compound, alfascharge, chosenconc, needupdate, setNeedUpdate
 //  buffering_funtion = buffering_funtion.map(e => Math.abs(e))
   // Criando o gráfico
 
-
+  const [graph_data, setGraphData] = useState(buffer)
   console.log(buffering_funtion)
 
   useEffect(() => {
@@ -216,7 +216,14 @@ function VANSYKLE({ compound, alfascharge, chosenconc, needupdate, setNeedUpdate
     }
   })
 
-
+  let initial_sum_water_buffer = []
+  let sum_water_buffer =  []
+  if (buffer && water_contribution) {
+    initial_sum_water_buffer = water_contribution.map((element, idx) =>  element + buffer[idx])
+  }
+  if (buffer && water_contribution) {
+    sum_water_buffer =  water_contribution.map((element, idx) =>  element + buffer[idx])
+  } 
 
   
   // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
@@ -227,14 +234,7 @@ function VANSYKLE({ compound, alfascharge, chosenconc, needupdate, setNeedUpdate
     }
 
     const ctx = chartRef.current.getContext("2d");
-    let initial_sum_water_buffer = []
-    let sum_water_buffer =  []
-    if (buffer && water_contribution) {
-      initial_sum_water_buffer = water_contribution.map((element, idx) =>  element + buffer[idx])
-    }
-    if (graph_data && water_contribution) {
-      sum_water_buffer =  water_contribution.map((element, idx) =>  element + graph_data[idx])
-    } 
+
     // Cria o novo gráfico de linha
     chartInstanceRef.current = new Chart(ctx, {
       type: "line", // Tipo de gráfico
@@ -249,30 +249,6 @@ function VANSYKLE({ compound, alfascharge, chosenconc, needupdate, setNeedUpdate
             borderWidth: 2,
             fill: false,
           },
-          {
-            data: water_contribution,
-            label: "Contribuição da água",
-            backgroundColor: "rgba(219, 18, 18, 0.2)",
-            borderColor: "rgba(219, 18, 18, 1)",
-            borderWidth: 2,
-            fill: false,
-          },
-          {
-            data: sum_water_buffer[0] ? sum_water_buffer : initial_sum_water_buffer,
-            label: "Soma",
-            backgroundColor: "rgba(11, 158, 45, 0.2)",
-            borderColor: "rgba(11, 158, 45, 1)",
-            borderWidth: 3,
-            fill: false, 
-          },
-          {
-            data: buffering_funtion,
-            label: "Buffering Function",
-            backgroundColor: "rgba(11, 158, 45, 0.2)",
-            borderColor: "rgba(11, 158, 45, 1)",
-            borderWidth: 2,
-            fill: false, 
-          }
         ],
       },
       options: {
@@ -356,18 +332,29 @@ function VANSYKLE({ compound, alfascharge, chosenconc, needupdate, setNeedUpdate
   }, [alpha, ph, buffer, max_default_y_axis, water_contribution,graph_data,graph_title,compound]);
 // criando função que muda entre van slke e koltoff
 
-function changeGraphType() {
-  if (showKoltOff) {
+function changeGraphToKoltoff() {
     setGraphData(koltoff)
-    setShowKoltoff(!showKoltOff)
-    setGraphTitle(["Kolthoff’ buffer value","Mudar para Van Slyke"])
+    setGraphTitle(["Kolthoff's buffer capacity"])
   }
-  if (!showKoltOff) {
-    setGraphData(buffer)
-    setShowKoltoff(!showKoltOff)
-    setGraphTitle(["Van Slyke’s buffer value","Mudar para Kolthoff"])
-  }
+
+
+function changeGraphToVanSykle() {
+  setGraphData(buffer)
+  setGraphTitle(["Evaluation of Capacity of Buffer"])
 }
+function changeGraphToSumVanSykle() {
+  setGraphData(sum_water_buffer)
+  setGraphTitle(["Soma"])
+}
+
+function changeGraphBufferingFunction() {
+  setGraphData(buffering_funtion)
+  setGraphTitle(["Buffering Function"])
+}
+
+
+
+
 
 // useEffect(() => {
 //   // Recalcula os dados do gráfico com base no composto selecionado
@@ -393,7 +380,15 @@ function changeGraphType() {
       </div>
 
       <div style={{display: 'flex', justifyContent: 'center'}} >
-        <button  className='change-graph-button' onClick={() => changeGraphType()}>{graph_title[1]}</button>
+        <div className="grid-buttons">
+        <button  className='change-graph-button' onClick={() => changeGraphToVanSykle()}>Capacity of Buffer</button>
+        <button  className='change-graph-button' onClick={() => changeGraphToKoltoff()}>Kolthoff's buffer capacity</button>
+        <button  className='change-graph-button' onClick={() => changeGraphToSumVanSykle()}>Soma</button>
+        <button  className='change-graph-button' onClick={() => changeGraphBufferingFunction()}>Buffering Funtion</button>
+
+        </div>
+
+
 
       </div>
 

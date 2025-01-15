@@ -59,13 +59,17 @@
     border: 2px solid;
     border-color: #00254E ;
     height: 35px;
-    width: 100px;
+    width: 200px;
     
 }
 
 .change-graph-button:hover {
     background-color:#8EB2D9;
     color: black;
-    height: 40px;
-    width: 210px;
+
+}
+.grid-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px
 }

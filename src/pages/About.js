@@ -2,7 +2,29 @@ import Nav from "../Components/Nav.js";
 import Footer from "../Components/Footer.js";
 import "../assets/about.css";
 import { FaLinkedin, FaEnvelope } from "react-icons/fa6";
+import GraphComponent from "../Components/GraphComponent.js";
+
 function About() {
+  // Para teste do graph componente
+
+  let y_data = [
+    {
+      label: "α₀",
+      data: [1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14],
+      backgroundColor: "rgba(3, 119, 252, 0.2)",
+      borderColor: "rgba(3, 119, 252, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α1",
+      data: [1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14],
+      backgroundColor: "rgba(11, 158, 45, 1)",
+      borderColor: "rgba(11, 158, 45, 0.2)",
+      borderWidth: 2,
+      fill: false,
+    },
+  ];
   return (
     <>
       {/* NAV BAR */}
@@ -52,7 +74,10 @@ function About() {
                   >
                     <FaLinkedin color="#014087" size={"1.5em"} />
                   </a>
-                  <a href="mailto:andref.oliveira@ufv.br" className="link-without-style">
+                  <a
+                    href="mailto:andref.oliveira@ufv.br"
+                    className="link-without-style"
+                  >
                     <FaEnvelope size={"1.5em"} />
                   </a>
                   <a
@@ -60,11 +85,11 @@ function About() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                  <img
-                    src={process.env.PUBLIC_URL + "/images/latteslogo.png"}
-                    width="21px"
-                    alt="LATTES"
-                  />
+                    <img
+                      src={process.env.PUBLIC_URL + "/images/latteslogo.png"}
+                      width="21px"
+                      alt="LATTES"
+                    />
                   </a>
                 </div>
               </div>
@@ -80,22 +105,25 @@ function About() {
         <section>
           <div className="section-container">
             <div className="grid-item">
-            <img
+              <img
                 className="rounded-image"
                 src={process.env.PUBLIC_URL + "/images/rafaelazinato.jpg"}
                 width="250px"
                 alt=" "
               />
               <div>
-
-              <p>
-                Essa ferramenta foi desenvolvida por Rafaela Zinato Pereira,
-                atualmente estudante de Engenharia Química na Universidade
-                Federal de Viçosa (UFV). Atualmente estagiária, no Laboratório
-                de química analítica da UFV, sua principal atuação consiste em
-                simular sistemas químicos por meio de linguagens de programação.
-              </p>
-              <div className="icons-container" style={{justifyContent: 'left'}}>
+                <p>
+                  Essa ferramenta foi desenvolvida por Rafaela Zinato Pereira,
+                  atualmente estudante de Engenharia Química na Universidade
+                  Federal de Viçosa (UFV). Atualmente estagiária, no Laboratório
+                  de química analítica da UFV, sua principal atuação consiste em
+                  simular sistemas químicos por meio de linguagens de
+                  programação.
+                </p>
+                <div
+                  className="icons-container"
+                  style={{ justifyContent: "left" }}
+                >
                   <a
                     href="https://www.linkedin.com/in/rafaela-zinato-b98614314/"
                     target="_blank"
@@ -103,7 +131,10 @@ function About() {
                   >
                     <FaLinkedin color="#014087" size={"1.5em"} />
                   </a>
-                  <a href="mailto:rafaela.pereira1@ufv.br" className="link-without-style">
+                  <a
+                    href="mailto:rafaela.pereira1@ufv.br"
+                    className="link-without-style"
+                  >
                     <FaEnvelope size={"1.5em"} />
                   </a>
                   <a
@@ -111,22 +142,33 @@ function About() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                  <img
-                    src={process.env.PUBLIC_URL + "/images/latteslogo.png"}
-                    width="21px"
-                    alt="LATTES"
-                  />
+                    <img
+                      src={process.env.PUBLIC_URL + "/images/latteslogo.png"}
+                      width="21px"
+                      alt="LATTES"
+                    />
                   </a>
                 </div>
               </div>
-          </div>
+            </div>
           </div>
         </section>
       </div>
+      <p>Teste com componente gráfico</p>
+      <>
+        <GraphComponent
+          x_data={[1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14]}
+          y_data={y_data}
+          y_title={"bbb"}
+          initial_limits={[0,14,0,1]}
 
+        />
+      </>
       <Footer />
     </>
   );
 }
 
 export default About;
+
+
