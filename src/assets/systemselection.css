@@ -12,7 +12,7 @@
     grid-template-columns: 1fr;
     /* grid-row-gap: 7px; */
 
-    background-color: #C7DCE5;
+    background-color: white;
     border-radius: 10px;
     height: 200px;
     width: 100%;
@@ -66,7 +66,7 @@
 }
 
 #select-menu {
-    background-color: #C7DCE5;
+    background-color:white;
     background-image: url("./arrow_down.svg");
     background-size: 32px;
     background-position: right;

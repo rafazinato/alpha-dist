@@ -245,21 +245,7 @@ function VANSYKLE({
 
 
 
-  useEffect(() => {
-    if (needupdate) {
-      if (buffer) {
-        setGraphData(buffer);
-        setGraphData_user(buffer_user)
-        setMaxDefaultYaxis(1.2 * Math.max(koltoff));
-        setInitialLimits([0, 14, 0, max_default_y_axis]);
-        setGraphTitle(["Evaluation of Capacity of Buffer"]);
-      } 
-      // else {
-      //   setGraphData(buffer);
-      // }
-      setNeedUpdate(false);
-    }
-  });
+
 
   let initial_sum_water_buffer = [];
   let sum_water_buffer = [];
@@ -273,7 +259,7 @@ function VANSYKLE({
       (element, idx) => element + water_contribution[idx]
     );
   }
-console.log(buffer)
+
   // Código de variaveis para o gráfico do user
 
   let alpha_user = ph.map((ph) => calcAlpha(ph, pkauser));
@@ -387,7 +373,7 @@ console.log(buffer)
     );
   }
   if (buffer_user && water_contribution) {
-    sum_water_buffer = water_contribution.map(
+    sum_water_buffer_user = water_contribution.map(
       (element, idx) => element + buffer_user[idx]
     );
   }
@@ -499,6 +485,10 @@ console.log(buffer)
   // }, [alpha, ph, buffer, max_default_y_axis, water_contribution,graph_data,graph_title,compound]);
   // criando função que muda entre van slke e koltoff
 
+  useEffect(() => {
+    changeGraphToVanSykle()
+  },[chosenconc])
+  
   function changeGraphToKoltoff() {
     setGraphData(koltoff);
     setGraphData_user(koltoff_user)
@@ -572,31 +562,32 @@ console.log(buffer)
 
   
 
-  const getCalculatedData = () => {
+  const getCalculatedData_user = () => {
     if (showInput) {
       if (graph_data_user !== buffer_user && graph_title[0] === "Evaluation of Capacity of Buffer") return buffer_user;
       if (graph_data_user !== koltoff_user && graph_title[0] === "Kolthoff's buffer capacity") return koltoff_user;
       if (graph_data_user !== buffering_funtion_user && graph_title[0] === "Buffering Function") return buffering_funtion_user;
-      if (graph_data_user !== sum_water_buffer && graph_title[0] === "Capacity of Buffer + Water contribuition") return sum_water_buffer;
+      if (graph_data_user !== sum_water_buffer_user && graph_title[0] === "Capacity of Buffer + Water contribuition") return sum_water_buffer_user;
     }
     return graph_data_user; // Retorna o estado atual se nada mudou
   };
   
-  const graphDataToRender = getCalculatedData();
+  const graphDataToRender_user = getCalculatedData_user();
 
   
-  let y_data = [
-    {
-      label: graph_title,
-      data: graph_data,
-      backgroundColor: "rgba(3, 119, 252, 0.2)",
-      borderColor: "rgba(3, 119, 252, 1)",
-      borderWidth: 2,
-      fill: false,
-    },
-  ];
+  const getCalculatedData = () => {
 
-  let y_data_user = [
+      if (graph_data !== buffer && graph_title[0] === "Evaluation of Capacity of Buffer") return buffer;
+      if (graph_data !== koltoff && graph_title[0] === "Kolthoff's buffer capacity") return koltoff;
+      if (graph_data !== buffering_funtion && graph_title[0] === "Buffering Function") return buffering_funtion;
+      if (graph_data !== sum_water_buffer && graph_title[0] === "Capacity of Buffer + Water contribuition") return sum_water_buffer;
+
+    return graph_data; // Retorna o estado atual se nada mudou
+  };
+  
+  const graphDataToRender = getCalculatedData();
+
+  let y_data = [
     {
       label: graph_title,
       data: graphDataToRender,
@@ -607,7 +598,33 @@ console.log(buffer)
     },
   ];
 
+  let y_data_user = [
+    {
+      label: graph_title,
+      data: graphDataToRender_user,
+      backgroundColor: "rgba(3, 119, 252, 0.2)",
+      borderColor: "rgba(3, 119, 252, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+  ];
 
+  useEffect(() => {
+    if (needupdate) {
+      if (buffer) {
+        setGraphData(buffer);
+        setGraphData_user(buffer_user)
+        setMaxDefaultYaxis(1.2 * Math.max(buffer));
+        setInitialLimits([0, 14, 0, max_default_y_axis]);
+        setGraphTitle(["Evaluation of Capacity of Buffer"]);
+      } 
+      // else {
+      //   setGraphData(buffer);
+      // }
+      setNeedUpdate(false);
+    }
+  },[needupdate, buffer, setNeedUpdate, buffer_user]);
+  console.log(buffer)
   return (
     <div>
       {/* <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -623,6 +640,7 @@ console.log(buffer)
         y_title={graph_title}
         initial_limits={initial_limits}
         graph_title={graph_title}
+        depedency={chosenconc}
       />
         ) : (
           <GraphComponent
@@ -631,6 +649,7 @@ console.log(buffer)
           y_title={graph_title}
           initial_limits={initial_limits}
           graph_title={graph_title}
+          depedency={chosenconc}
         />
         )}
 

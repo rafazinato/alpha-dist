@@ -74,12 +74,28 @@ function SystemSelection({
     value: item,
     label: item,
   }));
-  console.log(list_dataselect);
-  console.log(compound_option);
+
+let default_compound_option = (data.map((compounds,idx) => ( compounds.categoria === "geral" ?  compounds.sistema : null ))).filter((v) => v !== null)
+default_compound_option = default_compound_option.map((item) => ({
+  value: item,
+  label: item,
+}));
+
+
   return (
     <>
       <div className="selection-grip">
+
+
+      </div>
+    
+    <div className="selector">
+      <div >
+        <div >Seleção de base de dados:</div>
+        <div>
         <Select
+          // defaultInputValue='Selecione um ou mais datasets'
+          defaultValue={{value:'geral', label:"geral"}}
           onChange={setSelectedOption}
           isMulti
           name="colors"
@@ -87,52 +103,25 @@ function SystemSelection({
           className="basic-multi-select"
           classNamePrefix="select"
         />
+        </div>
+      </div>
+
+      <div >
+        <div >Seleção de sistema:</div>
+        <div >
         <Select
+          defaultInputValue='Selecione um sistema'
+          defaultValue={{value:'cítrico - ácido', label:"cítrico - ácido"}}
           onChange={handleId}
           name="colors"
           options={compound_option}
           className="basic-multi-select"
           classNamePrefix="select"
         />
+        </div>
       </div>
+    </div>
     </>
-    // <div className="selector">
-    //   <div className="database-selection">
-    //     <div className="grid-item-4">Seleção de base de dados:</div>
-    //     <div className="grid-item-5">
-    //       <Form.Select id="select-menu" defaultValue="Todos" onChange={(e) => handleListName(e.target.value)}>
-    //         <option disabled={true} value="">
-    //           Todos
-    //         </option>
-    //         {listCategory.map((element, index) => (
-    //           <option key={index} value={element}>
-    //             {element}
-    //           </option>
-    //         ))}
-    //       </Form.Select>
-    //     </div>
-    //   </div>
-
-    //   <div className="system-selection">
-    //     <div className="grid-item-1">Seleção de sistema:</div>
-    //     <div className="grid-item-2">
-    //       <Form.Select
-    //         id="select-menu"
-    //         defaultValue=""
-    //         onChange={(e) => handleId(e.target.value)}
-    //       >
-    //         <option disabled={true} value="">
-    //           Open this select menu
-    //         </option>
-    //         {listName.map((element, index) => (
-    //           <option key={index} value={element}>
-    //             {element ? element : initial_list[index]}
-    //           </option>
-    //         ))}
-    //       </Form.Select>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }
 

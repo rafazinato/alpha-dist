@@ -12,6 +12,7 @@ function GraphComponent({
   y_title,
   initial_limits,
   graph_title,
+  depedency
 }) {
   const [showeditor, setShowEditor] = useState(false);
 
@@ -114,7 +115,7 @@ function GraphComponent({
         },
       });
     }
-  }, [x_data, y_data, x_label, y_labels, y_title, main_limit, initial_limits]);
+  }, [x_data, y_data, x_label, y_labels, y_title, main_limit, initial_limits,depedency]);
 
   // Gráfico do Modal
 
@@ -232,6 +233,7 @@ function GraphComponent({
     ymax,
     ymin,
     initial_limits,
+    depedency,
   ]);
 
   function openModal() {
@@ -249,6 +251,8 @@ function GraphComponent({
     setYmax(undefined);
     setXmax(undefined);
   }
+
+  console.log(depedency)
   return (
     <>
       <div className="graph-title" style={{ display: "flex" }}>
