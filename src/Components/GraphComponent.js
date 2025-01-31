@@ -11,6 +11,7 @@ function GraphComponent({
   y_labels,
   y_title,
   initial_limits,
+  graph_title,
 }) {
   const [showeditor, setShowEditor] = useState(false);
 
@@ -26,9 +27,15 @@ function GraphComponent({
   const [ymin, setYmin] = useState(undefined);
   const [ymax, setYmax] = useState(undefined);
 
-  const [main_limit, setMainLimit] = useState([undefined,undefined,undefined,undefined])
+  const [main_limit, setMainLimit] = useState([
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+  ]);
   // Gráfico normal
   useEffect(() => {
+    if (!y_data) return;
     if (chartInstanceRef.current) {
       chartInstanceRef.current.destroy(); // Destroi o gráfico anterior antes de criar o novo
     }
@@ -75,10 +82,12 @@ function GraphComponent({
               },
               beginAtZero: true,
               min: main_limit[2] ? main_limit[2] : initial_limits[2],
-              max:  main_limit[3] ? main_limit[3] : initial_limits[3],
+              max: main_limit[3] ? main_limit[3] : initial_limits[3],
             },
 
             x: {
+              type: 'linear',
+              position: 'bottom',
               title: {
                 display: true,
                 text: "pH",
@@ -88,7 +97,7 @@ function GraphComponent({
                   size: "12px",
                 },
               },
-              min:  main_limit[0] ? main_limit[0] : initial_limits[0],
+              min: main_limit[0] ? main_limit[0] : initial_limits[0],
               max: main_limit[1] ? main_limit[1] : initial_limits[1],
               ticks: {
                 // callback: function (value, index) {
@@ -105,7 +114,7 @@ function GraphComponent({
         },
       });
     }
-  }, [x_data, y_data, x_label, y_labels, y_title,main_limit,initial_limits]);
+  }, [x_data, y_data, x_label, y_labels, y_title, main_limit, initial_limits]);
 
   // Gráfico do Modal
 
@@ -146,6 +155,11 @@ function GraphComponent({
             },
           },
           scales: {
+            xAxes: [{
+              ticks: {
+                precision: 0
+              }
+            }],
             y: {
               title: {
                 display: true,
@@ -162,7 +176,10 @@ function GraphComponent({
             },
 
             x: {
+              type: 'linear',
+              position: 'bottom',
               title: {
+
                 display: true,
                 text: "pH",
                 color: "black",
@@ -173,23 +190,29 @@ function GraphComponent({
               },
               min: xmin ? xmin : initial_limits[0],
               max: xmax ? xmax : initial_limits[1],
-              ticks: {
+              ticks: 
+              {
                 // callback: function (value, index) {
-                //   if (xmin) {
-                //     if (
-                //       Number.isInteger(x_data[index]) &&
-                //       x_data[index] >= xmin
-                //     ) {
-                //       return x_data[index];
-                //     }
-                //   } else {
-                //     if (
-                //       Number.isInteger(x_data[index])
-                
-                //     ) {
-                //       return x_data[index];
-                //     }
-                //   }
+                  // if (Number.isInteger(x_data[index])) {
+                  //   console.log(x_data[index]);
+                  //   // return x_data[index];
+                  // }}
+                // callback: function (value, index) {
+                  // if (xmin) {
+                  //   if (
+                  //     Number.isInteger(x_data[index]) &&
+                  //     x_data[index] >= xmin
+                  //   ) {
+                  //     console.log(x_data[index]);
+                  //     return x_data[index];
+                  //   }
+                  // } else {
+                  //   if (
+                  //     Number.isInteger(x_data[index])
+                  //   ) {
+                  //     return x_data[index];
+                  //   }
+                  // }
                 // },
               },
             },
@@ -208,50 +231,57 @@ function GraphComponent({
     xmax,
     ymax,
     ymin,
-    initial_limits
+    initial_limits,
   ]);
 
   function openModal() {
     setShowEditor(true);
   }
   function handleSave() {
-    setMainLimit([xmin, xmax,ymin, ymax])
+    setMainLimit([xmin, xmax, ymin, ymax]);
   }
   function handleResetGraph() {
-    setMainLimit(initial_limits)
+    setMainLimit(initial_limits);
   }
   function resetEditor() {
-    setYmin(undefined)
-    setXmin(undefined)
-    setYmax(undefined)
-    setXmax(undefined)
-
+    setYmin(undefined);
+    setXmin(undefined);
+    setYmax(undefined);
+    setXmax(undefined);
   }
   return (
     <>
-      <Button
-        style={{
-          backgroundColor: "#C7DCE5",
-          fontFamily: "Inter",
-          border: "none",
-          fontSize: "12px",
-        }}
-        onClick={() => openModal()}
-      >
-        <span class="material-symbols-outlined">edit</span>
-      </Button>
-      <Button
-        style={{
-          backgroundColor: "#C7DCE5",
-          fontFamily: "Inter",
-          border: "none",
-          fontSize: "12px",
-        }}
-        onClick={() => handleResetGraph()}
-      >
-        <span class="material-symbols-outlined">restart_alt</span>{" "}
-      </Button>
-      <div style={{ width: "500px", height: "500px" }}>
+      <div className="graph-title" style={{ display: "flex" }}>
+        <div style={{ width: "100%" }}>
+          <p> {graph_title}</p>
+        </div>
+
+        <div className="edition-buttons-container">
+        <Button
+          style={{
+            backgroundColor: "#C7DCE5",
+            fontFamily: "Inter",
+            border: "none",
+            fontSize: "12px",
+          }}
+          onClick={() => openModal()}
+        >
+          <span class="material-symbols-outlined">edit</span>
+        </Button>
+        <Button
+          style={{
+            backgroundColor: "#C7DCE5",
+            fontFamily: "Inter",
+            border: "none",
+            fontSize: "12px",
+          }}
+          onClick={() => handleResetGraph()}
+        >
+          <span class="material-symbols-outlined">restart_alt</span>{" "}
+        </Button>
+      </div>
+      </div>  
+      <div className="graph-container">
         <canvas ref={chartRef}></canvas>
       </div>
 
@@ -311,7 +341,7 @@ function GraphComponent({
                 fontSize: "12px",
                 height: `35px`,
               }}
-                onClick={() => handleSave()}
+              onClick={() => handleSave()}
             >
               Salvar
             </Button>
@@ -324,7 +354,7 @@ function GraphComponent({
                 fontSize: "12px",
                 height: `35px`,
               }}
-                onClick={() => resetEditor()}
+              onClick={() => resetEditor()}
             >
               Resetar
             </Button>

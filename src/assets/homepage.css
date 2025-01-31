@@ -8,6 +8,7 @@ body {
     width: 100%;
     grid-template-columns: 2fr 1fr 2fr;
     gap: 15px;
+    row-gap: 20px;
   
   
   
@@ -17,6 +18,7 @@ body {
   
   .grid-system-selection {
       margin: 10px 10px 0px 10px;
+      
   }
   
   .background-molecule {

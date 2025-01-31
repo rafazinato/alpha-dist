@@ -161,13 +161,23 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc }) {
           <td>
             α<sub>4</sub>
           </td>
+          <td>{Number(alpha[4]) ? alpha[4].toFixed(4) : "--"}</td>
+          <td>
+            {Math.log10(Number(alpha[4]))
+              ? Math.log10(Number(alpha[4])).toFixed(4)
+              : "--"}
+          </td>
         </tr>
         <tr>
           <td>
             α<sub>5</sub>
           </td>
-          <td></td>
-          <td></td>
+          <td>{Number(alpha[5]) ? alpha[5].toFixed(4) : "--"}</td>
+          <td>
+            {Math.log10(Number(alpha[5]))
+              ? Math.log10(Number(alpha[5])).toFixed(4)
+              : "--"}
+          </td>
 
 
         </tr>
@@ -175,8 +185,12 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc }) {
           <td>
             α<sub>6</sub>
           </td>
-          <td></td>
-          <td></td>
+          <td>{Number(alpha[6]) ? alpha[6].toFixed(4) : "--"}</td>
+          <td>
+            {Math.log10(Number(alpha[6]))
+              ? Math.log10(Number(alpha[6])).toFixed(4)
+              : "--"}
+          </td>
 
 
         </tr>
@@ -184,15 +198,23 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc }) {
           <td>
             α<sub>7</sub>
           </td>
-          <td></td>
-          <td></td>
+          <td>{Number(alpha[7]) ? alpha[7].toFixed(4) : "--"}</td>
+          <td>
+            {Math.log10(Number(alpha[7]))
+              ? Math.log10(Number(alpha[7])).toFixed(4)
+              : "--"}
+          </td>
         </tr>
         <tr>
           <td>
             α<sub>8</sub>
           </td>
-          <td></td>
-          <td></td>
+          <td>{Number(alpha[8]) ? alpha[8].toFixed(4) : "--"}</td>
+          <td>
+            {Math.log10(Number(alpha[8]))
+              ? Math.log10(Number(alpha[8])).toFixed(4)
+              : "--"}
+          </td>
         </tr>
       </table>
     );

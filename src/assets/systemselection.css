@@ -76,3 +76,8 @@
     text-align: right;
     width: 250px;
 }
+
+.selection-grip {
+    gap: 16px;
+    
+}

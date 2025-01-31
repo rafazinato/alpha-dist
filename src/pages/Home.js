@@ -43,16 +43,26 @@ function Home() {
      const [chosenconc, setChosenConc] = useState(0) 
      // State que controla user gráfico
      const userchartInstanceRef = useRef(null);
-     // Calculando a carga de cada alfa
+     // Calculando a carga de cada alfa 
      let listpka = [compound.pka1, compound.pka2, compound.pka3, compound.pka4,compound.pka5,compound.pka6,compound.pka7,compound.pka8];
      let numberpka = listpka.filter((v) => v).length;
      let alfascharge = [compound.charge_protonated];
      for (let i = 0; i < numberpka; i++) {
        alfascharge.push(alfascharge[alfascharge.length - 1] - 1);
      }
+
+
      // State que vai conter os pkas inseridos pelo usuario
      const [showInput, setShowInput] = useState(false);
      const [pkauser, setPkaUser] = useState([]);
+     const [max_charge_user , setMaxChargeUser] = useState()
+     let alfascharge_user = [max_charge_user];
+     let numberpka_user = pkauser.filter((v) => v).length;
+     for (let i = 0; i < numberpka_user; i++) {
+      alfascharge_user.push(alfascharge_user[alfascharge_user.length - 1] - 1);
+     }
+     
+     console.log(alfascharge_user)
      const datasets = {
        'Dataset' : file,
      };
@@ -90,26 +100,26 @@ function Home() {
               <Molecule smiles={compound.smiles}/>
             </div>
             <div className="table-1">
-              <Table1 compound={compound} setCompound={setCompound} pkauser={pkauser} setPkaUser={setPkaUser}  showInput={showInput} setShowInput={setShowInput} userchartInstanceRef={userchartInstanceRef}/>
+              <Table1 compound={compound} setCompound={setCompound} pkauser={pkauser} setPkaUser={setPkaUser}  showInput={showInput} setShowInput={setShowInput} userchartInstanceRef={userchartInstanceRef} max_charge_user={max_charge_user} setMaxChargeUser={setMaxChargeUser} />
             </div>
             <div >
-            <QEGRAPH compound={compound} alfascharge={alfascharge} />
+            <QEGRAPH compound={compound} alfascharge={alfascharge} alfascharge_user={alfascharge_user} pkauser={pkauser} showInput={showInput} />
             </div>
             <div className='dde'>
                 <DDE compound={compound} pkauser={pkauser} showInput={showInput} userchartInstanceRef={userchartInstanceRef} />
             </div>
             <div className='ddelog'>
-                <LOGDDE compound={compound} />
+                <LOGDDE compound={compound} pkauser={pkauser} showInput={showInput} />
             </div>
             <div className='table-2'>
 
               <Table2 compound={compound} alfascharge={alfascharge}  chosenconc={chosenconc} setChosenConc={setChosenConc} />
             </div>
             <div>
-              <VANSYKLE compound={compound} alfascharge={alfascharge} chosenconc={chosenconc} needupdate={needupdate} setNeedUpdate={setNeedUpdate} />
+              <VANSYKLE compound={compound} alfascharge={alfascharge} chosenconc={chosenconc} needupdate={needupdate} setNeedUpdate={setNeedUpdate} pkauser={pkauser} showInput={showInput} alfascharge_user={alfascharge_user}  />
             </div>
             <div>
-            <IONICSTRENGTH compound={compound} alfascharge={alfascharge} chosenconc={chosenconc} />
+            <IONICSTRENGTH compound={compound} alfascharge={alfascharge} chosenconc={chosenconc} alfascharge_user={alfascharge_user} pkauser={pkauser} showInput={showInput}  />
             </div>
         </div>
         <Footer />

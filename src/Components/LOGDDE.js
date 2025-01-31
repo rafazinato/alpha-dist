@@ -3,6 +3,7 @@ import Chart from "chart.js/auto";
 import "../assets/graphs.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import GraphComponent from "./GraphComponent";
 
 function arange(start, stop, step = 1) {
   let result = [];
@@ -12,7 +13,7 @@ function arange(start, stop, step = 1) {
   return result;
 }
 
-function DDE({ compound }) {
+function DDE({ compound, pkauser, showInput }) {
   // Variavéis usadas para construção do editor de gráfico
 
   const [showeditor, setShowEditor] = useState(false);
@@ -21,8 +22,7 @@ function DDE({ compound }) {
   const [ph_editor, setPhEditor] = useState(() =>
     arange(0, 14, 0.05).map((value) => parseFloat(value.toFixed(1)))
   );
-  const [storage_ymin, setStorageYmin] = useState(null);
-  const [storage_ymax, setStorageYmax] = useState(null);
+
   const [ymin_editor, setYminEditor] = useState(undefined);
   const [ymax_editor, setYmaxEditor] = useState(undefined);
   let ph_reference = arange(0, 14.05, 0.05).map((value) =>
@@ -92,12 +92,28 @@ function DDE({ compound }) {
   let loga1 = alpha.map((a) => Math.log10(a[1]));
   let loga2 = alpha.map((a) => Math.log10(a[2]));
   let loga3 = alpha.map((a) => Math.log10(a[3]));
+  let loga4 = alpha.map((a) => Math.log10(a[4]));
+  let loga5 = alpha.map((a) => Math.log10(a[5]));
+  let loga6 = alpha.map((a) => Math.log10(a[6]));
+  let loga7 = alpha.map((a) => Math.log10(a[7]));
+  let loga8 = alpha.map((a) => Math.log10(a[8]));
   let alpha_reference = ph_reference.map((ph) => calcAlpha(ph, pka));
   let loga0_reference = alpha_reference.map((a) => Math.log10(a[0]));
   let loga1_reference = alpha_reference.map((a) => Math.log10(a[1]));
   let loga2_reference = alpha_reference.map((a) => Math.log10(a[2]));
   let loga3_reference = alpha_reference.map((a) => Math.log10(a[3]));
 
+  // Calculando com os dados inseridos pelo usuario
+  let alpha_user = ph.map((ph) => calcAlpha(ph, pkauser));
+  let loga0_user = alpha_user.map((a) => Math.log10(a[0]));
+  let loga1_user = alpha_user.map((a) => Math.log10(a[1]));
+  let loga2_user = alpha_user.map((a) => Math.log10(a[2]));
+  let loga3_user = alpha_user.map((a) => Math.log10(a[3]));
+  let loga4_user = alpha_user.map((a) => Math.log10(a[4]));
+  let loga5_user = alpha_user.map((a) => Math.log10(a[5]));
+  let loga6_user = alpha_user.map((a) => Math.log10(a[6]));
+  let loga7_user = alpha_user.map((a) => Math.log10(a[7]));
+  let loga8_user = alpha_user.map((a) => Math.log10(a[8]));
   // Criando o gráfico principal
 
   useEffect(() => {
@@ -207,44 +223,6 @@ function DDE({ compound }) {
   let alpha_min = 0;
   let alpha_max = 0;
 
-  function changephEditor() {
-    if (xmin !== 0 && xmax !== 0) {
-      setPhEditor(arange(xmin, xmax, 0.05));
-      alpha_min = ph_reference.indexOf(xmin);
-      alpha_max = ph_reference.indexOf(xmax);
-      setLogA0Editor(loga0.slice(alpha_min, alpha_max));
-      setLogA1Editor(loga1.slice(alpha_min, alpha_max));
-      setLogA2Editor(loga2.slice(alpha_min, alpha_max));
-      setLogA3Editor(loga3.slice(alpha_min, alpha_max));
-    } else if (xmin !== 0 && xmax === 0) {
-      setPhEditor(arange(xmin, 14, 0.05));
-      console.log("a");
-      alpha_min = ph_reference.indexOf(xmin);
-      setLogA0Editor(loga0.slice(alpha_min));
-      setLogA1Editor(loga1.slice(alpha_min));
-      setLogA2Editor(loga2.slice(alpha_min));
-      setLogA3Editor(loga3.slice(alpha_min));
-    } else if (xmax !== 0) {
-      setPhEditor(arange(0, xmax, 0.05));
-      alpha_max = ph_reference.indexOf(xmax);
-      setLogA0Editor(loga0.slice(0, alpha_max));
-      setLogA1Editor(loga1.slice(0, alpha_max));
-      setLogA2Editor(loga2.slice(0, alpha_max));
-      setLogA3Editor(loga3.slice(0, alpha_max));
-    } else {
-      setPhEditor(arange(xmin, 14, 0.05));
-      alpha_min = ph_reference.indexOf(xmin);
-      setLogA0Editor(loga0.slice(alpha_min));
-      setLogA1Editor(loga1.slice(alpha_min));
-      setLogA2Editor(loga2.slice(alpha_min));
-      setLogA3Editor(loga3.slice(alpha_min));
-    }
-    setYmin(storage_ymin);
-    setYmax(storage_ymax);
-    setYmaxEditor(storage_ymax);
-    setYminEditor(storage_ymin);
-  }
-
   useEffect(() => {
     if (!showeditor) return;
     if (editorInstanceRef.current) {
@@ -339,7 +317,11 @@ function DDE({ compound }) {
                 },
               },
               ticks: {
-                callback: function (value,index) { if (Number.isInteger(ph[index])) { return ph[index]; } },
+                callback: function (value, index) {
+                  if (Number.isInteger(ph[index])) {
+                    return ph[index];
+                  }
+                },
               },
             },
           },
@@ -366,151 +348,183 @@ function DDE({ compound }) {
     ymin_editor,
   ]);
 
-  function handleSave() {
-    loga0 = loga0_editor;
-    loga1 = loga1_editor;
-    loga2 = loga2_editor;
-    loga3 = loga3_editor;
-    setPh(ph_editor);
-  }
-  function handleResetGraph() {
-    setPh(arange(0, 14.05, 0.05).map((value) => parseFloat(value.toFixed(4))));
-    loga0 = alpha.map((a) => a[0]);
-    loga1 = alpha.map((a) => a[1]);
-    loga2 = alpha.map((a) => a[2]);
-    loga3 = alpha.map((a) => a[3]);
-    setYmin(0);
-    setYmax(1);
-    console.log(loga0);
-  }
+  let y_data = [
+    {
+      label: "α0",
+      data: loga0,
+      backgroundColor: "rgba(3, 119, 252, 0.2)",
+      borderColor: "rgba(3, 119, 252, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α1",
+      data: loga1,
+      backgroundColor: "rgba(252, 177, 3, 0.2)",
+      borderColor: "rgba(252, 177, 3, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α2",
+      data: loga2,
+      backgroundColor: "rgba(11, 158, 45, 0.2)",
+      borderColor: "rgba(11, 158, 45, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α3",
+      data: loga3,
+      backgroundColor: "rgba(219, 18, 18, 0.2)",
+      borderColor: "rgba(219, 18, 18, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α4",
+      data: loga4,
+      backgroundColor: "rgba(18, 206, 219, 0.2)",
+      borderColor: "rgb(18, 212, 219)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α5",
+      data: loga5,
+      backgroundColor: "rgba(162, 18, 219, 0.2)",
+      borderColor: "rgb(179, 18, 219)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α6",
+      data: loga6,
+      backgroundColor: "rgba(108, 219, 18, 0.2)",
+      borderColor: "rgb(98, 219, 18)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α7",
+      data: loga7,
+      backgroundColor: "rgba(219, 18, 112, 0.2)",
+      borderColor: "rgb(219, 18, 169)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α8",
+      data: loga8,
+      backgroundColor: "rgba(18, 31, 219, 0.2)",
+      borderColor: "rgb(18, 31, 219)",
+      borderWidth: 2,
+      fill: false,
+    },
+  ];
+  y_data = y_data.filter((item) => Array.isArray(item.data) && item.data[0]);
 
-  function openModal() {
-    setPhEditor(
-      arange(0, 14.05, 0.05).map((value) => parseFloat(value.toFixed(4)))
-    );
-    setLogA0Editor(loga0_reference);
-    setLogA1Editor(loga1_reference);
-    setLogA2Editor(loga2_reference);
-    setLogA3Editor(loga3_reference);
-    setYmaxEditor(1);
-    setYminEditor(0);
-    setShowEditor(true);
-  }
+  let y_data_user = [
+    {
+      label: "α0",
+      data: loga0_user,
+      backgroundColor: "rgba(3, 119, 252, 0.2)",
+      borderColor: "rgba(3, 119, 252, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α1",
+      data: loga1_user,
+      backgroundColor: "rgba(252, 177, 3, 0.2)",
+      borderColor: "rgba(252, 177, 3, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α2",
+      data: loga2_user,
+      backgroundColor: "rgba(11, 158, 45, 0.2)",
+      borderColor: "rgba(11, 158, 45, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α3",
+      data: loga3_user,
+      backgroundColor: "rgba(219, 18, 18, 0.2)",
+      borderColor: "rgba(219, 18, 18, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α4",
+      data: loga4_user,
+      backgroundColor: "rgba(18, 206, 219, 0.2)",
+      borderColor: "rgb(18, 212, 219)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α5",
+      data: loga5_user,
+      backgroundColor: "rgba(162, 18, 219, 0.2)",
+      borderColor: "rgb(179, 18, 219)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α6",
+      data: loga6_user,
+      backgroundColor: "rgba(108, 219, 18, 0.2)",
+      borderColor: "rgb(98, 219, 18)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α7",
+      data: loga7_user,
+      backgroundColor: "rgba(219, 18, 112, 0.2)",
+      borderColor: "rgb(219, 18, 169)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "α8",
+      data: loga8_user,
+      backgroundColor: "rgba(18, 31, 219, 0.2)",
+      borderColor: "rgb(18, 31, 219)",
+      borderWidth: 2,
+      fill: false,
+    },
+  ];
+
+  y_data_user = y_data_user.filter(
+    (item) => Array.isArray(item.data) && item.data[0]
+  );
 
   return (
     <div>
-      <div className="graph-title" style={{ display: "flex" }}>
-        <div style={{ width: "100%" }}>
-          <p> Logaritmo Diagrama de distribuição de espécies</p>
-        </div>
-
-        <div className="edition-buttons-container">
-          <Button
-            style={{
-              backgroundColor: "#C7DCE5",
-              fontFamily: "Inter",
-              border: "none",
-              fontSize: "12px",
-            }}
-            onClick={() => openModal()}
-          >
-            <span class="material-symbols-outlined">edit</span>
-          </Button>
-          <Button
-            style={{
-              backgroundColor: "#C7DCE5",
-              fontFamily: "Inter",
-              border: "none",
-              fontSize: "12px",
-            }}
-            onClick={() => handleResetGraph()}
-          >
-            <span class="material-symbols-outlined">restart_alt</span>{" "}
-          </Button>
-        </div>
-      </div>
-
       <div className="graph-container">
-        <canvas ref={chartRef} />
+        {/* <canvas ref={chartRef} /> */}
+        {showInput ? (
+          <GraphComponent
+            x_data={ph}
+            y_data={y_data_user}
+            y_title={"Fraction of equilibrium (logα)"}
+            initial_limits={[0, 14, -30, 0]}
+            graph_title={"Logaritmo Diagrama de distribuição de espécies"}
+          />
+        ) : (
+          <GraphComponent
+            x_data={ph}
+            y_data={y_data}
+            y_title={"Fraction of equilibrium (logα)"}
+            initial_limits={[0, 14, -30, 0]}
+            graph_title={"Logaritmo Diagrama de distribuição de espécies"}
+          />
+        )}
       </div>
-
-      <Modal
-        onHide={() => setShowEditor(false)}
-        show={showeditor}
-        dialogClassName="modal-editor"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {" "}
-            Editor do Logaritmo do Diagrama de distribuição de espécies
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div>
-            <canvas ref={editorRef} />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="modal-buttons-container">
-            <p>
-              X min:
-              <input
-                type="number"
-                onChange={(e) => setXmin(Number(e.target.value))}
-              />{" "}
-            </p>
-            <p>
-              X max:
-              <input
-                type="number"
-                onChange={(e) => setXmax(Number(e.target.value))}
-              />
-            </p>
-            <p>
-              Y min:
-              <input
-                type="number"
-                onChange={(e) => setStorageYmin(Number(e.target.value))}
-              />
-            </p>
-            <p>
-              Y max:
-              <input
-                type="number"
-                onChange={(e) => setStorageYmax(Number(e.target.value))}
-              />
-            </p>
-            <Button
-              style={{
-                backgroundColor: "#C7DCE5",
-                color: "black",
-                fontFamily: "Inter",
-                border: "none",
-                fontSize: "12px",
-                height: `35px`,
-              }}
-              onClick={() => changephEditor()}
-            >
-              Aplicar
-            </Button>
-            <Button
-              style={{
-                backgroundColor: "#C7DCE5",
-                color: "black",
-                fontFamily: "Inter",
-                border: "none",
-                fontSize: "12px",
-                height: `35px`,
-              }}
-              onClick={() => handleSave()}
-            >
-              Salvar
-            </Button>
-          </div>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 }

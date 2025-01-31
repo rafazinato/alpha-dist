@@ -8,6 +8,8 @@ function Table1({
   showInput,
   setShowInput,
   userchartInstanceRef,
+  max_charge_user,
+  setMaxChargeUser,
 }) {
   compound.charge_protonated = Number(compound.charge_protonated);
   // const [showInput, setShowInput] = useState(false);
@@ -45,6 +47,22 @@ function Table1({
       </>
     );
   }
+
+  function inputfunc_charge_user() {
+    return (
+      <>
+        <input
+          id="id-input-user"
+          type="number"
+          className="table-input"
+          onChange={(e) => setMaxChargeUser(Number(e.target.value))}
+        ></input>
+      </>
+    );
+  }
+
+
+  
   function handlebutton() {
     resetuserData()
     showInput ?  setTextButton('Inserir dados originais'): setTextButton('Voltar à base de dados')
@@ -83,7 +101,7 @@ function Table1({
       .indexOf(Math.max(...alfascharge.map(Math.abs)));
     let maxcharge = alfascharge[indexOfMax];
     listpka.unshift(maxcharge);
-
+    console.log(max_charge_user)
     return (
       <div style={{ display: "flex", gap: "10px" }}>
 
@@ -94,7 +112,14 @@ function Table1({
             </tr>
           </thead>
           <tr>
-            <td>{maxcharge}</td>
+            <td>
+            {showInput
+                  ? inputfunc_charge_user()
+                  : maxcharge
+                  ? maxcharge
+                  : "--"}
+              
+              </td>
           </tr>
         </table>
         <table className="table1">

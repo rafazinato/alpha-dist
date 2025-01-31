@@ -2,7 +2,7 @@ import Nav from "../Components/Nav.js";
 import Footer from "../Components/Footer.js";
 import "../assets/about.css";
 import { FaLinkedin, FaEnvelope } from "react-icons/fa6";
-import GraphComponent from "../Components/GraphComponent.js";
+
 
 function About() {
   // Para teste do graph componente
@@ -154,16 +154,8 @@ function About() {
           </div>
         </section>
       </div>
-      <p>Teste com componente gráfico</p>
-      <>
-        <GraphComponent
-          x_data={[1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14]}
-          y_data={y_data}
-          y_title={"bbb"}
-          initial_limits={[0,14,0,1]}
 
-        />
-      </>
+     
       <Footer />
     </>
   );

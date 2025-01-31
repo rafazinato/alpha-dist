@@ -4,6 +4,8 @@ import "../assets/graphs.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useMemo } from "react";
+import GraphComponent from "./GraphComponent";
+
 function arange(start, stop, step = 1) {
   let result = [];
   for (let i = start; i < stop; i += step) {
@@ -12,7 +14,13 @@ function arange(start, stop, step = 1) {
   return result;
 }
 
-function QEGRAPH({ compound, alfascharge }) {
+function QEGRAPH({
+  compound,
+  alfascharge,
+  alfascharge_user,
+  pkauser,
+  showInput,
+}) {
   // Variavéis usadas para construção do editor de gráfico
   const [showeditor, setShowEditor] = useState(false);
   const editorRef = useRef(null);
@@ -42,7 +50,7 @@ function QEGRAPH({ compound, alfascharge }) {
     Number(compound.pka5),
     Number(compound.pka6),
     Number(compound.pka7),
-    Number(compound.pka8)
+    Number(compound.pka8),
   ].filter((v) => v !== 0);
   const [xmin, setXmin] = useState(undefined);
   const [xmax, setXmax] = useState(undefined);
@@ -88,12 +96,45 @@ function QEGRAPH({ compound, alfascharge }) {
   let a1 = alpha.map((a) => a[1]);
   let a2 = alpha.map((a) => a[2]);
   let a3 = alpha.map((a) => a[3]);
+  let a4 = alpha.map((a) => a[4]);
+  let a5 = alpha.map((a) => a[5]);
+  let a6 = alpha.map((a) => a[6]);
+  let a7 = alpha.map((a) => a[7]);
+  let a8 = alpha.map((a) => a[8]);
 
   // Criando o cálculo da carga efetiva
-  let alpha_list = [a0, a1, a2, a3];
+  let alpha_list = [a0, a1, a2, a3, a4, a5, a6, a7, a8];
   let each_charge = ph.map((ph, phindex) =>
     alfascharge.map(
       (charge, index) => Number(charge) * Number(alpha_list[index][phindex])
+    )
+  );
+
+  let alpha_user = ph.map((ph) => calcAlpha(ph, pkauser));
+  let a0_user = alpha_user.map((a) => a[0]);
+  let a1_user = alpha_user.map((a) => a[1]);
+  let a2_user = alpha_user.map((a) => a[2]);
+  let a3_user = alpha_user.map((a) => a[3]);
+  let a4_user = alpha_user.map((a) => a[4]);
+  let a5_user = alpha_user.map((a) => a[5]);
+  let a6_user = alpha_user.map((a) => a[6]);
+  let a7_user = alpha_user.map((a) => a[7]);
+  let a8_user = alpha_user.map((a) => a[8]);
+  let alpha_list_user = [
+    a0_user,
+    a1_user,
+    a2_user,
+    a3_user,
+    a4_user,
+    a5_user,
+    a6_user,
+    a7_user,
+    a8_user,
+  ];
+  let each_charge_user = ph.map((ph, phindex) =>
+    alfascharge_user.map(
+      (charge, index) =>
+        Number(charge) * Number(alpha_list_user[index][phindex])
     )
   );
 
@@ -113,94 +154,101 @@ function QEGRAPH({ compound, alfascharge }) {
     return tempReference;
   }, [each_charge]);
 
+  let effective_charge_user = useMemo(() => {
+    const tempReference = [];
+    each_charge_user.forEach((num) => {
+      tempReference.push(num.reduce((acc, curr) => acc + curr, 0));
+    });
+    return tempReference;
+  }, [each_charge_user]);
+
   let effective_charge_reference = useMemo(() => {
     const tempReference = [];
     each_charge.forEach((num) => {
       tempReference.push(num.reduce((acc, curr) => acc + curr, 0));
     });
     return tempReference;
-  }, [each_charge]); 
-
+  }, [each_charge]);
 
   // Criando o gráfico
 
-  useEffect(() => {
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
+  // useEffect(() => {
+  //   if (chartInstanceRef.current) {
+  //     chartInstanceRef.current.destroy();
+  //   }
 
-    const ctx = chartRef.current.getContext("2d");
-    if (ctx) {
-      chartInstanceRef.current = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: ph ? ph : [0],
-          datasets: [
-            {
-              label: 'Carga Efetiva',
-              data: effective_charge,
-              backgroundColor: "rgba(3, 119, 252, 0.2)",
-              borderColor: "rgba(3, 119, 252, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-          ],
-        },
-        options: {
-          elements: {
-            point: {
-              radius: 0,
-            },
-          },
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false,
-              position: "top",
-              labels: {
-                font: {
-                  size: 15,
-                },
-              },
-            },
-          },
-          scales: {
-            y: {
-              title: {
-                display: true,
-                text: "Effective Charge (qe)", // 'Fração de α'
-                color: "black",
-                font: {
-                  family: "Inter",
-                  size: "12px",
-                },
-              },
-              beginAtZero: true,
-              min: ymin ? ymin : Math.min(effective_charge_reference),
-              max: ymax ? ymax : Math.max(effective_charge_reference),
-            },
-            x: {
-              title: {
-                display: true,
-                text: "pH",
-                color: "black",
-                font: {
-                  family: "Inter",
-                  size: "12px",
-                },
-              },
-              min: Math.min(ph),
-              max: Math.max(ph),
-              ticks: {
-                callback: function (value,index) { if (Number.isInteger(ph[index])) { return ph[index]; } },
-                
-              },
-            },
-          },
-        },
-      });
-    }
-  }, [alpha, ph, effective_charge, effective_charge_reference, ymax, ymin]);
+  //   const ctx = chartRef.current.getContext("2d");
+  //   if (ctx) {
+  //     chartInstanceRef.current = new Chart(ctx, {
+  //       type: "line",
+  //       data: {
+  //         labels: ph ? ph : [0],
+  //         datasets: [
+  //           {
+  //             label: 'Carga Efetiva',
+  //             data: effective_charge,
+  //             backgroundColor: "rgba(3, 119, 252, 0.2)",
+  //             borderColor: "rgba(3, 119, 252, 1)",
+  //             borderWidth: 2,
+  //             fill: false,
+  //           },
+  //         ],
+  //       },
+  //       options: {
+  //         elements: {
+  //           point: {
+  //             radius: 0,
+  //           },
+  //         },
+  //         responsive: true,
+  //         plugins: {
+  //           legend: {
+  //             display: false,
+  //             position: "top",
+  //             labels: {
+  //               font: {
+  //                 size: 15,
+  //               },
+  //             },
+  //           },
+  //         },
+  //         scales: {
+  //           y: {
+  //             title: {
+  //               display: true,
+  //               text: "Effective Charge (qe)", // 'Fração de α'
+  //               color: "black",
+  //               font: {
+  //                 family: "Inter",
+  //                 size: "12px",
+  //               },
+  //             },
+  //             beginAtZero: true,
+  //             min: ymin ? ymin : Math.min(effective_charge_reference),
+  //             max: ymax ? ymax : Math.max(effective_charge_reference),
+  //           },
+  //           x: {
+  //             title: {
+  //               display: true,
+  //               text: "pH",
+  //               color: "black",
+  //               font: {
+  //                 family: "Inter",
+  //                 size: "12px",
+  //               },
+  //             },
+  //             min: Math.min(ph),
+  //             max: Math.max(ph),
+  //             ticks: {
+  //               callback: function (value,index) { if (Number.isInteger(ph[index])) { return ph[index]; } },
+
+  //             },
+  //           },
+  //         },
+  //       },
+  //     });
+  //   }
+  // }, [alpha, ph, effective_charge, effective_charge_reference, ymax, ymin]);
 
   // Gráfico do editor
 
@@ -363,9 +411,49 @@ function QEGRAPH({ compound, alfascharge }) {
     setYmax(undefined);
   }
 
+  let y_data = [
+    {
+      label: "Carga Efetiva",
+      data: effective_charge,
+      backgroundColor: "rgba(3, 119, 252, 0.2)",
+      borderColor: "rgba(3, 119, 252, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+  ];
+
+  let y_data_user = [
+    {
+      label: "Carga Efetiva",
+      data: effective_charge_user,
+      backgroundColor: "rgba(3, 119, 252, 0.2)",
+      borderColor: "rgba(3, 119, 252, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+  ];
+  let indexOfMax = alfascharge
+    .indexOf(Math.max(...alfascharge));
+  let indexOfMin = alfascharge
+    .indexOf(Math.min(...alfascharge));
+  let max_y = alfascharge[indexOfMax];
+  let min_y = alfascharge[indexOfMin];
+
+  let max_y_user =
+    alfascharge_user[
+      alfascharge_user
+        .indexOf(Math.max(...alfascharge_user))
+    ];
+
+  let min_y_user =
+    alfascharge_user[
+      alfascharge_user
+        .indexOf(Math.min(...alfascharge_user))
+    ];
+
   return (
     <div>
-      <div className="graph-title" style={{ display: "flex" }}>
+      {/* <div className="graph-title" style={{ display: "flex" }}>
         <div style={{ width: "100%" }}>
           <p>Carga Efetiva</p>
         </div>
@@ -394,13 +482,31 @@ function QEGRAPH({ compound, alfascharge }) {
             <span class="material-symbols-outlined">restart_alt</span>{" "}
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <div className="graph-container">
-        <canvas ref={chartRef} />
+        {/* <canvas ref={chartRef} /> */}
+
+        {showInput ? (
+          <GraphComponent
+            x_data={ph}
+            y_data={y_data_user}
+            y_title={"Effective Charge (qe)"}
+            initial_limits={[0, 14, min_y_user, max_y_user]}
+            graph_title={"Carga Efetiva"}
+          />
+        ) : (
+          <GraphComponent
+            x_data={ph}
+            y_data={y_data}
+            y_title={"Effective Charge (qe)"}
+            initial_limits={[0, 14, min_y, max_y]}
+            graph_title={"Carga Efetiva"}
+          />
+        )}
       </div>
 
-      <Modal
+      {/* <Modal
         onHide={() => setShowEditor(false)}
         show={showeditor}
         dialogClassName="modal-editor"
@@ -473,7 +579,7 @@ function QEGRAPH({ compound, alfascharge }) {
             </Button>
           </div>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
