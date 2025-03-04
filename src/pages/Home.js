@@ -37,7 +37,7 @@ function Home() {
        pka7: '',
        pka8: '',
        smiles: 'C(C(=O)O)C(CC(=O)O)(C(=O)O)O',
-       img_url: 'https://res.cloudinary.com/ditcg5hxz/image/upload/v1738673175/acido-citrico_see3ji.jpg',
+       img_url: 'https://res.cloudinary.com/ditcg5hxz/image/upload/acido-citrico.jpg',
        referencia: '',
        
      });
