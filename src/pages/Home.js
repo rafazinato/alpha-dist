@@ -25,22 +25,23 @@ function Home() {
     //  const [selectedDataset, setSelectedDataset] = useState(file);
     const selectedDataset = file
      const [compound, setCompound] = useState({
-       categoria: '',
-       name: '',
-       charge_protonated: '',
-       pka1: '',
-       pka2: '',
-       pka3: '',
+       categoria: 'geral',
+       name: 'cítrico - ácido',
+       charge_protonated: '0',
+       pka1: '3.128',
+       pka2: '4.761',
+       pka3: '6.396',
        pka4: '',
        pka5: '',
        pka6: '',
        pka7: '',
        pka8: '',
-       smiles: '',
+       smiles: 'C(C(=O)O)C(CC(=O)O)(C(=O)O)O',
+       img_url: 'https://res.cloudinary.com/ditcg5hxz/image/upload/v1738673175/acido-citrico_see3ji.jpg',
        referencia: '',
        
      });
-     const [chosenconc, setChosenConc] = useState(0) 
+     const [chosenconc, setChosenConc] = useState(1) 
      // State que controla user gráfico
      const userchartInstanceRef = useRef(null);
      // Calculando a carga de cada alfa 
@@ -62,7 +63,7 @@ function Home() {
       alfascharge_user.push(alfascharge_user[alfascharge_user.length - 1] - 1);
      }
      
-     console.log(alfascharge_user)
+     
      const datasets = {
        'Dataset' : file,
      };
@@ -93,11 +94,11 @@ function Home() {
         
         <div className='container-first'>
             <div className='grid-system-selection'>
-              <SystemSelection data={data} setCompound={setCompound} datasets={datasets} selectedDataset={selectedDataset} needupdate={needupdate} setNeedUpdate={setNeedUpdate} />   
+              <SystemSelection data={data}  compound={compound} setCompound={setCompound} datasets={datasets} selectedDataset={selectedDataset} needupdate={needupdate} setNeedUpdate={setNeedUpdate} />   
             </div>
   
             <div className="background-molecule">
-              <Molecule smiles={compound.smiles}/>
+              <Molecule smiles={compound.smiles} url={compound.img_url}/>
             </div>
             <div className="table-1">
               <Table1 compound={compound} setCompound={setCompound} pkauser={pkauser} setPkaUser={setPkaUser}  showInput={showInput} setShowInput={setShowInput} userchartInstanceRef={userchartInstanceRef} max_charge_user={max_charge_user} setMaxChargeUser={setMaxChargeUser} />
@@ -113,7 +114,7 @@ function Home() {
             </div>
             <div className='table-2'>
 
-              <Table2 compound={compound} alfascharge={alfascharge}  chosenconc={chosenconc} setChosenConc={setChosenConc} />
+              <Table2 compound={compound} alfascharge={alfascharge}  chosenconc={chosenconc} setChosenConc={setChosenConc} alfascharge_user={alfascharge_user} pkauser={pkauser}  showInput={showInput} />
             </div>
             <div>
               <VANSYKLE compound={compound} alfascharge={alfascharge} chosenconc={chosenconc} needupdate={needupdate} setNeedUpdate={setNeedUpdate} pkauser={pkauser} showInput={showInput} alfascharge_user={alfascharge_user}  />

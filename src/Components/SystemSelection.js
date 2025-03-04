@@ -1,12 +1,14 @@
 import "../assets/systemselection.css";
 import "material-symbols";
 import Form from "react-bootstrap/Form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Select from "react-select";
 
+
 function SystemSelection({
   setCompound,
+  compound,
   data,
   datasets,
   selectedDataset,
@@ -14,12 +16,42 @@ function SystemSelection({
   needupdate,
   setNeedUpdate,
 }) {
+
+  const Checkbox = ({ children, ...props }) => (
+    <label style={{ marginRight: '1em' }}>
+      <input type="checkbox" {...props} />
+      {children}
+    </label>
+  );
+
+// function WhenChecked() {
+//   setSelectedOption(listCategory.map((item) => ({
+//     value: item,
+//     label: item,
+//   })))
+
+// }
+
+// if (isChecked == true) {
+//   setSelectedOption(listCategory.map((item) => ({
+//     value: item,
+//     label: item,
+//   })))
+// }
+
+const [isChecked,setIsChecked] = useState(false)
+
+
+
+
+
   // Compostos que irão aparecer no menu de selecão select
   const [listName, setListName] = useState(
     data.map((compounds, index) => compounds.sistema)
   );
   let initial_list = data.map((compounds, index) => compounds.sistema);
   let listCategory = [...new Set(data.map((item) => item.categoria))];
+  listCategory = listCategory.sort()
   let options_object = listCategory.map((item) => ({
     value: item,
     label: item,
@@ -43,7 +75,8 @@ function SystemSelection({
       pka7: data[idx].pK7,
       pka8: data[idx].pK8,
       smiles: data[idx].smiles_string,
-      referencia: data[idx].referencia,
+      img_url: data[idx].smile_image,
+      referencia: data[idx].reference,
     });
     setNeedUpdate(true);
   };
@@ -59,7 +92,7 @@ function SystemSelection({
   //   }
   // }
 
-  let list_dataselect = selectedOption
+  let list_dataselect = selectedOption 
     ? selectedOption.map((obj) => obj.value)
     : [];
   let compound_option = list_dataselect.map((i) =>
@@ -81,28 +114,70 @@ default_compound_option = default_compound_option.map((item) => ({
   label: item,
 }));
 
+// options_object = options_object.unshift({value: 'Todos', label: "Todos" })
+
+
+function handleDataBaseSelection(e) {
+  setSelectedOption(e)
+  setIsChecked(false)
+}
+
+
+const handleCheckboxChange = (e) => {
+  const newChecked = e.target.checked;
+  setIsChecked(newChecked);
+  let OlderSelectedOption = selectedOption
+  if (newChecked) {
+    // Se estiver marcado, seleciona todas as categorias
+
+    setSelectedOption(listCategory.map((item) => ({
+      value: item,
+      label: item,
+    })));
+  } else {
+    // Se estiver desmarcado, limpa a seleção
+    setSelectedOption(OlderSelectedOption)
+  }
+};
 
   return (
     <>
-      <div className="selection-grip">
+      {/* <div className="selection-grip">
 
 
       </div>
-    
+     */}
     <div className="selector">
       <div >
         <div >Seleção de base de dados:</div>
         <div>
+
         <Select
-          // defaultInputValue='Selecione um ou mais datasets'
-          defaultValue={{value:'geral', label:"geral"}}
-          onChange={setSelectedOption}
+          // onChange={setSelectedOption}
+          onChange={handleDataBaseSelection}
           isMulti
           name="colors"
           options={options_object}
           className="basic-multi-select"
           classNamePrefix="select"
+
         />
+                <div
+        style={{
+          color: 'hsl(0, 0%, 40%)',
+          display: 'inline-block',
+          fontSize: 12,
+          fontStyle: 'italic',
+          marginTop: '1em',
+        }}
+      >
+        <Checkbox
+          checked={isChecked}
+          onChange={handleCheckboxChange} style={{marginRight: '3px'}}
+        > 
+           Selecionar todas as bases de dados
+        </Checkbox>
+      </div>
         </div>
       </div>
 
@@ -110,7 +185,7 @@ default_compound_option = default_compound_option.map((item) => ({
         <div >Seleção de sistema:</div>
         <div >
         <Select
-          defaultInputValue='Selecione um sistema'
+          
           defaultValue={{value:'cítrico - ácido', label:"cítrico - ácido"}}
           onChange={handleId}
           name="colors"
@@ -119,6 +194,7 @@ default_compound_option = default_compound_option.map((item) => ({
           classNamePrefix="select"
         />
         </div>
+      <div>Fonte: {compound ? compound.referencia : null}</div>
       </div>
     </div>
     </>

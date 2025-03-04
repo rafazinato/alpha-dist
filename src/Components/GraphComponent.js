@@ -252,7 +252,7 @@ function GraphComponent({
     setXmax(undefined);
   }
 
-  console.log(depedency)
+  
   return (
     <>
       <div className="graph-title" style={{ display: "flex" }}>
@@ -309,29 +309,33 @@ function GraphComponent({
         <Modal.Footer>
           <div className="modal-buttons-container">
             <p>
-              X min:
+              X mínimo:
               <input
+              id="modal-input"
                 type="number"
                 onChange={(e) => setXmin(Number(e.target.value))}
               />
             </p>
             <p>
-              X max:
+              X máximo:
               <input
+              id="modal-input"
                 type="number"
                 onChange={(e) => setXmax(Number(e.target.value))}
               />
             </p>
             <p>
-              Y min:
+              Y mínino:
               <input
+              id="modal-input"
                 type="number"
                 onChange={(e) => setYmin(Number(e.target.value))}
               />
             </p>
             <p>
-              Y max:
+              Y máximo:
               <input
+              id="modal-input"
                 type="number"
                 onChange={(e) => setYmax(Number(e.target.value))}
               />

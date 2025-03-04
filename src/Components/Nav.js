@@ -17,7 +17,7 @@ function Nav(props) {
             </div>
             <div className='nav'>
             <Link style={{textDecoration: 'none' }} to="/"><Button content="Início" /></Link>
-            <Button style={{textDecoration: 'none' }} content="Tutorial" />
+            <Link style={{textDecoration: 'none' }} to="/tutorial"><Button content="Tutorial" /></Link>
             <Button style={{textDecoration: 'none' }} content="Teoria" />
             <Link style={{textDecoration: 'none' }} to="/sobre"><Button content="Sobre" /></Link>
 

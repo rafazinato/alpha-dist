@@ -624,7 +624,7 @@ function VANSYKLE({
       setNeedUpdate(false);
     }
   },[needupdate, buffer, setNeedUpdate, buffer_user]);
-  console.log(buffer)
+  
   return (
     <div>
       {/* <div style={{display: 'flex', justifyContent: 'center'}}>

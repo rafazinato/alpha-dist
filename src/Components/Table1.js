@@ -101,7 +101,7 @@ function Table1({
       .indexOf(Math.max(...alfascharge.map(Math.abs)));
     let maxcharge = alfascharge[indexOfMax];
     listpka.unshift(maxcharge);
-    console.log(max_charge_user)
+    
     return (
       <div style={{ display: "flex", gap: "10px" }}>
 

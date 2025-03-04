@@ -20,6 +20,7 @@
     "react-router-dom": "^6.28.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.9.0",
+    "react-youtube": "^10.1.0",
     "smiles-drawer": "^2.1.7",
     "web-vitals": "^2.1.4"
   },

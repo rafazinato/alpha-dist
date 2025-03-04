@@ -5,26 +5,8 @@ import { FaLinkedin, FaEnvelope } from "react-icons/fa6";
 
 
 function About() {
-  // Para teste do graph componente
 
-  let y_data = [
-    {
-      label: "α₀",
-      data: [1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14],
-      backgroundColor: "rgba(3, 119, 252, 0.2)",
-      borderColor: "rgba(3, 119, 252, 1)",
-      borderWidth: 2,
-      fill: false,
-    },
-    {
-      label: "α1",
-      data: [1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14],
-      backgroundColor: "rgba(11, 158, 45, 1)",
-      borderColor: "rgba(11, 158, 45, 0.2)",
-      borderWidth: 2,
-      fill: false,
-    },
-  ];
+  
   return (
     <>
       {/* NAV BAR */}
