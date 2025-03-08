@@ -54,13 +54,14 @@
 }
 
 .change-graph-button {
+    margin-top: 10px;
     background-color:#C7DCE5;
     color: black;
     border-radius: 5px;
     border: 2px solid;
     border-color: #00254E ;
     height: 35px;
-    width: 200px;
+    width: 150px;
     font-size: 11px;
     
 }
@@ -73,7 +74,7 @@
 .grid-buttons {
     margin-top: 20px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px
 }
 

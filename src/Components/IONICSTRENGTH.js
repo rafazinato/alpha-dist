@@ -96,31 +96,42 @@ function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pka
 
   // criando o cálculo da carga efetiva
   let alpha_list = [a0, a1, a2, a3, a4, a5, a6, a7, a8];
-  let each_charge = ph.map((ph, phindex) =>
+  let each_charge_quad = ph.map((ph, phindex) =>
     alfascharge.map(
-      (charge, index) => Number(charge) * Number(alpha_list[index][phindex])
+      (charge, index) => Number(charge**2) * Number(alpha_list[index][phindex])
     )
   );
 
-  let effective_charge = [];
+  let qquad = [];
 
-  each_charge.forEach((num) => {
-    effective_charge.push(num.reduce((acc, curr) => acc + curr, 0));
+  each_charge_quad.forEach((num) => {
+    qquad.push(num.reduce((acc, curr) => acc + curr, 0));
   });
 
   let each_charge_user = ph.map((ph, phindex) =>
     alfascharge_user.map(
       (charge, index) =>
-        Number(charge) * Number(alpha_list_user[index][phindex])
+        Number(charge**2) * Number(alpha_list_user[index][phindex])
     )
   );
 
 
-  let ionic_strength = effective_charge.map(
-    (effective_charge) => (1 / 2) * chosenconc * effective_charge ** 2
-  );
+  // qquad = alpha.map((e,idx) => (e*((alfascharge[idx]))**2))
+  // qquad = qquad.reduce(
+  //   (accumulator, currentValue) => accumulator + currentValue,
+  //   0,
+  // );
+  //.reduce((accumulator, currentValue) => accumulator + currentValue,0)
+  // console.log(alpha_list)
 
-    let effective_charge_user = useMemo(() => {
+  // let qquad = (ph.map((ph, phindex) => (alfascharge.map((e,idx) => alpha_list[idx][phindex]*(e)**2))))
+  // console.log(alfascharge) 
+  // console.log(qquad)  
+
+  let ionic_strength =  qquad.map( qquad => (1 / 2) * chosenconc * qquad )
+
+
+    let qquad_user = useMemo(() => {
       const tempReference = [];
       each_charge_user.forEach((num) => {
         tempReference.push(num.reduce((acc, curr) => acc + curr, 0));
@@ -128,8 +139,8 @@ function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pka
       return tempReference;
     }, [each_charge_user]);
 
-  let ionic_strength_user = effective_charge_user.map(
-    (effective_charge_user) => (1 / 2) * chosenconc * effective_charge_user ** 2
+  let ionic_strength_user = qquad_user.map(
+    (qquad_user) => (1 / 2) * chosenconc * qquad_user ** 2
   );
   // Criando o gráfico
 
@@ -224,7 +235,17 @@ function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pka
   //   });
   // }, [alpha, ph, ionic_strength, qwat]); // O efeito será disparado toda vez que o 'text' mudar
 
+  let total = ionic_strength.map( (e,idx) => e + qwat[idx])
+  let total_user = ionic_strength_user.map( (e,idx) => e + qwat[idx])
   let y_data = [
+    {
+      label: "Total",
+      data: total,
+      backgroundColor: "rgba(219, 18, 18, 0.2)",
+      borderColor: "rgba(219, 18, 18, 1)",
+      borderWidth: 2,
+      fill: false,
+      },
     {
       label: "Sistema",
       data: ionic_strength,
@@ -234,16 +255,25 @@ function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pka
       fill: false,
     },
     {
-    label: "Contribuição da água",
+    label: "Água",
     data: qwat,
     backgroundColor: "rgba(3, 119, 252, 0.2)",
     borderColor: "rgba(3, 119, 252, 1)",
     borderWidth: 2,
     fill: false,
     }
+
   ]
 
   let y_data_user = [
+    {
+      label: "Total",
+      data: total_user,
+      backgroundColor: "rgba(219, 18, 18, 0.2)",
+      borderColor: "rgba(219, 18, 18, 1)",
+      borderWidth: 2,
+      fill: false,
+      },
     {
       label: "Sistema",
       data: ionic_strength_user,
@@ -253,7 +283,7 @@ function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pka
       fill: false,
     },
     {
-    label: "Contribuição da água",
+    label: "Água",
     data: qwat,
     backgroundColor: "rgba(3, 119, 252, 0.2)",
     borderColor: "rgba(3, 119, 252, 1)",

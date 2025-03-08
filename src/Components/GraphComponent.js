@@ -69,6 +69,11 @@ function GraphComponent({
                 },
               },
             },
+            tooltip: {
+              callbacks: {
+                label: function (tooltipItem) {
+                  return `Valor: ${tooltipItem.raw.toFixed(5)}`; // Exibe com 5 casas decimais
+                }}},
           },
           scales: {
             y: {
@@ -154,6 +159,11 @@ function GraphComponent({
                 },
               },
             },
+            tooltip: {
+              callbacks: {
+                label: function (tooltipItem) {
+                  return `Valor: ${tooltipItem.raw.toFixed(5)}`; // Exibe com 5 casas decimais
+                }}},
           },
           scales: {
             xAxes: [{

@@ -60,9 +60,15 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc,alfascharge_u
     effective_charge += num;
   });
   let qquad = 0;
-  for (let i = 0; i < alpha.length; i++) {
-    qquad += alpha[i] * each_charge[i] ** 2;
-  }
+  // for (let i = 0; i < alpha.length; i++) {
+  //   qquad += alpha[i] * each_charge[i] ** 2;
+  // }
+  qquad = alpha.map((e,idx) => (e*((alfascharge[idx]))**2))
+  qquad = qquad.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0,
+  );
+
   // Van Slyke’s buffer
 
     let ph_before = Number(chosenph - 0.1);
@@ -84,7 +90,7 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc,alfascharge_u
     buffer =((effective_charge - effective_charge_before) * chosenconc +
         (wat - wat_before)) /
       (Number(chosenph) - ph_before);
-      
+
     // Calculo do buffer sem considerar QWAT
     // buffer = Math.abs(((effective_charge - effective_charge_before)*chosenconc )/(chosenph - ph_before))
     
@@ -117,7 +123,7 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc,alfascharge_u
   let koltoff =
     effective_charge * chosenconc -
         (effective_charge_koltoff*chosenconc);
-console.log(koltoff)
+
 // Calculando parametros para quando o usuario insere dados
 let alpha_user = calcAlpha(chosenph, pkauser);
 
@@ -176,10 +182,15 @@ let koltoff_user =
       10 ** (chosenph - 1 - pKw) +
       effective_charge_koltoff_user * chosenconc);
 
+
+
   let qquad_user = 0    
-  for (let i = 0; i < alpha_user.length; i++) {
-    qquad_user += alpha_user[i] * each_charge_user[i] ** 2;
-  }
+  qquad_user = alpha_user.map((e,idx) => (e*((alfascharge_user[idx]))**2))
+  qquad_user = qquad_user.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0,
+  );
+console.log(effective_charge)
 
   function maketable2() {
     return (
@@ -193,7 +204,7 @@ let koltoff_user =
           <td>
             α<sub>0</sub>
           </td>
-          <td>{alpha_user[0] ? alpha_user[0].toFixed(4) : ( Number(alpha[0]) ? alpha[0].toFixed(4) : "--")}</td>
+          <td>{showInput ? alpha_user[0].toFixed(4) : ( Number(alpha[0]) ? alpha[0].toFixed(4) : "--")}</td>
           {/* <td> {( Number(alpha[0]) ? alpha[0].toFixed(4) : "--")}</td> */}
 
         </tr>

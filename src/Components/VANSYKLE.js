@@ -40,8 +40,7 @@ function VANSYKLE({
     Number(compound.pka8),
   ].filter((v) => v !== 0);
 
-  let ph = arange(0, 14, 0.05);
-
+  let ph = arange(0, 14, 0.1);
   // Função que retorna uma lista, em qu cada elemento corresponde ao alfa0,alfa1....alfaN
 
   function calcAlpha(ph, pka) {
@@ -95,7 +94,7 @@ function VANSYKLE({
   // let effective_charge = [];
 
   if (Array.isArray(ph) && ph.length > 0) {
-    ph_before = ph.map((ph) => ph - 0.05);
+    ph_before = ph.map((ph) => ph - 0.1);
     wat = ph.map((ph) => 10 ** -ph - 10 ** (ph - pKw));
     wat_before = ph_before.map(
       (ph_before) => 10 ** -ph_before - 10 ** (ph_before - pKw)
@@ -169,10 +168,14 @@ function VANSYKLE({
     }
     return tempReference;
   }, [chosenconc, ph, effective_charge]);
-
+  
+  let phbuffer = arange(0.1, 14, 0.1);
+  // phbuffer.shift()
+  console.log(buffer)
+  console.log(ph)
   const [showKoltOff, setShowKoltoff] = useState(true);
   const [graph_title, setGraphTitle] = useState([
-    "Evaluation of Capacity of Buffer",
+    "Van Slyke's buffer power",
   ]);
 
   // for (let i = 1; i < ph.length; i++) {
@@ -243,7 +246,8 @@ function VANSYKLE({
 
   const [graph_data, setGraphData] = useState();
 
-
+  let buffer_total = buffer.map((e,idx) => e + water_contribution[idx])
+  let koltoff_total = koltoff.map((e,idx) => e + water_contribution[idx])
 
 
 
@@ -377,8 +381,9 @@ function VANSYKLE({
       (element, idx) => element + buffer_user[idx]
     );
   }
-
-  const [graph_data_user, setGraphData_user] = useState(buffer_user);
+  let buffer_total_user = buffer_user.map((e,idx) => e + water_contribution[idx])
+  let koltoff_user_total = koltoff_user.map((e,idx) => e + water_contribution[idx])
+  const [graph_data_user, setGraphData_user] = useState([buffer_total_user, buffer_user,water_contribution]);
   // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
   // useEffect(() => {
 
@@ -503,7 +508,7 @@ function VANSYKLE({
     setGraphData_user(buffer_user)
     setMaxDefaultYaxis(1.2 * Math.max(koltoff));
     setInitialLimits([0, 14, 0, max_default_y_axis]);
-    setGraphTitle(["Evaluation of Capacity of Buffer"]);
+    setGraphTitle(["Van Slyke's buffer power"]);
   }
   function changeGraphToSumVanSykle() {
     setGraphData(buffer.map((e,idx) => (e + water_contribution[idx])));
@@ -564,10 +569,10 @@ function VANSYKLE({
 
   const getCalculatedData_user = () => {
     if (showInput) {
-      if (graph_data_user !== buffer_user && graph_title[0] === "Evaluation of Capacity of Buffer") return buffer_user;
-      if (graph_data_user !== koltoff_user && graph_title[0] === "Kolthoff's buffer capacity") return koltoff_user;
-      if (graph_data_user !== buffering_funtion_user && graph_title[0] === "Buffering Function") return buffering_funtion_user;
-      if (graph_data_user !== sum_water_buffer_user && graph_title[0] === "Capacity of Buffer + Water contribuition") return sum_water_buffer_user;
+      if (graph_data !== ([buffer_total_user, buffer_user, water_contribution]) && graph_title[0] === "Van Slyke's buffer power") return ([buffer_total_user, buffer_user, water_contribution]);
+      if (graph_data !== ([koltoff_user_total, koltoff_user, water_contribution]) && graph_title[0] === "Kolthoff's buffer capacity") return ([koltoff_user_total, koltoff_user, water_contribution]);
+      if (graph_data !== ([buffering_funtion_user]) && graph_title[0] === "Buffering Function") return [buffering_funtion_user,null,null];
+
     }
     return graph_data_user; // Retorna o estado atual se nada mudou
   };
@@ -575,22 +580,36 @@ function VANSYKLE({
   const graphDataToRender_user = getCalculatedData_user();
 
   
-  const getCalculatedData = () => {
+  const getCalculatedDataTotal = () => {
 
-      if (graph_data !== buffer && graph_title[0] === "Evaluation of Capacity of Buffer") return buffer;
-      if (graph_data !== koltoff && graph_title[0] === "Kolthoff's buffer capacity") return koltoff;
-      if (graph_data !== buffering_funtion && graph_title[0] === "Buffering Function") return buffering_funtion;
-      if (graph_data !== sum_water_buffer && graph_title[0] === "Capacity of Buffer + Water contribuition") return sum_water_buffer;
+      if (graph_data !== ([buffer_total, buffer, water_contribution]) && graph_title[0] === "Van Slyke's buffer power") return ([buffer_total, buffer, water_contribution]);
+      if (graph_data !== ([koltoff_total, koltoff, water_contribution]) && graph_title[0] === "Kolthoff's buffer capacity") return ([koltoff_total, koltoff, water_contribution]);
+      if (graph_data !== ([buffering_funtion]) && graph_title[0] === "Buffering Function") return [buffering_funtion,null,null];
 
     return graph_data; // Retorna o estado atual se nada mudou
   };
   
-  const graphDataToRender = getCalculatedData();
-
+  const graphDataToRender = getCalculatedDataTotal();
   let y_data = [
     {
-      label: graph_title,
-      data: graphDataToRender,
+      label: "Total",
+      data: graphDataToRender[0],
+      backgroundColor: "rgba(219, 18, 18, 0.2)",
+      borderColor: "rgba(219, 18, 18, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "Sistema",
+      data: graphDataToRender[1],
+      backgroundColor: "rgba(11, 158, 45, 0.2)",
+      borderColor: "rgba(11, 158, 45, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "Água",
+      data: graphDataToRender[2],
       backgroundColor: "rgba(3, 119, 252, 0.2)",
       borderColor: "rgba(3, 119, 252, 1)",
       borderWidth: 2,
@@ -598,17 +617,34 @@ function VANSYKLE({
     },
   ];
 
+y_data = y_data.filter(item => item.data)
   let y_data_user = [
     {
-      label: graph_title,
-      data: graphDataToRender_user,
+      label: "Total",
+      data: graphDataToRender_user[0],
+      backgroundColor: "rgba(219, 18, 18, 0.2)",
+      borderColor: "rgba(219, 18, 18, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "Sistema",
+      data: graphDataToRender_user[1],
+      backgroundColor: "rgba(11, 158, 45, 0.2)",
+      borderColor: "rgba(11, 158, 45, 1)",
+      borderWidth: 2,
+      fill: false,
+    },
+    {
+      label: "Água",
+      data: graphDataToRender_user[2],
       backgroundColor: "rgba(3, 119, 252, 0.2)",
       borderColor: "rgba(3, 119, 252, 1)",
       borderWidth: 2,
       fill: false,
     },
   ];
-
+  y_data_user = y_data_user.filter(item => item.data)
   useEffect(() => {
     if (needupdate) {
       if (buffer) {
@@ -616,7 +652,7 @@ function VANSYKLE({
         setGraphData_user(buffer_user)
         setMaxDefaultYaxis(1.2 * Math.max(buffer));
         setInitialLimits([0, 14, 0, max_default_y_axis]);
-        setGraphTitle(["Evaluation of Capacity of Buffer"]);
+        setGraphTitle(["Van Slyke's buffer power"]);
       } 
       // else {
       //   setGraphData(buffer);
@@ -635,7 +671,11 @@ function VANSYKLE({
         {/* <canvas ref={chartRef} /> */}
         {showInput ? (
         <GraphComponent
-        x_data={ph}
+        x_data={(Array.isArray(graphDataToRender) && 
+          graphDataToRender.length === 3 &&
+          graphDataToRender[0] === buffer_total_user &&
+          graphDataToRender[1] === buffer_user &&
+          graphDataToRender[2] === water_contribution) ? phbuffer : ph}
         y_data={y_data_user}
         y_title={graph_title}
         initial_limits={initial_limits}
@@ -644,7 +684,12 @@ function VANSYKLE({
       />
         ) : (
           <GraphComponent
-          x_data={ph}
+          x_data={(Array.isArray(graphDataToRender) && 
+            graphDataToRender.length === 3 &&
+            graphDataToRender[0] === buffer_total &&
+            graphDataToRender[1] === buffer &&
+            graphDataToRender[2] === water_contribution) ? phbuffer : ph}
+          // x_data={ph}
           y_data={y_data}
           y_title={graph_title}
           initial_limits={initial_limits}
@@ -661,7 +706,7 @@ function VANSYKLE({
             className="change-graph-button"
             onClick={() => changeGraphToVanSykle()}
           >
-            Capacity of Buffer
+            Van Slyke's buffer power
           </button>
           <button
             className="change-graph-button"
@@ -669,12 +714,12 @@ function VANSYKLE({
           >
             Kolthoff's buffer capacity
           </button>
-          <button
+          {/* <button
             className="change-graph-button"
             onClick={() => changeGraphToSumVanSykle()}
           >
             Capacity of Buffer + Water contribuition
-          </button>
+          </button> */}
           <button
             className="change-graph-button"
             onClick={() => changeGraphBufferingFunction()}

@@ -108,7 +108,7 @@ function Table1({
         <table className="charge-table">
           <thead className="table1-header">
             <tr>
-              <th>Carga máxima</th>
+              <th>{showInput ? 'Carga da espécie mais protonada' : "Carga máxima" }</th>
             </tr>
           </thead>
           <tr>
