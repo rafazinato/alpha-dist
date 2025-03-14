@@ -41,12 +41,12 @@ function About() {
               <div>
                 <p>
                   Todo o mecanismo do AlphaDistWeb segue a óptica do método XXI,
-                  criado por André Fernando Oliveira, Uma de suas grandes
+                  criado por André Fernando Oliveira. Uma de suas grandes
                   vantagens dessa é a possibilidade de descrever a força de
-                  sistemas tamponantes utilizando apenas parâmetros do próprio
-                  sistema. Atualmente é professor do Departamento de Química na
-                  Universidade Federal de Viçosa, sendo a química analítica uma
-                  de suas principais áreas de pesquisa
+                  sistemas tamponantes utilizando apenas parâmetros do dele próprio
+                  . Atualmente, ele é professor do Departamento de Química na
+                  Universidade Federal de Viçosa, onde a química analítica é uma
+                  de suas principais áreas de pesquisa.
                 </p>
                 <div className="icons-container">
                   <a
@@ -97,8 +97,8 @@ function About() {
                 <p>
                   Essa ferramenta foi desenvolvida por Rafaela Zinato Pereira,
                   atualmente estudante de Engenharia Química na Universidade
-                  Federal de Viçosa (UFV). Atualmente estagiária, no Laboratório
-                  de química analítica da UFV, sua principal atuação consiste em
+                  Federal de Viçosa (UFV). Atuando como estagiária no Laboratório
+                  de química analítica da UFV(LAQUA), sua principal atuação consiste em
                   simular sistemas químicos por meio de linguagens de
                   programação.
                 </p>

@@ -12,7 +12,12 @@
 }
 .text-footer {
     margin-bottom: 0;
+    min-width: 400px;
+    
 }
 a {
     color: white;
+}
+.info-foot {
+    display: contents;
 }

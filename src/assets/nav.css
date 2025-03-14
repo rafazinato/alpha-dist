@@ -1,7 +1,7 @@
 .nav {
     background-color: #014087;
     height: 50px;
-    display: flex;
+    display: contents;
     width: 100vw;
     align-items: center;
     justify-content: left;
@@ -53,7 +53,7 @@
 }
 
 .nav-container {
-    display: flex;
+    display: inline-flex;
     background-color: #014087;
     height: 50px;
     width: 100%;

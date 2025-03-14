@@ -171,8 +171,8 @@ function VANSYKLE({
   
   let phbuffer = arange(0.1, 14, 0.1);
   // phbuffer.shift()
-  console.log(buffer)
-  console.log(ph)
+  // console.log(buffer)
+  // console.log(ph)
   const [showKoltOff, setShowKoltoff] = useState(true);
   const [graph_title, setGraphTitle] = useState([
     "Van Slyke's buffer power",
@@ -198,6 +198,12 @@ function VANSYKLE({
     0,
     max_default_y_axis,
   ]);
+  const [initial_limits_user, setInitialLimitsUser] = useState([
+    0,
+    14,
+    0,
+    max_default_y_axis,
+  ]);
   //           initial_limits={[0, 14, 0, max_default_y_axis]}
 
   // calculando koltoff
@@ -214,6 +220,10 @@ function VANSYKLE({
   let a7k = koltoff_alpha.map((a) => a[7]);
   let a8k = koltoff_alpha.map((a) => a[8]);
   let alpha_list_koltoff = [a0k, a1k, a2k, a3k, a4k, a5k, a6k, a7k, a8k];
+  // let ph_koltoff_wat = arange(0.5, 14.5, 0.1)
+  // let water_contribution_koltoff = ph.map((ph) => Math.abs((10**(-ph) - 10**(ph - pKw)) - (10 **(-(ph-1)) - 10 ** (ph-1 - pKw))) )
+  
+  let water_contribution_koltoff = ph.map((ph) => Math.abs((10**(-ph+1) - 10**(ph + 1 - pKw)) - (10 **(-(ph)) - 10 ** (ph - pKw))) )
 
   let each_charge_koltoff = ph_koltoff.map((ph, phindex) =>
     alfascharge.map(
@@ -247,8 +257,9 @@ function VANSYKLE({
   const [graph_data, setGraphData] = useState();
 
   let buffer_total = buffer.map((e,idx) => e + water_contribution[idx])
-  let koltoff_total = koltoff.map((e,idx) => e + water_contribution[idx])
-
+  let koltoff_total = koltoff.map((e,idx) => e + water_contribution_koltoff[idx])
+  // console.log(ph)
+  
 
 
   let initial_sum_water_buffer = [];
@@ -381,125 +392,42 @@ function VANSYKLE({
       (element, idx) => element + buffer_user[idx]
     );
   }
+  
   let buffer_total_user = buffer_user.map((e,idx) => e + water_contribution[idx])
-  let koltoff_user_total = koltoff_user.map((e,idx) => e + water_contribution[idx])
+  let koltoff_user_total = koltoff_user.map((e,idx) => e + water_contribution_koltoff[idx])
   const [graph_data_user, setGraphData_user] = useState([buffer_total_user, buffer_user,water_contribution]);
-  // Efeito para criar ou atualizar o gráfico sempre que 'text' for atualizado
-  // useEffect(() => {
-
-  //   if (chartInstanceRef.current) {
-  //     chartInstanceRef.current.destroy(); // Destroi o gráfico anterior antes de criar o novo
+ 
+  // buffer_total_user.forEach(element => {
+  //   if (element >  initial_limits_user[3]) {
+  //     setInitialLimitsUser([0, 14, 0, 1.1 * buffer_user.reduce((a, b) => Math.max(a, b), -Infinity)])
   //   }
+  // });
+  useEffect(() => {
+    if (graph_data !== ([buffer_total_user, buffer_user, water_contribution]) && graph_title[0] === "Van Slyke's buffer power") {
+      setInitialLimitsUser([0, 14, 0, 1.1 * buffer_user.reduce((a, b) => Math.max(a, b), -Infinity)])
+    };
+    if (graph_data !== ([koltoff_user_total, koltoff_user, water_contribution]) && graph_title[0] === "Kolthoff's buffer capacity") {
+      setInitialLimitsUser([0, 14, 0, 1.1 * koltoff_user.reduce((a, b) => Math.max(a, b), -Infinity)])
+    }
+    if (graph_data !== ([buffering_funtion_user]) && graph_title[0] === "Buffering Function") {
+      setInitialLimitsUser([0, 14, Math.min(buffering_funtion_user), 1.1 * buffering_funtion_user.reduce((a, b) => Math.max(a, b), -Infinity)])
 
-  //   const ctx = chartRef.current.getContext("2d");
-
-  //   // Cria o novo gráfico de linha
-  //   chartInstanceRef.current = new Chart(ctx, {
-  //     type: "line", // Tipo de gráfico
-  //     data: {
-  //       labels: ph ? ph : [0],
-  //       datasets: [
-  //         {
-  //           data: graph_data || buffer,
-  //           label: graph_title[0],
-  //           backgroundColor: "rgba(3, 119, 252, 0.2)",
-  //           borderColor: "rgba(3, 119, 252, 1)",
-  //           borderWidth: 2,
-  //           fill: false,
-  //         },
-  //       ],
-  //     },
-  //     options: {
-  //       elements: {
-  //         point: {
-  //           radius: 0,
-  //         },
-  //       },
-  //       responsive: true,
-  //       plugins: {
-  //         zoom: {
-  //           pan: {
-  //             enabled: false,
-  //             mode: "xy",
-  //             modifierKey: "shift",
-  //             scaleMode: "xy",
-  //           },
-  //           zoom: {
-  //             wheel: {
-  //               enabled: false,
-  //             },
-  //             pinch: {
-  //               enabled: false,
-  //             },
-  //             mode: "xy",
-  //           },
-  //         },
-
-  //         legend: {
-  //           display: true,
-  //           position: "top",
-  //           labels: {
-  //             textAlign: "right",
-  //             font: {
-  //               size: 15,
-  //             },
-  //             color: "black",
-  //             padding: 10,
-  //           },
-  //         },
-  //         // title: {
-  //         //   display: true,
-  //         // },
-  //       },
-  //       scales: {
-  //         y: {
-  //           title: {
-  //             display: true,
-  //             text: graph_title[0],
-  //             color: "black",
-  //             font: {
-  //               family: "Inter",
-  //               size: "12px",
-  //             },
-  //           },
-  //           beginAtZero: true,
-  //           max: max_default_y_axis,
-  //         },
-  //         x: {
-  //           title: {
-  //             display: true,
-  //             text: "pH",
-  //             color: "black",
-  //             font: {
-  //               family: "Inter",
-  //               size: "12px",
-  //             },
-  //           },
-  //           min: Math.min(ph),
-  //           max: Math.max(ph),
-  //           ticks: {
-  //             stepSize: 1,
-  //             callback: (value, index, values) => {
-  //               return ph[index] ? (ph[index]).toFixed(1) : 0;
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-  // }, [alpha, ph, buffer, max_default_y_axis, water_contribution,graph_data,graph_title,compound]);
-  // criando função que muda entre van slke e koltoff
+    };
+  },[pkauser])
 
   useEffect(() => {
     changeGraphToVanSykle()
   },[chosenconc])
   
+  console.log(koltoff.reduce((a, b) => Math.max(a, b), -Infinity))
   function changeGraphToKoltoff() {
     setGraphData(koltoff);
     setGraphData_user(koltoff_user)
   
-    setMaxDefaultYaxis(1.2 * Math.max(koltoff));
-    setInitialLimits([0, 14, 0, max_default_y_axis]);
+    setMaxDefaultYaxis(1.1 * koltoff.reduce((a, b) => Math.max(a, b), -Infinity));
+    setInitialLimits([0, 14, 0, 1.1 * koltoff.reduce((a, b) => Math.max(a, b), -Infinity)]);
+    setInitialLimitsUser([0, 14, 0, 1.1 * koltoff_user.reduce((a, b) => Math.max(a, b), -Infinity)])
+
     setGraphTitle(["Kolthoff's buffer capacity"]);
   }
 
@@ -507,7 +435,8 @@ function VANSYKLE({
     setGraphData(buffer);
     setGraphData_user(buffer_user)
     setMaxDefaultYaxis(1.2 * Math.max(koltoff));
-    setInitialLimits([0, 14, 0, max_default_y_axis]);
+    setInitialLimits([0, 14, 0, 1.1 * buffer.reduce((a, b) => Math.max(a, b), -Infinity)]);
+    setInitialLimitsUser([0, 14, 0, 1.1 * buffer_user.reduce((a, b) => Math.max(a, b), -Infinity)])
     setGraphTitle(["Van Slyke's buffer power"]);
   }
   function changeGraphToSumVanSykle() {
@@ -522,49 +451,10 @@ function VANSYKLE({
     setGraphData(buffering_funtion);
     setGraphData_user(buffering_funtion_user);
     setMaxDefaultYaxis(1.1 * Math.max(buffering_funtion));
-    setInitialLimits([0, 14, Math.min(buffering_funtion), max_default_y_axis]);
+    setInitialLimits([0, 14, Math.min(buffering_funtion), 1.1 * buffering_funtion.reduce((a, b) => Math.max(a, b), -Infinity)]);
+    setInitialLimitsUser([0, 14, Math.min(buffering_funtion_user), 1.1 * buffering_funtion_user.reduce((a, b) => Math.max(a, b), -Infinity)])
     setGraphTitle(["Buffering Function"]);
   }
-
-  // useEffect(() => {
-  //   // Recalcula os dados do gráfico com base no composto selecionado
-  //   if (graph_title[0] === "Evaluation of Capacity of Buffer" && showInput ) {
-  //     if (graph_data_user !== buffer_user)
-  //     setGraphData_user(buffer_user)
-  //   } else if (graph_title[0] === "Kolthoff's buffer capacity" && showInput )  {
-  //     setGraphData_user(koltoff_user)
-  //   } 
-  //   else if (graph_title[0] === "Soma" && showInput)  {
-  //     setGraphData_user(sum_water_buffer)
-  //   } else if (graph_title[0] === "Buffering Function" && showInput) {
-  //     setGraphData_user(buffering_funtion_user);
-  //   }
-  // }, [alfascharge_user, buffer_user,koltoff_user,sum_water_buffer,buffering_funtion_user,graph_title,showInput]); // Adicione 'compound' como dependência
-
-  // const getGraphDataForTitle = () => {
-  //   switch (graph_title[0]) {
-  //     case "Evaluation of Capacity of Buffer":
-  //       return buffer_user;
-  //     case "Kolthoff's buffer capacity":
-  //       return koltoff_user;
-  //     case "Soma":
-  //       return sum_water_buffer;
-  //     case "Buffering Function":
-  //       return buffering_funtion_user;
-  //     default:
-  //       return graph_data_user;
-  //   }
-  // };
-  
-  // useEffect(() => {
-  //   if (!showInput) return;
-  
-  //   const newGraphData = getGraphDataForTitle();
-  //   if (newGraphData !== graph_data_user) {
-  //     setGraphData_user(newGraphData);
-  //   }
-  // }, [graph_data_user, graph_title, showInput]);
-
   
 
   const getCalculatedData_user = () => {
@@ -583,7 +473,7 @@ function VANSYKLE({
   const getCalculatedDataTotal = () => {
 
       if (graph_data !== ([buffer_total, buffer, water_contribution]) && graph_title[0] === "Van Slyke's buffer power") return ([buffer_total, buffer, water_contribution]);
-      if (graph_data !== ([koltoff_total, koltoff, water_contribution]) && graph_title[0] === "Kolthoff's buffer capacity") return ([koltoff_total, koltoff, water_contribution]);
+      if (graph_data !== ([koltoff_total, koltoff, water_contribution_koltoff]) && graph_title[0] === "Kolthoff's buffer capacity") return ([koltoff_total, koltoff, water_contribution_koltoff]);
       if (graph_data !== ([buffering_funtion]) && graph_title[0] === "Buffering Function") return [buffering_funtion,null,null];
 
     return graph_data; // Retorna o estado atual se nada mudou
@@ -678,7 +568,7 @@ y_data = y_data.filter(item => item.data)
           graphDataToRender[2] === water_contribution) ? phbuffer : ph}
         y_data={y_data_user}
         y_title={graph_title}
-        initial_limits={initial_limits}
+        initial_limits={initial_limits_user}
         graph_title={graph_title}
         depedency={chosenconc}
       />

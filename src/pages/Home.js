@@ -98,7 +98,7 @@ function Home() {
             </div>
   
             <div className="background-molecule">
-              <Molecule smiles={compound.smiles} url={compound.img_url}/>
+              <Molecule smiles={compound.smiles} url={compound.img_url} showInput={showInput} />
             </div>
             <div className="table-1">
               <Table1 compound={compound} setCompound={setCompound} pkauser={pkauser} setPkaUser={setPkaUser}  showInput={showInput} setShowInput={setShowInput} userchartInstanceRef={userchartInstanceRef} max_charge_user={max_charge_user} setMaxChargeUser={setMaxChargeUser} />

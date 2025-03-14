@@ -46,7 +46,7 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc,alfascharge_u
 
   // calculo do Wat para temperatura ambiente
   let pKw = 14;
-  let wat = 10**(-chosenph)  - 10 **(chosenph - pKw);
+  let wat = 10**(-chosenph)  - 10**(chosenph - pKw);
   let alpha = calcAlpha(chosenph, pka);
   let qwat = (10 ** -chosenph) ** 2 + (10 ** (chosenph - pKw)) ** 2;
 
@@ -122,7 +122,7 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc,alfascharge_u
 
   let koltoff =
     effective_charge * chosenconc -
-        (effective_charge_koltoff*chosenconc);
+        (effective_charge_koltoff*chosenconc) + (wat - (10**(-(chosenph -1))  - 10 **(chosenph -1 - pKw)));
 
 // Calculando parametros para quando o usuario insere dados
 let alpha_user = calcAlpha(chosenph, pkauser);
@@ -175,12 +175,11 @@ each_charge_koltoff_user.forEach((num) => {
 });
 
 let koltoff_user =
-  wat +
   effective_charge_user * chosenconc -
-  10 **
-    (-(chosenph - 1) -
-      10 ** (chosenph - 1 - pKw) +
-      effective_charge_koltoff_user * chosenconc);
+  (10 **
+    (-(chosenph - 1)) -
+      10 ** (chosenph - 1 - pKw))/(chosenph - 1) +
+       - effective_charge_koltoff_user * chosenconc;
 
 
 
@@ -190,7 +189,7 @@ let koltoff_user =
     (accumulator, currentValue) => accumulator + currentValue,
     0,
   );
-console.log(effective_charge)
+
 
   function maketable2() {
     return (

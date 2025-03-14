@@ -21,7 +21,7 @@ function Tutorial() {
         </div>
         <div className="title">Vídeo explicativo</div>
         <div className="video-container">
-        <YouTube videoId="VSGyiYLQwhY" opts={opts}  />
+        <YouTube videoId="1dnWP76B3Co" opts={opts}  />
         </div>
         <Footer />
       </>
