@@ -105,16 +105,7 @@ function GraphComponent({
               },
               min: main_limit[0] ? main_limit[0] : initial_limits[0],
               max: main_limit[1] ? main_limit[1] : initial_limits[1],
-              ticks: {
-                // callback: function (value, index) {
-                //   if (Number.isInteger(x_data[index])) {
-                //     return x_data[index];
-                //   }
-                // },
-                // callback: (value, index, values) => {
-                //   return ph[index] ? ph[index].toFixed(1) : 0;
-                // },
-              },
+              ticks: {},
             },
           },
         },
@@ -202,30 +193,7 @@ function GraphComponent({
               min: xmin ? xmin : initial_limits[0],
               max: xmax ? xmax : initial_limits[1],
               ticks: 
-              {
-                // callback: function (value, index) {
-                  // if (Number.isInteger(x_data[index])) {
-                  //   console.log(x_data[index]);
-                  //   // return x_data[index];
-                  // }}
-                // callback: function (value, index) {
-                  // if (xmin) {
-                  //   if (
-                  //     Number.isInteger(x_data[index]) &&
-                  //     x_data[index] >= xmin
-                  //   ) {
-                  //     console.log(x_data[index]);
-                  //     return x_data[index];
-                  //   }
-                  // } else {
-                  //   if (
-                  //     Number.isInteger(x_data[index])
-                  //   ) {
-                  //     return x_data[index];
-                  //   }
-                  // }
-                // },
-              },
+              {},
             },
           },
         },

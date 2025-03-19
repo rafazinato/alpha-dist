@@ -13,8 +13,6 @@ function arange(start, stop, step = 1) {
 }
 
 function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pkauser, showInput }) {
-  const chartRef = useRef(null);
-  const chartInstanceRef = useRef(null); // Ref para armazenar a instância do gráfico
   const pka = [
     Number(compound.pka1),
     Number(compound.pka2),
@@ -28,7 +26,6 @@ function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pka
 
   let pKw = 14;
   let ph = arange(0, 14, 0.05);
-  // let ph = arange(Math.floor(Math.min(...pka) - 3), Math.ceil(Math.max(...pka) + 3), .05);
   let qwat = ph.map((ph) => (10 ** -ph) ** 2 + (10 ** (ph - pKw)) ** 2);
 
   function calcAlpha(ph, pka) {
@@ -108,7 +105,7 @@ function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pka
     qquad.push(num.reduce((acc, curr) => acc + curr, 0));
   });
 
-  let each_charge_user = ph.map((ph, phindex) =>
+  let each_charge_quad_user = ph.map((ph, phindex) =>
     alfascharge_user.map(
       (charge, index) =>
         Number(charge**2) * Number(alpha_list_user[index][phindex])
@@ -131,109 +128,17 @@ function IONICSTRENGTH({ compound, alfascharge, chosenconc,alfascharge_user, pka
   let ionic_strength =  qquad.map( qquad => (1 / 2) * chosenconc * qquad )
 
 
-    let qquad_user = useMemo(() => {
+  let qquad_user = useMemo(() => {
       const tempReference = [];
-      each_charge_user.forEach((num) => {
+      each_charge_quad_user.forEach((num) => {
         tempReference.push(num.reduce((acc, curr) => acc + curr, 0));
       });
       return tempReference;
-    }, [each_charge_user]);
+    }, [each_charge_quad_user]);
 
   let ionic_strength_user = qquad_user.map(
     (qquad_user) => (1 / 2) * chosenconc * qquad_user ** 2
   );
-  // Criando o gráfico
-
-  // useEffect(() => {
-  //   if (chartInstanceRef.current) {
-  //     chartInstanceRef.current.destroy();
-  //   }
-
-  //   const ctx = chartRef.current.getContext("2d");
-
-  //   // Cria o novo gráfico de linha
-  //   chartInstanceRef.current = new Chart(ctx, {
-  //     type: "line", // Tipo de gráfico
-  //     data: {
-  //       labels: ph ? ph : [0],
-  //       datasets: [
-  //         {
-  //           data: ionic_strength,
-  //           label: "Sistema",
-  //           backgroundColor: "rgba(3, 119, 252, 0.2)",
-  //           borderColor: "rgba(3, 119, 252, 1)",
-  //           borderWidth: 2,
-  //           fill: false,
-  //         },
-  //         {
-  //           data: qwat,
-  //           label: "Contribuição da água",
-  //           backgroundColor: "rgba(11, 158, 45, 0.2)",
-  //           borderColor: "rgba(11, 158, 45, 1)",
-  //           borderWidth: 2,
-  //           fill: false,
-  //         },
-  //       ],
-  //     },
-  //     options: {
-  //       elements: {
-  //         point: {
-  //           radius: 0,
-  //         },
-  //       },
-  //       responsive: true,
-  //       plugins: {
-  //         legend: {
-  //           display: true,
-  //           position: "top",
-  //           labels: {
-  //             textAlign: "right",
-  //             font: {
-  //               size: 15,
-  //             },
-  //             color: "black",
-  //             padding: 10,
-  //           },
-  //         },
-  //         // title: {
-  //         //   display: true,
-  //         // },
-  //       },
-  //       scales: {
-  //         y: {
-  //           title: {
-  //             display: true,
-  //             text: "Ionic Strength /(mol/L)",
-  //             color: "black",
-  //             font: {
-  //               family: "Inter",
-  //               size: "12px",
-  //             },
-  //           },
-  //           beginAtZero: true,
-  //         },
-  //         x: {
-  //           title: {
-  //             display: true,
-  //             text: "pH",
-  //             color: "black",
-  //             font: {
-  //               family: "Inter",
-  //               size: "12px",
-  //             },
-  //           },
-  //           min: Math.min(ph),
-  //           max: Math.max(ph),
-  //           ticks: {
-  //             callback: (value, index, values) => {
-  //               return ph[index] ? ph[index].toFixed(1) : 0;
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-  // }, [alpha, ph, ionic_strength, qwat]); // O efeito será disparado toda vez que o 'text' mudar
 
   let total = ionic_strength.map( (e,idx) => e + qwat[idx])
   let total_user = ionic_strength_user.map( (e,idx) => e + qwat[idx])

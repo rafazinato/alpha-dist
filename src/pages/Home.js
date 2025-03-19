@@ -56,8 +56,8 @@ function Home() {
      // State que vai conter os pkas inseridos pelo usuario
      const [showInput, setShowInput] = useState(false);
      const [pkauser, setPkaUser] = useState([]);
-     const [max_charge_user , setMaxChargeUser] = useState()
-     let alfascharge_user = [max_charge_user];
+     const [first_charge_user , setFirstChargeUser] = useState()
+     let alfascharge_user = [first_charge_user];
      let numberpka_user = pkauser.filter((v) => v).length;
      for (let i = 0; i < numberpka_user; i++) {
       alfascharge_user.push(alfascharge_user[alfascharge_user.length - 1] - 1);
@@ -101,7 +101,7 @@ function Home() {
               <Molecule smiles={compound.smiles} url={compound.img_url} showInput={showInput} />
             </div>
             <div className="table-1">
-              <Table1 compound={compound} setCompound={setCompound} pkauser={pkauser} setPkaUser={setPkaUser}  showInput={showInput} setShowInput={setShowInput} userchartInstanceRef={userchartInstanceRef} max_charge_user={max_charge_user} setMaxChargeUser={setMaxChargeUser} />
+              <Table1 compound={compound} alfascharge={alfascharge} setCompound={setCompound} pkauser={pkauser} setPkaUser={setPkaUser}  showInput={showInput} setShowInput={setShowInput} userchartInstanceRef={userchartInstanceRef} first_charge_user={first_charge_user} setFirstChargeUser={setFirstChargeUser} />
             </div>
             <div >
             <QEGRAPH compound={compound} alfascharge={alfascharge} alfascharge_user={alfascharge_user} pkauser={pkauser} showInput={showInput} />

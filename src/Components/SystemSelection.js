@@ -1,7 +1,6 @@
 import "../assets/systemselection.css";
 import "material-symbols";
-import Form from "react-bootstrap/Form";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import Select from "react-select";
 
@@ -10,10 +9,6 @@ function SystemSelection({
   setCompound,
   compound,
   data,
-  datasets,
-  selectedDataset,
-  setSelectedDataset,
-  needupdate,
   setNeedUpdate,
 }) {
 
@@ -24,32 +19,10 @@ function SystemSelection({
     </label>
   );
 
-// function WhenChecked() {
-//   setSelectedOption(listCategory.map((item) => ({
-//     value: item,
-//     label: item,
-//   })))
-
-// }
-
-// if (isChecked == true) {
-//   setSelectedOption(listCategory.map((item) => ({
-//     value: item,
-//     label: item,
-//   })))
-// }
-
 const [isChecked,setIsChecked] = useState(false)
 
 
 
-
-
-  // Compostos que irão aparecer no menu de selecão select
-  const [listName, setListName] = useState(
-    data.map((compounds, index) => compounds.sistema)
-  );
-  let initial_list = data.map((compounds, index) => compounds.sistema);
   let listCategory = [...new Set(data.map((item) => item.categoria))];
   listCategory = listCategory.sort()
   let options_object = listCategory.map((item) => ({
@@ -58,7 +31,6 @@ const [isChecked,setIsChecked] = useState(false)
   }));
   const [selectedOption, setSelectedOption] = useState(null);
 
-  // listCategory.unshift("Todos");
   const handleId = (i) => {
     let chemical = i ? i.value : null;
     let idx = data.findIndex((item) => item.sistema === chemical);
@@ -80,17 +52,7 @@ const [isChecked,setIsChecked] = useState(false)
     });
     setNeedUpdate(true);
   };
-  // modo antigo
-  // function handleListName(i) {
-  //   if (i !== "Todos") {
-  //       setListName((data.map((compounds, index) => ( i === compounds.categoria ?  compounds.sistema : null))).filter((v) => v !== null));
 
-  //   } else {
-  //       setListName(data.map((compounds, index) => compounds.sistema).filter((v) => v !== null));
-  //       console.log(i)
-
-  //   }
-  // }
 
   let list_dataselect = selectedOption 
     ? selectedOption.map((obj) => obj.value)
@@ -114,7 +76,6 @@ default_compound_option = default_compound_option.map((item) => ({
   label: item,
 }));
 
-// options_object = options_object.unshift({value: 'Todos', label: "Todos" })
 
 
 function handleDataBaseSelection(e) {
@@ -142,18 +103,13 @@ const handleCheckboxChange = (e) => {
 
   return (
     <>
-      {/* <div className="selection-grip">
 
-
-      </div>
-     */}
     <div className="selector">
       <div >
         <div >Seleção de base de dados:</div>
         <div>
 
         <Select
-          // onChange={setSelectedOption}
           onChange={handleDataBaseSelection}
           isMulti
           name="colors"

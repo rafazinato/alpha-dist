@@ -8,21 +8,12 @@ function Table1({
   showInput,
   setShowInput,
   userchartInstanceRef,
-  max_charge_user,
-  setMaxChargeUser,
+  first_charge_user,
+  setFirstChargeUser,
+  alfascharge
 }) {
   compound.charge_protonated = Number(compound.charge_protonated);
-  // const [showInput, setShowInput] = useState(false);
-  // const [pkauser, setPkaUser] = useState([
-  //   Number(compound.pka1),
-  //   Number(compound.pka2),
-  //   Number(compound.pka3),
-  //   Number(compound.pka4),
-  //   Number(compound.pka5),
-  //   Number(compound.pka6),
-  //   Number(compound.pka7),
-  //   Number(compound.pka8),
-  // ]);
+
 
   // state que vai conter texto do botão que decide o tipo de operação
   const[inputvalue, setInputValue] = useState([null,null,null,null,null,null,null,null])
@@ -55,7 +46,7 @@ function Table1({
           id="id-input-user"
           type="number"
           className="table-input"
-          onChange={(e) => setMaxChargeUser(Number(e.target.value))}
+          onChange={(e) => setFirstChargeUser(Number(e.target.value))}
         ></input>
       </>
     );
@@ -74,6 +65,7 @@ function Table1({
       userchartInstanceRef.current.destroy();
     }
     setPkaUser([]);
+    setFirstChargeUser()
     setShowInput(false);
 
   
@@ -88,20 +80,11 @@ function Table1({
     inputs.forEach((input) => (input.value = '')); // Limpa os valores dos inputs 
   }
   function maketable() {
-    let listpka = [compound.pka1, compound.pka2, compound.pka3];
-    let numberpka = listpka.filter((v) => v).length;
-    let alfascharge = [compound.charge_protonated];
-    for (let i = 0; i < numberpka; i++) {
-      alfascharge.push(alfascharge[alfascharge.length - 1] - 1);
-    }
-
-    listpka = listpka.map((i) => (i == "" ? "--" : i));
     let indexOfMax = alfascharge
       .map(Math.abs)
       .indexOf(Math.max(...alfascharge.map(Math.abs)));
     let maxcharge = alfascharge[indexOfMax];
-    listpka.unshift(maxcharge);
-    
+
     return (
       <div style={{ display: "flex", gap: "10px" }}>
 
@@ -172,7 +155,7 @@ function Table1({
           </thead>
           <tbody>
             <tr>
-              {/* <td rowSpan={2}>{maxcharge}</td> */}
+              
               <th className="cell2">
                 pKA<sub>5</sub>
               </th>
@@ -223,8 +206,6 @@ function Table1({
   }
 
   return <>
-
-
       {maketable()}
 
   <div style={{display:'flex', justifyContent: 'center', gap:'10px', marginTop: '10px' }}>

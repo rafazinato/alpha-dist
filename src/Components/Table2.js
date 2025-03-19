@@ -112,14 +112,6 @@ function Table2({ compound, alfascharge, chosenconc, setChosenConc,alfascharge_u
     effective_charge_koltoff += num;
   });
 
-  // let koltoff =
-  //   wat +
-  //   effective_charge * chosenconc -
-  //   10 **
-  //     (-(chosenph - 1) -
-  //       10 ** (chosenph - 1 - pKw)) -
-  //       effective_charge_koltoff * chosenconc;
-
   let koltoff =
     effective_charge * chosenconc -
         (effective_charge_koltoff*chosenconc) + (wat - (10**(-(chosenph -1))  - 10 **(chosenph -1 - pKw)));
@@ -204,7 +196,6 @@ let koltoff_user =
             α<sub>0</sub>
           </td>
           <td>{showInput ? alpha_user[0].toFixed(4) : ( Number(alpha[0]) ? alpha[0].toFixed(4) : "--")}</td>
-          {/* <td> {( Number(alpha[0]) ? alpha[0].toFixed(4) : "--")}</td> */}
 
         </tr>
 
@@ -293,6 +284,7 @@ let koltoff_user =
       </table>
     );
   }
+
   function maketable3() {
 
     return(
@@ -373,6 +365,8 @@ let koltoff_user =
     </table>
     );
   }
+
+  
   return (
     <>
     <div style={{display: 'flex',gap:'30px'}}>

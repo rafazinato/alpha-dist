@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Chart from "chart.js/auto";
 import "../assets/graphs.css";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import GraphComponent from "./GraphComponent";
 
 function arange(start, stop, step = 1) {
@@ -13,16 +10,8 @@ function arange(start, stop, step = 1) {
   return result;
 }
 
-function DDE({ compound, pkauser, showInput, userchartInstanceRef }) {
-  //
-
-  const chartRef = useRef(null);
-
-  const userchartRef = useRef(null);
-
-  // Variavéis usadas para construção do gráfico principal
-  const chartInstanceRef = useRef(null);
-
+function DDE({ compound, pkauser, showInput}) {
+ 
   // const userchartInstanceRef = useRef(null);
   const pka = [
     Number(compound.pka1),
@@ -38,16 +27,6 @@ function DDE({ compound, pkauser, showInput, userchartInstanceRef }) {
     arange(0, 14.05, 0.05).map((value) => parseFloat(value.toFixed(4)))
   );
 
-  // Limites dos eixos dos gráficos
-
-  const [xmin, setXmin] = useState(undefined);
-  const [xmax, setXmax] = useState(undefined);
-  const [ymin, setYmin] = useState(undefined);
-  const [ymax, setYmax] = useState(undefined);
-
-  let ph_reference = arange(0, 14.05, 0.05).map((value) =>
-    parseFloat(value.toFixed(4))
-  );
 
   // Função que retorna uma lista, em que cada elemento corresponde ao alfa0,alfa1....alfaN
   function calcAlpha(ph, pka) {
@@ -92,11 +71,6 @@ function DDE({ compound, pkauser, showInput, userchartInstanceRef }) {
   let a7 = alpha.map((a) => a[7]);
   let a8 = alpha.map((a) => a[8]);
 
-  let alpha_reference = ph_reference.map((ph) => calcAlpha(ph, pka));
-  let a0_reference = alpha_reference.map((a) => a[0]);
-  let a1_reference = alpha_reference.map((a) => a[1]);
-  let a2_reference = alpha_reference.map((a) => a[2]);
-  let a3_reference = alpha_reference.map((a) => a[3]);
   // Variaveis para inserir dados do usuario
 
   let alpha_user = ph.map((ph) => calcAlpha(ph, pkauser));
@@ -109,229 +83,6 @@ function DDE({ compound, pkauser, showInput, userchartInstanceRef }) {
   let a6_user = alpha_user.map((a) => a[6]);
   let a7_user = alpha_user.map((a) => a[7]);
   let a8_user = alpha_user.map((a) => a[8]);
-
-  useEffect(() => {
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy(); // Destroi o gráfico anterior antes de criar o novo
-    }
-
-    if (chartRef.current) {
-      // Verifica se os elementos canvas estão disponíveis
-      const ctx = chartRef.current.getContext("2d");
-      let alldata = [a0, a1, a2, a3];
-      let legend_color_list = [
-        "rgba(3, 119, 252, 0.2)",
-        "rgba(252, 177, 3, 0.2)",
-        "rgba(11, 158, 45, 0.2)",
-        "rgba(219, 18, 18, 0.2)",
-      ];
-      let legend_bordercolor_list = [
-        "rgba(3, 119, 252, 1)",
-        "rgba(252, 177, 3, 1)",
-        "rgba(11, 158, 45, 1)",
-        "rgba(219, 18, 18, 1)",
-      ];
-      let label_list = ["α₀", "α₁", "α₂", "α₃"];
-      let datachartset = [];
-      alldata.forEach((array, index) => {
-        if (array[0]) {
-          datachartset.push({
-            label: label_list[index],
-            data: array,
-            backgroundColor: legend_color_list[index],
-            borderColor: legend_bordercolor_list[index],
-            borderWidth: 2,
-            fill: false,
-          });
-        }
-      });
-
-      // Cria o novo gráfico de linha
-      chartInstanceRef.current = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: ph ? ph : [0],
-          datasets: datachartset,
-        },
-        options: {
-          elements: {
-            point: {
-              radius: 0,
-            },
-          },
-          responsive: true,
-          plugins: {
-            legend: {
-              display: true,
-              position: "top",
-              labels: {
-                font: {
-                  size: 15,
-                },
-              },
-            },
-          },
-          scales: {
-            y: {
-              title: {
-                display: true,
-                text: "Fraction of equilibrium (α)", // 'Fração de α'
-                color: "black",
-                font: {
-                  family: "Inter",
-                  size: "12px",
-                },
-              },
-              beginAtZero: true,
-              min: ymin ? ymin : 0,
-              max: ymax ? ymax : 1,
-            },
-
-            x: {
-              title: {
-                display: true,
-                text: "pH",
-                color: "black",
-                font: {
-                  family: "Inter",
-                  size: "12px",
-                },
-              },
-              min: Math.min(ph),
-              max: Math.max(ph),
-              ticks: {
-                callback: function (value, index) {
-                  if (Number.isInteger(ph[index])) {
-                    return ph[index];
-                  }
-                },
-                // callback: (value, index, values) => {
-                //   return ph[index] ? ph[index].toFixed(1) : 0;
-                // },
-              },
-            },
-          },
-        },
-      });
-    }
-  }, [alpha, ph, a0, a1, a2, a3, ymax, ymin, alpha_user]);
-  // gráfico construído para colocar dados dos usuarios
-
-  useEffect(() => {
-    if (userchartInstanceRef.current) {
-      userchartInstanceRef.current.destroy(); // Destroi o gráfico anterior antes de criar o novo
-    }
-
-    if (userchartRef.current) {
-      // Verifica se os elementos canvas estão disponíveis
-      const ctx = userchartRef.current.getContext("2d");
-
-      // Cria o novo gráfico de linha
-      userchartInstanceRef.current = new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: ph ? ph : [0],
-          datasets: [
-            {
-              label: "α₀",
-              data: a0_user,
-              backgroundColor: "rgba(3, 119, 252, 0.2)",
-              borderColor: "rgba(3, 119, 252, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₁",
-              data: a1_user,
-              backgroundColor: "rgba(252, 177, 3, 0.2)",
-              borderColor: "rgba(252, 177, 3, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₂",
-              data: a2_user,
-              backgroundColor: "rgba(11, 158, 45, 0.2)",
-              borderColor: "rgba(11, 158, 45, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-            {
-              label: "α₃",
-              data: a3_user,
-              backgroundColor: "rgba(219, 18, 18, 0.2)",
-              borderColor: "rgba(219, 18, 18, 1)",
-              borderWidth: 2,
-              fill: false,
-            },
-          ],
-        },
-        options: {
-          elements: {
-            point: {
-              radius: 0,
-            },
-          },
-          responsive: true,
-          plugins: {
-            legend: {
-              display: true,
-              position: "top",
-              labels: {
-                font: {
-                  size: 15,
-                },
-              },
-            },
-          },
-          scales: {
-            y: {
-              title: {
-                display: true,
-                text: "Fraction of equilibrium (α)",
-                color: "black",
-                font: {
-                  family: "Inter",
-                  size: "12px",
-                },
-              },
-              beginAtZero: true,
-              min: ymin ? ymin : 0,
-              max: ymax ? ymax : 1,
-            },
-            x: {
-              // afterTickToLabelConversion: function(data) {
-              //   var xLabels = data.ticks;
-              //   xLabels.forEach(function (labels, i) {
-              //       if (i % 1000 != 0){
-              //           xLabels[i] = '';
-              //       }
-              //   });
-              // },
-              title: {
-                display: true,
-                text: "pH",
-                color: "black",
-                font: {
-                  family: "Inter",
-                  size: "12px",
-                },
-              },
-              min: Math.min(ph),
-              max: Math.max(ph),
-              ticks: {
-                callback: function (value, index) {
-                  if (Number.isInteger(ph[index])) {
-                    return ph[index];
-                  }
-                },
-              },
-            },
-          },
-        },
-      });
-    }
-  }, [alpha, ph, a0, a1, a2, a3, ymax, ymin, alpha_user]);
 
   let y_data = [
     {
