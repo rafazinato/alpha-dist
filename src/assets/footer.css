@@ -1,14 +1,18 @@
 .foot-container {
-    padding-left: 18px;
-    padding-right: 18px;
-    height: 70px;
+    position: fixed; /* Fixa o footer na tela */
+    bottom: 0; /* Coloca o footer no final da tela */
+    left: 0; /* Alinha o footer à esquerda */
+    width: 100%; /* Ocupa toda a largura da tela */
+    height: 70px; /* Altura do footer */
     display: flex;
-    background-color: #014087;
-    color: white;
-    align-items: center;
-    justify-content: space-between;
-
-    
+    background-color: #014087; /* Cor de fundo */
+    color: white; /* Cor do texto */
+    align-items: center; /* Centraliza os itens verticalmente */
+    justify-content: space-between; /* Espaço entre os itens */
+    padding-left: 18px; /* Espaçamento interno à esquerda */
+    padding-right: 18px; /* Espaçamento interno à direita */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Sombra para destacar o footer */
+    z-index: 1000; /* Garante que o footer fique acima de outros elementos */
 }
 .text-footer {
     margin-bottom: 0;
