@@ -4,10 +4,10 @@ body {
   
   .container-first {
     display: grid;
-    align-self: center;
-    width: 100%;
-    grid-template-columns: 2fr 1fr 2fr;
-    gap: 15px;
+    margin: auto;
+    width: 90%;
+    grid-template-columns: 1fr 1fr 2fr;
+    gap: 10rem;
     row-gap: 20px;
   
   
