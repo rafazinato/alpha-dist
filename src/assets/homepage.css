@@ -3,14 +3,14 @@ body {
   }
   
   .container-first {
-    display: grid;
-    margin: auto;
-    width: 90%;
-    grid-template-columns: 1fr 1fr 2fr;
-    gap: 10rem;
+    /* display: grid; */
+    /* margin: auto; */
+    width: 70%;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
     row-gap: 20px;
-  
-  
+    justify-content: center; /* centraliza horizontalmente */
+    margin: 0 auto; 
   
   
     /* overflow: hidden; */
