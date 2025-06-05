@@ -52,8 +52,8 @@ function VANSYKLE({
     pka.forEach((element, idx) => {
       denominator += element
         ? 10 **
-          ((idx + 1) * ph -
-            pka.slice(0, idx + 1).reduce((acc, curr) => acc + curr, 0))
+        ((idx + 1) * ph -
+          pka.slice(0, idx + 1).reduce((acc, curr) => acc + curr, 0))
         : 0;
     });
 
@@ -65,9 +65,9 @@ function VANSYKLE({
       if (element)
         alpha.push(
           alpha[0] *
-            10 **
-              ((idx + 1) * ph -
-                pka.slice(0, idx + 1).reduce((acc, curr) => acc + curr, 0))
+          10 **
+          ((idx + 1) * ph -
+            pka.slice(0, idx + 1).reduce((acc, curr) => acc + curr, 0))
         );
     });
 
@@ -93,7 +93,7 @@ function VANSYKLE({
   let wat = 0;
   let wat_before = 0;
   let each_charge = 0;
- 
+
 
 
   if (Array.isArray(ph) && ph.length > 0) {
@@ -103,7 +103,7 @@ function VANSYKLE({
       (ph_before) => 10 ** -ph_before - 10 ** (ph_before - pKw)
     );
 
-  // Calculando a carga efetiva atual
+    // Calculando a carga efetiva atual
     each_charge = ph.map((ph, phindex) =>
       alfascharge.map(
         (charge, index) => Number(charge) * Number(alpha_list[index][phindex])
@@ -131,23 +131,23 @@ function VANSYKLE({
     }
     return tempReference;
   }, [ph, wat, wat_before]);
-  
+
   let buffer = useMemo(() => {
     const tempReference = [];
     for (let i = 1; i < ph.length; i++) {
       tempReference.push(
         Math.abs(
           ((effective_charge[i] - effective_charge[i - 1]) * chosenconc) /
-            (ph[i] - ph[i - 1])
+          (ph[i] - ph[i - 1])
         )
       );
     }
     return tempReference;
   }, [chosenconc, ph, effective_charge]);
-  
+
   let phbuffer = arange(0.1, 14, 0.1);
 
-  
+
 
 
 
@@ -183,8 +183,8 @@ function VANSYKLE({
   let a7k = koltoff_alpha.map((a) => a[7]);
   let a8k = koltoff_alpha.map((a) => a[8]);
   let alpha_list_koltoff = [a0k, a1k, a2k, a3k, a4k, a5k, a6k, a7k, a8k];
-  
-  let water_contribution_koltoff = ph.map((ph) => Math.abs((10**(-ph+1) - 10**(ph + 1 - pKw)) - (10 **(-(ph)) - 10 ** (ph - pKw))) )
+
+  let water_contribution_koltoff = ph.map((ph) => Math.abs((10 ** (-ph + 1) - 10 ** (ph + 1 - pKw)) - (10 ** (-(ph)) - 10 ** (ph - pKw))))
 
   let each_charge_koltoff = ph_koltoff.map((ph, phindex) =>
     alfascharge.map(
@@ -206,7 +206,7 @@ function VANSYKLE({
   let koltoff = ph.map((ph, idx) =>
     Math.abs(
       effective_charge[idx] * chosenconc -
-        effective_charge_koltoff[idx] * chosenconc
+      effective_charge_koltoff[idx] * chosenconc
     )
   );
 
@@ -220,10 +220,10 @@ function VANSYKLE({
 
 
 
-  let buffer_total = buffer.map((e,idx) => e + water_contribution[idx])
-  let koltoff_total = koltoff.map((e,idx) => e + water_contribution_koltoff[idx])
+  let buffer_total = buffer.map((e, idx) => e + water_contribution[idx])
+  let koltoff_total = koltoff.map((e, idx) => e + water_contribution_koltoff[idx])
 
-  
+
 
 
   let initial_sum_water_buffer = [];
@@ -239,7 +239,7 @@ function VANSYKLE({
     );
   }
 
-   // Van Slyke’s buffer para dados do usuário
+  // Van Slyke’s buffer para dados do usuário
 
   let alpha_user = ph.map((ph) => calcAlpha(ph, pkauser));
   let a0_user = alpha_user.map((a) => a[0]);
@@ -287,7 +287,7 @@ function VANSYKLE({
       tempReference.push(
         Math.abs(
           ((effective_charge_user[i] - effective_charge_user[i - 1]) * chosenconc) /
-            (ph[i] - ph[i - 1])
+          (ph[i] - ph[i - 1])
         )
       );
     }
@@ -295,7 +295,7 @@ function VANSYKLE({
   }, [chosenconc, ph, effective_charge_user]);
 
 
-    // Kolthoff's buffer capacity para dados do usuário
+  // Kolthoff's buffer capacity para dados do usuário
 
   let ph_koltoff_user = ph.map((ph) => ph - 1);
   let koltoff_alpha_user = ph_koltoff_user.map((ph) => calcAlpha(ph, pkauser));
@@ -329,7 +329,7 @@ function VANSYKLE({
       )
     );
   }
-  
+
   let effective_charge_koltoff_user = useMemo(() => {
     let tempReference = [];
     each_charge_koltoff_user.forEach((num) => {
@@ -341,12 +341,13 @@ function VANSYKLE({
   let koltoff_user = ph.map((ph, idx) =>
     Math.abs(
       effective_charge_user[idx] * chosenconc -
-        effective_charge_koltoff_user[idx] * chosenconc
+      effective_charge_koltoff_user[idx] * chosenconc
     )
   );
-  let koltoff_user_total = koltoff_user.map((e,idx) => e + water_contribution_koltoff[idx])
+  let koltoff_user_total = koltoff_user.map((e, idx) => e + water_contribution_koltoff[idx])
 
-
+console.log(koltoff_user)
+console.log(koltoff)
   // Buffering Function para dados do usuário
 
   let buffering_funtion_user = effective_charge_user.map(
@@ -363,11 +364,11 @@ function VANSYKLE({
       (element, idx) => element + buffer_user[idx]
     );
   }
-  
-  let buffer_total_user = buffer_user.map((e,idx) => e + water_contribution[idx])
 
-  const [graph_data_user, setGraphData_user] = useState([buffer_total_user, buffer_user,water_contribution]);
- 
+  let buffer_total_user = buffer_user.map((e, idx) => e + water_contribution[idx])
+
+  const [graph_data_user, setGraphData_user] = useState([buffer_total_user, buffer_user, water_contribution]);
+
 
   useEffect(() => {
     if (graph_data !== ([buffer_total_user, buffer_user, water_contribution]) && graph_title[0] === "Van Slyke's buffer power") {
@@ -380,18 +381,16 @@ function VANSYKLE({
       setInitialLimitsUser([0, 14, Math.min(buffering_funtion_user), 1.1 * buffering_funtion_user.reduce((a, b) => Math.max(a, b), -Infinity)])
 
     };
-  },[pkauser])
+  }, [pkauser])
 
   useEffect(() => {
     changeGraphToVanSykle()
-  },[chosenconc])
-  
-  console.log(koltoff.reduce((a, b) => Math.max(a, b), -Infinity))
+  }, [chosenconc])
 
   function changeGraphToKoltoff() {
     setGraphData(koltoff);
-    setGraphData_user(koltoff_user)
-  
+    setGraphData_user(koltoff_user_total)
+
     setMaxDefaultYaxis(1.1 * koltoff.reduce((a, b) => Math.max(a, b), -Infinity));
     setInitialLimits([0, 14, 0, 1.1 * koltoff.reduce((a, b) => Math.max(a, b), -Infinity)]);
     setInitialLimitsUser([0, 14, 0, 1.1 * koltoff_user.reduce((a, b) => Math.max(a, b), -Infinity)])
@@ -416,30 +415,30 @@ function VANSYKLE({
     setInitialLimitsUser([0, 14, Math.min(buffering_funtion_user), 1.1 * buffering_funtion_user.reduce((a, b) => Math.max(a, b), -Infinity)])
     setGraphTitle(["Buffering Function"]);
   }
-  
+
 
   const getCalculatedData_user = () => {
     if (showInput) {
       if (graph_data !== ([buffer_total_user, buffer_user, water_contribution]) && graph_title[0] === "Van Slyke's buffer power") return ([buffer_total_user, buffer_user, water_contribution]);
       if (graph_data !== ([koltoff_user_total, koltoff_user, water_contribution]) && graph_title[0] === "Kolthoff's buffer capacity") return ([koltoff_user_total, koltoff_user, water_contribution]);
-      if (graph_data !== ([buffering_funtion_user]) && graph_title[0] === "Buffering Function") return [buffering_funtion_user,null,null];
+      if (graph_data !== ([buffering_funtion_user]) && graph_title[0] === "Buffering Function") return [buffering_funtion_user, null, null];
 
     }
     return graph_data_user; // Retorna o estado atual se nada mudou
   };
-  
+
   const graphDataToRender_user = getCalculatedData_user();
 
-  
+
   const getCalculatedDataTotal = () => {
 
-      if (graph_data !== ([buffer_total, buffer, water_contribution]) && graph_title[0] === "Van Slyke's buffer power") return ([buffer_total, buffer, water_contribution]);
-      if (graph_data !== ([koltoff_total, koltoff, water_contribution_koltoff]) && graph_title[0] === "Kolthoff's buffer capacity") return ([koltoff_total, koltoff, water_contribution_koltoff]);
-      if (graph_data !== ([buffering_funtion]) && graph_title[0] === "Buffering Function") return [buffering_funtion,null,null];
+    if (graph_data !== ([buffer_total, buffer, water_contribution]) && graph_title[0] === "Van Slyke's buffer power") return ([buffer_total, buffer, water_contribution]);
+    if (graph_data !== ([koltoff_total, koltoff, water_contribution_koltoff]) && graph_title[0] === "Kolthoff's buffer capacity") return ([koltoff_total, koltoff, water_contribution_koltoff]);
+    if (graph_data !== ([buffering_funtion]) && graph_title[0] === "Buffering Function") return [buffering_funtion, null, null];
 
     return graph_data; // Retorna o estado atual se nada mudou
   };
-  
+
   const graphDataToRender = getCalculatedDataTotal();
   let y_data = [
     {
@@ -468,7 +467,7 @@ function VANSYKLE({
     },
   ];
 
-y_data = y_data.filter(item => item.data)
+  y_data = y_data.filter(item => item.data)
   let y_data_user = [
     {
       label: "Total",
@@ -507,38 +506,38 @@ y_data = y_data.filter(item => item.data)
       }
       setNeedUpdate(false);
     }
-  },[needupdate, buffer, setNeedUpdate, buffer_user]);
-  
+  }, [needupdate, buffer, setNeedUpdate, buffer_user]);
+
   return (
     <div>
       <div class="graph-container">
 
         {showInput ? (
-        <GraphComponent
-        x_data={(Array.isArray(graphDataToRender) && 
-          graphDataToRender.length === 3 &&
-          graphDataToRender[0] === buffer_total_user &&
-          graphDataToRender[1] === buffer_user &&
-          graphDataToRender[2] === water_contribution) ? phbuffer : ph}
-        y_data={y_data_user}
-        y_title={graph_title}
-        initial_limits={initial_limits_user}
-        graph_title={graph_title}
-        depedency={chosenconc}
-      />
+          <GraphComponent
+            x_data={(Array.isArray(graphDataToRender) &&
+              graphDataToRender.length === 3 &&
+              graphDataToRender[0] === buffer_total_user &&
+              graphDataToRender[1] === buffer_user &&
+              graphDataToRender[2] === water_contribution) ? phbuffer : ph}
+            y_data={y_data_user}
+            y_title={graph_title}
+            initial_limits={initial_limits_user}
+            graph_title={graph_title}
+            depedency={chosenconc}
+          />
         ) : (
           <GraphComponent
-          x_data={(Array.isArray(graphDataToRender) && 
-            graphDataToRender.length === 3 &&
-            graphDataToRender[0] === buffer_total &&
-            graphDataToRender[1] === buffer &&
-            graphDataToRender[2] === water_contribution) ? phbuffer : ph}
-          y_data={y_data}
-          y_title={graph_title}
-          initial_limits={initial_limits}
-          graph_title={graph_title}
-          depedency={chosenconc}
-        />
+            x_data={(Array.isArray(graphDataToRender) &&
+              graphDataToRender.length === 3 &&
+              graphDataToRender[0] === buffer_total &&
+              graphDataToRender[1] === buffer &&
+              graphDataToRender[2] === water_contribution) ? phbuffer : ph}
+            y_data={y_data}
+            y_title={graph_title}
+            initial_limits={initial_limits}
+            graph_title={graph_title}
+            depedency={chosenconc}
+          />
         )}
 
       </div>

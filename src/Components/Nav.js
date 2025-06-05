@@ -10,24 +10,29 @@ function Button(props) {
 
 function Nav(props) {
     return (
-
         <div className='nav-container'>
             <div className='logo-container'>
-            <p className='logo'>AlphaDist</p><p className='logo1'>Web</p>   
+                <p className='logo'>AlphaDist</p>
+                <p className='logo1'>Web</p>   
             </div>
-            <div className='nav'>
-            <Link style={{textDecoration: 'none' }} to="/"><Button content="Início" /></Link>
-            <Link style={{textDecoration: 'none' }} to="/tutorial"><Button content="Tutorial" /></Link>
-            <Button style={{textDecoration: 'none' }} content="Teoria" />
-            <Link style={{textDecoration: 'none' }} to="/sobre"><Button content="Sobre" /></Link>
-
-            </div>
-
+            <nav className='nav'>
+                <Link style={{textDecoration: 'none'}} to="/">
+                    <Button content="Início" />
+                </Link>
+                <Link style={{textDecoration: 'none'}} to="/tutorial">
+                    <Button content="Tutorial" />
+                </Link>
+                <Link style={{textDecoration: 'none'}} to="/teoria">
+                    <Button content="Teoria" />
+                </Link>
+                <Link style={{textDecoration: 'none'}} to="/sobre">
+                    <Button content="Sobre" />
+                </Link>
+            </nav>
         </div>
-
-
-
+        
+        
     );
 }
 
-export default Nav
+export default Nav;

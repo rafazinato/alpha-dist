@@ -1,5 +1,7 @@
 .graph-container {
     position: relative;
+    /* height: 80%;
+    width: 90%; */
     height: 300px;
     width: 550px;
     display: flow-root;

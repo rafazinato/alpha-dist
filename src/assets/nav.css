@@ -1,62 +1,86 @@
-.nav {
-    background-color: #014087;
-    height: 50px;
-    display: contents;
-    width: 100vw;
-    align-items: center;
-    justify-content: left;
-}
-.navButton {
-    background-color: #014087;
-    height: 50px;
-    border: none;
-    font-weight: 400;
-    font-style: normal;
-    text-align: center;
-    color: white;
-    font-size: 17px;
-    display: block;
-    align-items: center;
-    margin-left: 50px;
+/* Reset básico */
+html,
+body {
+  /* margin: 0; */
+  padding: 0;
+  /* min-width: 100%; */
+
 }
 
-.navButton:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
+
+.nav-container {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  /* Garante que ocupa toda a largura */
+  min-width: 100%;
+  /* Impede que fique menor que a janela */
+  top: 0;
+  /* Positions it at the top of the viewport */
+  left: 0;
+  /* Positions it at the left of the viewport */
+  height: 50px;
+  background-color: #014087;
+  align-items: center;
+  padding: 0 18px;
+  z-index: 999;
+  box-sizing: border-box;
+  /* Inclui padding no cálculo da largura */
 }
+
+
+/* Restante do CSS permanece igual */
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+}
+
 .logo {
-    background-color: #014087;
-    padding-top: 0px;
-    color: white;
-    font-size: 1.5rem;
-    text-align: center;
-}
-
-.logo-container > p {
-    margin-block: auto;
+  color: white;
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
 }
 
 .logo1 {
-    background-color: #014087;
-    padding-top: 0px;
-    color: #8EB2D9;
-    font-size: 1.5rem;
-    text-align: center;
-    padding-right: 40px; 
-}
-.logo-container {
-    display: flex;
-    align-items: left;
-    justify-content: left;
-    padding-left: 0%;
-    margin-left: 0%;
+  color: #8EB2D9;
+  font-size: 1.5rem;
+  margin: 0;
+  padding-right: 20px;
 }
 
-.nav-container {
-    display: inline-flex;
-    background-color: #014087;
-    height: 50px;
-    width: 100%;
-    align-items: center;
-    padding-left: 18px;
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  /* Ocupa todo espaço restante */
+  white-space: nowrap;
+}
+
+.navButton {
+  background-color: transparent;
+  height: 100%;
+  border: none;
+  font-weight: 400;
+  color: white;
+  font-size: 17px;
+  padding: 0 15px;
+  cursor: pointer;
+  min-width: max-content;
+}
+
+.navButton:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Media Queries (mantenha os mesmos) */
+@media (max-width: 768px) {
+  /* ... */
 }

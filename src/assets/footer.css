@@ -1,4 +1,5 @@
 .foot-container {
+    position: relative;
     padding-left: 18px;
     padding-right: 18px;
     height: 70px;

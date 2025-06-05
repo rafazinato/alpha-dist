@@ -1,3 +1,13 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  /* min-height: 100vh; Ocupa no mínimo toda a altura da tela */
+  box-sizing: border-box;
+}
+
+
+
 body {
   font-family: 'Inter'
 }

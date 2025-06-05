@@ -166,14 +166,11 @@ each_charge_koltoff_user.forEach((num) => {
   effective_charge_koltoff_user += num;
 });
 
-let koltoff_user =
-  effective_charge_user * chosenconc -
-  (10 **
-    (-(chosenph - 1)) -
-      10 ** (chosenph - 1 - pKw))/(chosenph - 1) +
-       - effective_charge_koltoff_user * chosenconc;
+let koltoff_user = (effective_charge_user * chosenconc) + wat - (10**(-(chosenph - 1)) - 10**(chosenph - 1 - pKw)) - (effective_charge_koltoff_user * chosenconc)
 
-
+  // let koltoff =
+  //   effective_charge * chosenconc -
+  //       (effective_charge_koltoff*chosenconc) + (wat - (10**(-(chosenph -1))  - 10 **(chosenph -1 - pKw)));
 
   let qquad_user = 0    
   qquad_user = alpha_user.map((e,idx) => (e*((alfascharge_user[idx]))**2))
@@ -196,7 +193,9 @@ let koltoff_user =
             α<sub>0</sub>
           </td>
           <td>{showInput ? alpha_user[0].toFixed(4) : ( Number(alpha[0]) ? alpha[0].toFixed(4) : "--")}</td>
-
+          <td>
+            {Math.log10(alpha_user[0]) ? Math.log10(alpha_user[0]).toFixed(4) : (Math.log10(Number(alpha[0])) ? Math.log10(Number(alpha[0])).toFixed(4): "--")}
+          </td>
         </tr>
 
         <tr>
