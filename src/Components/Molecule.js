@@ -29,7 +29,7 @@ function image() {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            Imagem
+            Imagem representativa do sistema selecionado
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

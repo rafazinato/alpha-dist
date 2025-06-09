@@ -130,7 +130,7 @@ each_charge_user.forEach((num) => {
   effective_charge_user += num;
 });
 
-
+console.log(alpha_user)
 function calcBufferUser(chosenph, pkauser, chosenconc) {
   let ph_before = chosenph - 0.1;
   let wat_before = 10 **(-ph_before) - 10 ** (ph_before - pKw);
